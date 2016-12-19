@@ -12,7 +12,7 @@
 
 @implementation TiBluetoothCharacteristicProxy
 
--(id)_initWithPageContext:(id<TiEvaluator>)context andCharacteristic:(CBCharacteristic*)_characteristic
+- (id)_initWithPageContext:(id<TiEvaluator>)context andCharacteristic:(CBCharacteristic*)_characteristic
 {
     if ([super _initWithPageContext:[self pageContext]]) {
         characteristic = _characteristic;
@@ -21,46 +21,48 @@
     return self;
 }
     
--(CBCharacteristic*)characteristic
+- (CBCharacteristic*)characteristic
 {
     return characteristic;
 }
     
 #pragma mark Public API's
 
--(id)service
+- (id)service
 {
     return [[TiBluetoothServiceProxy alloc] _initWithPageContext:[self pageContext] andService:characteristic.service];
 }
 
--(id)properties
+- (id)properties
 {
     return NUMUINTEGER(characteristic.properties);
 }
     
--(id)isBroadcasted
+- (id)isBroadcasted
 {
     return NUMBOOL(characteristic.isBroadcasted);
 }
     
--(id)isNotifying
+- (id)isNotifying
 {
     return NUMBOOL(characteristic.isNotifying);
 }
     
--(id)descriptors
+- (id)descriptors
 {
     return [self arrayFromDescriptors:characteristic.descriptors];
 }
     
--(id)value
+- (id)value
 {
     return [[TiBlob alloc] initWithData:characteristic.value mimetype:@"text/plain"];
 }
 
+
+
 #pragma mark Utilities
 
--(NSArray*)arrayFromServices:(NSArray<CBService*>*)services
+- (NSArray*)arrayFromServices:(NSArray<CBService*>*)services
 {
     NSMutableArray *result = [NSMutableArray array];
     
@@ -71,7 +73,7 @@
     return result;
 }
 
--(NSArray*)arrayFromCharacteristics:(NSArray<CBCharacteristic*>*)characteristics
+- (NSArray*)arrayFromCharacteristics:(NSArray<CBCharacteristic*>*)characteristics
 {
     NSMutableArray *result = [NSMutableArray array];
     
@@ -82,7 +84,7 @@
     return result;
 }
 
--(NSArray*)arrayFromDescriptors:(NSArray<CBDescriptor*>*)descriptors
+- (NSArray*)arrayFromDescriptors:(NSArray<CBDescriptor*>*)descriptors
 {
     NSMutableArray *result = [NSMutableArray array];
     

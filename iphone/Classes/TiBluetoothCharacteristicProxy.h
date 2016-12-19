@@ -11,7 +11,7 @@
     CBCharacteristic *characteristic;
 }
 
--(id)_initWithPageContext:(id<TiEvaluator>)context andCharacteristic:(CBCharacteristic*)_characteristic;
--(CBCharacteristic*)characteristic;
+- (id)_initWithPageContext:(id<TiEvaluator>)context andCharacteristic:(CBCharacteristic*)_characteristic;
+- (CBCharacteristic*)characteristic;
 
 @end
