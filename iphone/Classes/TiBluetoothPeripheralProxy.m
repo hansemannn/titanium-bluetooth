@@ -7,6 +7,7 @@
 
 #import "TiBluetoothPeripheralProxy.h"
 #import "TiBluetoothServiceProxy.h"
+#import "TiUtils.h"
 
 @implementation TiBluetoothPeripheralProxy
 
@@ -46,6 +47,69 @@
     return [self arrayFromServices:peripheral.services];
 }
 
+- (void)readRSSI:(id)unused
+{
+    [peripheral readRSSI];
+}
+
+- (void)discoverServices:(id)args
+{
+    NSMutableArray<CBUUID*> *uuids = [NSMutableArray array];
+    
+    for (id uuid in args) {
+        ENSURE_TYPE(uuid, NSString);
+        [uuids addObject:[CBUUID UUIDWithString:[TiUtils stringValue:uuid]]];
+    }
+
+    [peripheral discoverServices:uuids];
+}
+
+// TODO: Implement other CBPeripheral methods
+
+- (void)discoverIncludedServicesForService:(id)args
+{
+    
+}
+
+- (void)discoverCharacteristicsForService:(id)args
+{
+    
+}
+
+- (void)readValueForCharacteristic:(id)value
+{
+    
+}
+
+- (id)maximumWriteValueLengthForType:(id)value
+{
+    
+}
+
+- (void)writeValueForCharacteristicWithType:(id)args
+{
+    
+}
+
+- (void)setNotifyValueForCharacteristic:(id)args
+{
+    
+}
+
+- (void)discoverDescriptorsForCharacteristic:(id)value
+{
+    
+}
+
+- (void)readValueForDescriptor:(id)value
+{
+    
+}
+
+- (void)writeValueForDescriptor:(id)args
+{
+    
+}
 
 #pragma mark Utilities
 
