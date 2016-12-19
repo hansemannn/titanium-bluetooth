@@ -7,11 +7,11 @@
 #import "TiProxy.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 
-@interface TiBluetoothCharacteristicProxy : TiProxy {
-    CBCharacteristic *characteristic;
+@interface TiBluetoothServiceProxy : TiProxy {
+    CBService *service;
 }
 
--(id)_initWithPageContext:(id<TiEvaluator>)context andCharacteristic:(CBCharacteristic*)_characteristic;
--(CBCharacteristic*)characteristic;
+-(id)_initWithPageContext:(id<TiEvaluator>)context andService:(CBService*)_service;
+- (CBService*)service;
 
 @end
