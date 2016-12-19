@@ -10,7 +10,7 @@
 
 @implementation TiBluetoothPeripheralProxy
 
--(id)_initWithPageContext:(id<TiEvaluator>)context andPeripheral:(CBPeripheral*)_peripheral
+- (id)_initWithPageContext:(id<TiEvaluator>)context andPeripheral:(CBPeripheral*)_peripheral
 {
     if ([super _initWithPageContext:[self pageContext]]) {
         peripheral = _peripheral;
@@ -26,22 +26,22 @@
 
 #pragma mark Public API's
 
--(id)name
+- (id)name
 {
     return peripheral.name;
 }
     
--(id)rssi
+- (id)rssi
 {
     return NUMINT(peripheral.RSSI);
 }
     
--(id)state
+- (id)state
 {
     return NUMINT(peripheral.state);
 }
     
--(id)services
+- (id)services
 {
     return [self arrayFromServices:peripheral.services];
 }
@@ -49,7 +49,7 @@
 
 #pragma mark Utilities
 
--(NSArray*)arrayFromServices:(NSArray<CBService*>*)services
+- (NSArray*)arrayFromServices:(NSArray<CBService*>*)services
 {
     NSMutableArray *result = [NSMutableArray array];
     

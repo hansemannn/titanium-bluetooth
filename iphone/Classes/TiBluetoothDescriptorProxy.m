@@ -10,7 +10,7 @@
 
 @implementation TiBluetoothDescriptorProxy
 
--(id)_initWithPageContext:(id<TiEvaluator>)context andDescriptor:(CBDescriptor*)_descriptor
+- (id)_initWithPageContext:(id<TiEvaluator>)context andDescriptor:(CBDescriptor*)_descriptor
 {
     if ([super _initWithPageContext:[self pageContext]]) {
         descriptor = _descriptor;
@@ -26,12 +26,12 @@
 
 #pragma mark Public API's
 
--(id)characteristic
+- (id)characteristic
 {
     return [[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:descriptor.characteristic];
 }
 
--(id)value
+- (id)value
 {
     return descriptor.value;
 }

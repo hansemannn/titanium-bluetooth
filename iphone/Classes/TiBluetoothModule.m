@@ -19,19 +19,19 @@
 #pragma mark Internal
 
 // this is generated for your module, please do not change it
--(id)moduleGUID
+- (id)moduleGUID
 {
 	return @"3c1bc730-d661-401e-8184-84695ad92360";
 }
 
--(NSString*)moduleId
+- (NSString*)moduleId
 {
 	return @"ti.bluetooth";
 }
 
 #pragma mark Lifecycle
 
--(void)startup
+- (void)startup
 {
 	[super startup];
 
@@ -49,36 +49,85 @@
 
 #pragma mark Public APIs
 
--(void)scanForPeripheralsWithServices:(id)args
+- (TiBluetoothCharacteristicProxy*)createCharacteristic:(id)args
+{
+    ENSURE_SINGLE_ARG(args, NSDictionary);
+    
+    id uuid = [args objectForKey:@"uuid"];
+    id properties = [args objectForKey:@"properties"];
+    id value = [args objectForKey:@"value"];
+    id permissions = [args objectForKey:@"permissions"];
+    
+    CBMutableCharacteristic *characteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:[TiUtils stringValue:uuid]]
+                                                                                 properties:[TiUtils intValue:properties]
+                                                                                      value:[(TiBlob*)value data]
+                                                                                permissions:[TiUtils intValue:permissions]];
+    
+    return [[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext]
+                                                      andCharacteristic:characteristic];
+}
+
+- (TiBluetoothServiceProxy*)createService:(id)args
+{
+    ENSURE_SINGLE_ARG(args, NSDictionary);
+    
+    id uuid = [args objectForKey:@"uuid"];
+    id primary = [args objectForKey:@"primary"];
+    
+    CBMutableService *service = [[CBMutableService alloc] initWithType:[CBUUID UUIDWithString:[TiUtils stringValue:uuid]]
+                                                               primary:[TiUtils boolValue:primary]];
+    
+    return [[TiBluetoothServiceProxy alloc] _initWithPageContext:[self pageContext]
+                                                      andService:service];
+}
+
+- (TiBluetoothDescriptorProxy*)createDescriptor:(id)args
+{
+    ENSURE_SINGLE_ARG(args, NSDictionary);
+    
+    id uuid = [args objectForKey:@"uuid"];
+    id value = [args objectForKey:@"value"];
+    
+    CBMutableDescriptor *descriptor = [[CBMutableDescriptor alloc] initWithType:[CBUUID UUIDWithString:[TiUtils stringValue:uuid]]
+                                                                          value:[(TiBlob*)value data]];
+    
+    return [[TiBluetoothDescriptorProxy alloc] _initWithPageContext:[self pageContext]
+                                                      andDescriptor:descriptor];
+}
+
+- (void)scanForPeripheralsWithServices:(id)args
 {
     ENSURE_SINGLE_ARG(args, NSArray);
     
+    NSMutableArray<CBUUID*> *uuids = [NSMutableArray array];
+
     for (id uuid in args) {
         ENSURE_TYPE(uuid, NSString);
+        [uuids addObject:[CBUUID UUIDWithString:[TiUtils stringValue:uuid]]];
     }
     
-    [[self centralManager] scanForPeripheralsWithServices:(NSArray<CBUUID*>*)args
+    [[self centralManager] scanForPeripheralsWithServices:uuids
                                                   options:nil];
 }
 
--(void)stopScan:(id)unused
+- (void)stopScan:(id)unused
 {
     [[self centralManager] stopScan];
 }
 
--(id)isScanning:(id)unused
+- (id)isScanning:(id)unused
 {
     return NUMBOOL([[self centralManager] isScanning]);
 }
 
--(void)connectPeripheral:(id)value
+- (void)connectPeripheral:(id)value
 {
     ENSURE_SINGLE_ARG(value, TiBluetoothPeripheralProxy);
     
     [[self centralManager] connectPeripheral:[(TiBluetoothPeripheralProxy*)value peripheral] options:nil];
 }
 
--(void)cancelPeripheralConnection:(id)value
+- (void)cancelPeripheralConnection:(id)value
 {
     ENSURE_SINGLE_ARG(value, TiBluetoothPeripheralProxy);
     
@@ -153,7 +202,7 @@
 
 #pragma mark Utilities
 
--(NSArray*)arrayFromServices:(NSArray<CBService*>*)services
+- (NSArray*)arrayFromServices:(NSArray<CBService*>*)services
 {
     NSMutableArray *result = [NSMutableArray array];
     
@@ -164,7 +213,7 @@
     return result;
 }
 
--(NSArray*)arrayFromCharacteristics:(NSArray<CBCharacteristic*>*)characteristics
+- (NSArray*)arrayFromCharacteristics:(NSArray<CBCharacteristic*>*)characteristics
 {
     NSMutableArray *result = [NSMutableArray array];
     
@@ -175,7 +224,7 @@
     return result;
 }
 
--(NSArray*)arrayFromDescriptors:(NSArray<CBDescriptor*>*)descriptors
+- (NSArray*)arrayFromDescriptors:(NSArray<CBDescriptor*>*)descriptors
 {
     NSMutableArray *result = [NSMutableArray array];
     
@@ -185,6 +234,8 @@
     
     return result;
 }
+
+#pragma mark Constants
 
 MAKE_SYSTEM_PROP(PERIPHERAL_STATE_DISCONNECTED, CBPeripheralStateDisconnected);
 MAKE_SYSTEM_PROP(PERIPHERAL_STATE_CONNECTING, CBPeripheralStateDisconnecting);

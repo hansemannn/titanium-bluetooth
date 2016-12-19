@@ -11,7 +11,7 @@
 
 @implementation TiBluetoothServiceProxy
 
--(id)_initWithPageContext:(id<TiEvaluator>)context andService:(CBService *)_service
+- (id)_initWithPageContext:(id<TiEvaluator>)context andService:(CBService *)_service
 {
     if ([super _initWithPageContext:[self pageContext]]) {
         service = _service;
@@ -27,26 +27,26 @@
 
 #pragma mark Public API's
 
--(id)isPrimary
+- (id)isPrimary
 {
     return NUMBOOL(service.isPrimary);
 }
--(id)peripheral
+- (id)peripheral
 {
     return [[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:service.peripheral];
 }
--(id)includedServices
+- (id)includedServices
 {
     return [self arrayFromServices:service.includedServices];
 }
--(id)characteristics
+- (id)characteristics
 {
     return [self arrayFromCharacteristics:service.characteristics];
 }
 
 #pragma mark Utilties
 
--(NSArray*)arrayFromServices:(NSArray<CBService*>*)services
+- (NSArray*)arrayFromServices:(NSArray<CBService*>*)services
 {
     NSMutableArray *result = [NSMutableArray array];
     
@@ -57,7 +57,7 @@
     return result;
 }
 
--(NSArray*)arrayFromCharacteristics:(NSArray<CBCharacteristic*>*)characteristics
+- (NSArray*)arrayFromCharacteristics:(NSArray<CBCharacteristic*>*)characteristics
 {
     NSMutableArray *result = [NSMutableArray array];
     
