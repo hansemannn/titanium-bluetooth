@@ -22,13 +22,15 @@ Unpack the module and place it inside the `modules/iphone/` folder of your proje
 Edit the modules section of your `tiapp.xml` file to include this module:
 ```xml
 <modules>
-<module platform="iphone">ti.bluetooth</module>
+    <module platform="iphone">ti.bluetooth</module>
 </modules>
 ```
 
 Features
 --------------------------------
-TBA
+- [x] Create descriptors, services and descriptors
+- [x] Start / Stop peripheral scanning
+- [x] Receive state events
 
 #### Example
 TBA
