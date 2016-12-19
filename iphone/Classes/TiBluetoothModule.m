@@ -8,6 +8,8 @@
 #import "TiBluetoothModule.h"
 #import "TiBluetoothPeripheralProxy.h"
 #import "TiBluetoothCharacteristicProxy.h"
+#import "TiBluetoothServiceProxy.h"
+#import "TiBluetoothDescriptorProxy.h"
 #import "TiBase.h"
 #import "TiHost.h"
 #import "TiUtils.h"
@@ -22,7 +24,6 @@
 	return @"3c1bc730-d661-401e-8184-84695ad92360";
 }
 
-// this is generated for your module, please do not change it
 -(NSString*)moduleId
 {
 	return @"ti.bluetooth";
@@ -32,8 +33,6 @@
 
 -(void)startup
 {
-	// this method is called when the module is first loaded
-	// you *must* call the superclass
 	[super startup];
 
 	NSLog(@"[DEBUG] %@ loaded",self);
@@ -93,7 +92,9 @@
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
 {
     if ([self _hasListeners:@"didConnectPeripheral"]) {
-        [self fireEvent:@"didConnectPeripheral" withObject:@{@"peripheral":[TiBluetoothModule dictionaryFromPeripheral:peripheral]}];
+        [self fireEvent:@"didConnectPeripheral" withObject:@{
+            @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral]
+        }];
     }
 }
 
@@ -101,17 +102,19 @@
 {
     if ([self _hasListeners:@"didDiscoverPeripheral"]) {
         [self fireEvent:@"didDiscoverPeripheral" withObject:@{
-                                                              @"peripheral":[TiBluetoothModule dictionaryFromPeripheral:peripheral],
-                                                              @"advertisementData": advertisementData,
-                                                              @"rssi": NUMINT(RSSI)
-                                                              }];
+            @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
+            @"advertisementData": advertisementData,
+            @"rssi": NUMINT(RSSI)
+        }];
     }
 }
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central
 {
     if ([self _hasListeners:@"didUpdateState"]) {
-        [self fireEvent:@"didUpdateState" withObject:@{@"state":NUMINT(central.state)}];
+        [self fireEvent:@"didUpdateState" withObject:@{
+            @"state":NUMINT(central.state)
+        }];
     }
 }
 
@@ -121,9 +124,9 @@
 {
     if ([self _hasListeners:@"didDiscoverServices"]) {
         [self fireEvent:@"didDiscoverServices" withObject:@{
-                                                            @"peripheral": [TiBluetoothModule dictionaryFromPeripheral:peripheral],
-                                                            @"error": [error localizedDescription] ?: @""
-                                                            }];
+            @"peripheral": [[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
+            @"error": [error localizedDescription] ?: @""
+        }];
     }
 }
 
@@ -131,10 +134,10 @@
 {
     if ([self _hasListeners:@"didDiscoverCharacteristicsForService"]) {
         [self fireEvent:@"didDiscoverCharacteristicsForService" withObject:@{
-                                                                             @"peripheral": [TiBluetoothModule dictionaryFromPeripheral:peripheral],
-                                                                             @"service": [TiBluetoothModule dictionaryFromService:service],
-                                                                             @"error": [error localizedDescription] ?: @""
-                                                                             }];
+            @"peripheral": [[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
+            @"service": [[TiBluetoothServiceProxy alloc] _initWithPageContext:[self pageContext] andService:service],
+            @"error": [error localizedDescription] ?: @""
+        }];
     }
 }
 
@@ -142,85 +145,45 @@
 {
     if ([self _hasListeners:@"didUpdateValueForCharacteristic"]) {
         [self fireEvent:@"didUpdateValueForCharacteristic" withObject:@{
-                                                            @"characteristic": [TiBluetoothModule dictionaryFromCharacteristic:characteristic],
-                                                            @"error": [error localizedDescription] ?: @""
-                                                            }];
+            @"characteristic": [[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:characteristic],
+            @"error": [error localizedDescription] ?: @""
+        }];
     }
 }
 
 #pragma mark Utilities
 
-+(NSArray*)arrayFromServices:(NSArray<CBService*>*)services
+-(NSArray*)arrayFromServices:(NSArray<CBService*>*)services
 {
     NSMutableArray *result = [NSMutableArray array];
     
     for (CBService *service in services) {
-        [result addObject:[TiBluetoothModule dictionaryFromService:service]];
+        [result addObject:[[TiBluetoothServiceProxy alloc] _initWithPageContext:[self pageContext] andService:service]];
     }
     
     return result;
 }
 
-+(NSArray*)arrayFromCharacteristics:(NSArray<CBCharacteristic*>*)characteristics
+-(NSArray*)arrayFromCharacteristics:(NSArray<CBCharacteristic*>*)characteristics
 {
     NSMutableArray *result = [NSMutableArray array];
     
     for (CBCharacteristic *characteristic in characteristics) {
-        [result addObject:[TiBluetoothModule dictionaryFromCharacteristic:characteristic]];
+        [result addObject:[[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:characteristic]];
     }
     
     return result;
 }
 
-+(NSArray*)arrayFromDescriptors:(NSArray<CBDescriptor*>*)descriptors
+-(NSArray*)arrayFromDescriptors:(NSArray<CBDescriptor*>*)descriptors
 {
     NSMutableArray *result = [NSMutableArray array];
     
     for (CBDescriptor *descriptor in descriptors) {
-        [result addObject:[TiBluetoothModule dictionaryFromDescriptor:descriptor]];
+        [result addObject:[[TiBluetoothDescriptorProxy alloc] _initWithPageContext:[self pageContext] andDescriptor:descriptor]];
     }
     
     return result;
-}
-
-+(NSDictionary*)dictionaryFromPeripheral:(CBPeripheral*)peripheral
-{
-    return @{
-             @"name": peripheral.name,
-             @"rssi": NUMINT(peripheral.RSSI),
-             @"state": NUMINT(peripheral.state),
-             @"services": [TiBluetoothModule arrayFromServices:peripheral.services]
-             };
-}
-
-+(NSDictionary*)dictionaryFromService:(CBService*)service
-{
-    return @{
-             @"isPrimary": NUMBOOL(service.isPrimary),
-             @"peripheral": [TiBluetoothModule dictionaryFromPeripheral:service.peripheral],
-             @"includedServices": [TiBluetoothModule arrayFromServices:service.includedServices],
-             @"characteristics": [TiBluetoothModule arrayFromCharacteristics:service.characteristics]
-             };
-}
-
-+(NSDictionary*)dictionaryFromCharacteristic:(CBCharacteristic*)characteristic
-{
-    return @{
-             @"service": [TiBluetoothModule dictionaryFromService:characteristic.service],
-             @"properties": NUMUINTEGER(characteristic.properties),
-             @"isBroadcasted": NUMBOOL(characteristic.isBroadcasted),
-             @"isNotifying": NUMBOOL(characteristic.isNotifying),
-             @"descriptors": [TiBluetoothModule arrayFromDescriptors:characteristic.descriptors],
-             @"value": [[TiBlob alloc] initWithData:characteristic.value mimetype:@"text/plain"]
-             };
-}
-
-+(NSDictionary*)dictionaryFromDescriptor:(CBDescriptor*)descriptor
-{
-    return @{
-             @"characteristic": [TiBluetoothModule dictionaryFromCharacteristic:descriptor.characteristic],
-             @"value": descriptor.value
-             };
 }
 
 MAKE_SYSTEM_PROP(PERIPHERAL_STATE_DISCONNECTED, CBPeripheralStateDisconnected);
