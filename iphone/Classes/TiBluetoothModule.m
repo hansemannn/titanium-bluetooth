@@ -121,7 +121,7 @@
         [uuids addObject:[CBUUID UUIDWithString:[TiUtils stringValue:uuid]]];
     }
     
-    [[self centralManager] scanForPeripheralsWithServices:nil options:nil];
+    [[self centralManager] scanForPeripheralsWithServices:uuids options:nil];
 }
 
 - (void)stopScan:(id)unused
