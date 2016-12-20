@@ -8,6 +8,7 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 
 #import "TiBluetoothModule.h"
+#import "TiBluetoothUtils.h"
 #import "TiBluetoothPeripheralProxy.h"
 #import "TiBluetoothCharacteristicProxy.h"
 #import "TiBluetoothServiceProxy.h"
@@ -50,7 +51,7 @@
             return;
         }
         
-        centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
+        centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue()];
     }
     
     return centralManager;
@@ -104,6 +105,11 @@
                                                       andDescriptor:descriptor];
 }
 
+- (void)initialize:(id)unused
+{
+    [self centralManager];
+}
+
 - (void)scanForPeripheralsWithServices:(id)args
 {
     ENSURE_SINGLE_ARG(args, NSArray);
@@ -115,8 +121,7 @@
         [uuids addObject:[CBUUID UUIDWithString:[TiUtils stringValue:uuid]]];
     }
     
-    [[self centralManager] scanForPeripheralsWithServices:uuids
-                                                  options:nil];
+    [[self centralManager] scanForPeripheralsWithServices:nil options:nil];
 }
 
 - (void)stopScan:(id)unused
@@ -143,6 +148,11 @@
     [[self centralManager] cancelPeripheralConnection:[(TiBluetoothPeripheralProxy*)value peripheral]];
 }
 
+- (id)state
+{
+    return NUMINTEGER([[self centralManager] state]);
+}
+
 #pragma mark - Delegates
 
 #pragma mark Central Manager Delegates
@@ -161,7 +171,7 @@
     if ([self _hasListeners:@"didDiscoverPeripheral"]) {
         [self fireEvent:@"didDiscoverPeripheral" withObject:@{
             @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
-            @"advertisementData": advertisementData,
+            @"advertisementData": [self dictionaryFromAdvertisementData:advertisementData],
             @"rssi": NUMINT(RSSI)
         }];
     }
@@ -242,6 +252,28 @@
     }
     
     return result;
+}
+
+- (NSDictionary*)dictionaryFromAdvertisementData:(NSDictionary*)advertisementData
+{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    
+    // Write own handler
+    for (id key in advertisementData) {
+        if ([[advertisementData objectForKey:key] isKindOfClass:[NSData class]]) {
+            [dict setObject:[[TiBlob alloc] initWithData:[advertisementData objectForKey:key] mimetype:@"text/plain"] forKey:key];
+        } else if ([[advertisementData objectForKey:key] isKindOfClass:[NSNumber class]]) {
+            [dict setObject:NUMBOOL([advertisementData objectForKey:key]) forKey:key];
+        } else if ([[advertisementData objectForKey:key] isKindOfClass:[NSString class]]) {
+            [dict setObject:[TiUtils stringValue:[advertisementData objectForKey:key]] forKey:key];
+        } else if ([key isEqualToString:@"kCBAdvDataServiceUUIDs"]) {
+            [dict setObject:[TiBluetoothUtils stringArrayFromUUIDArray:[advertisementData objectForKey:key]] forKey:key];
+        } else {
+            NSLog(@"[DEBUG] Unhandled type for key: %@ - Skipping, please do a PR to handle!", key);
+        }
+    }
+    
+    return dict;
 }
 
 #pragma mark Constants

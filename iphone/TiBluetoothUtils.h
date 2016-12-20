@@ -11,6 +11,7 @@
 
 }
 
-+ (NSArray<CBUUID *> *)UUIDArrayFromStringArray:(NSArray<id>*)array;
++ (NSArray<CBUUID *> *)UUIDArrayFromStringArray:(NSArray<id> *)array;
++ (NSArray<id> *)stringArrayFromUUIDArray:(NSArray<CBUUID *> *)array;
 
 @end
