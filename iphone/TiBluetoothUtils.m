@@ -22,4 +22,16 @@
     return result;
 }
 
++ (NSArray<id> *)stringArrayFromUUIDArray:(NSArray<CBUUID *> *)array
+{
+    NSMutableArray *result = [NSMutableArray array];
+    
+    for (CBUUID *uuid in array) {
+        ENSURE_TYPE(uuid, CBUUID);
+        [result addObject:[uuid UUIDString]];
+    }
+    
+    return result;
+}
+
 @end
