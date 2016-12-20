@@ -41,6 +41,13 @@
 - (CBCentralManager*)centralManager
 {
     if (!centralManager) {
+        NSString *bluetoothPermissions = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSBluetoothPeripheralUsageDescription"];
+        
+        if(!bluetoothPermissions) {
+            [self throwException:@"The NSBluetoothPeripheralUsageDescription key is required to interact with Bluetooth on iOS. Please add it to your plist and try it again." subreason:nil location:CODELOCATION];
+            return;
+        }
+        
         centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
     }
     
