@@ -6,7 +6,8 @@
  */
 
 #import "TiModule.h"
-#import <CoreBluetooth/CoreBluetooth.h>
+
+@class CBCentralManager, CBPeripheral;
 
 @interface TiBluetoothModule : TiModule <CBCentralManagerDelegate, CBPeripheralDelegate>
 {

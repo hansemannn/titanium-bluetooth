@@ -1,1 +1,1 @@
-OTHER_LDFLAGS=$(inherited) -framework CoreLocation
+OTHER_LDFLAGS=$(inherited) -framework CoreBluetooth
