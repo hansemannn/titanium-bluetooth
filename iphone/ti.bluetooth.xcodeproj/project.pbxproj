@@ -36,6 +36,7 @@
 		DB94F45B1E08943500C3B173 /* TiBluetoothServiceProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94F4591E08943500C3B173 /* TiBluetoothServiceProxy.m */; };
 		DB94F45E1E08944C00C3B173 /* TiBluetoothDescriptorProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = DB94F45C1E08944C00C3B173 /* TiBluetoothDescriptorProxy.h */; };
 		DB94F45F1E08944C00C3B173 /* TiBluetoothDescriptorProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94F45D1E08944C00C3B173 /* TiBluetoothDescriptorProxy.m */; };
+		DBC758881E09468D00BBB452 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBC758871E09468D00BBB452 /* CoreBluetooth.framework */; };
 		DBE7ACD31E09294400DE0A8A /* TiBluetoothUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DBE7ACD11E09294400DE0A8A /* TiBluetoothUtils.h */; };
 		DBE7ACD41E09294400DE0A8A /* TiBluetoothUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DBE7ACD21E09294400DE0A8A /* TiBluetoothUtils.m */; };
 /* End PBXBuildFile section */
@@ -67,6 +68,7 @@
 		DB94F4591E08943500C3B173 /* TiBluetoothServiceProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiBluetoothServiceProxy.m; path = Classes/TiBluetoothServiceProxy.m; sourceTree = "<group>"; };
 		DB94F45C1E08944C00C3B173 /* TiBluetoothDescriptorProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiBluetoothDescriptorProxy.h; path = Classes/TiBluetoothDescriptorProxy.h; sourceTree = "<group>"; };
 		DB94F45D1E08944C00C3B173 /* TiBluetoothDescriptorProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiBluetoothDescriptorProxy.m; path = Classes/TiBluetoothDescriptorProxy.m; sourceTree = "<group>"; };
+		DBC758871E09468D00BBB452 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		DBE7ACD11E09294400DE0A8A /* TiBluetoothUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiBluetoothUtils.h; sourceTree = "<group>"; };
 		DBE7ACD21E09294400DE0A8A /* TiBluetoothUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TiBluetoothUtils.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -76,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DBC758881E09468D00BBB452 /* CoreBluetooth.framework in Frameworks */,
 				AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -105,6 +108,7 @@
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DBC758871E09468D00BBB452 /* CoreBluetooth.framework */,
 				AACBBE490F95108600F1A2B1 /* Foundation.framework */,
 			);
 			name = Frameworks;

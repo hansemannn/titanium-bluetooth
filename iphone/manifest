@@ -15,4 +15,4 @@ name: ti.bluetooth
 moduleid: ti.bluetooth
 guid: 3c1bc730-d661-401e-8184-84695ad92360
 platform: iphone
-minsdk: 6.0.9
+minsdk: 6.0.0

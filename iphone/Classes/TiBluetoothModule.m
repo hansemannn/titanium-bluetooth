@@ -5,6 +5,8 @@
  * Copyright (c) 2016 Hans Knoechel. All rights reserved.
  */
 
+#import <CoreBluetooth/CoreBluetooth.h>
+
 #import "TiBluetoothModule.h"
 #import "TiBluetoothPeripheralProxy.h"
 #import "TiBluetoothCharacteristicProxy.h"
