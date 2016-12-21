@@ -2,7 +2,8 @@
 
 Summary
 ---------------
-Ti.Bluetooth is an open source project to support the CoreBluetooth framework in Titanium Mobile. 
+Ti.Bluetooth is an open source project to support the iOS CoreBluetooth framework in Titanium Mobile.
+For the Android version of this module, please check [miga/ti.bluetooth](https://github.com/m1ga/ti.bluetooth).
 
 Requirements
 ---------------
