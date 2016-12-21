@@ -1,4 +1,4 @@
-/** Info.plist entries
+/** Info.plist entries (for iOS)
 
 <plist>
   <dict>
