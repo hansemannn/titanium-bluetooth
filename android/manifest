@@ -6,7 +6,7 @@ version: 1.0.0
 apiversion: 3
 architectures: armeabi-v7a x86
 description: ti.bluetooth
-author: Your Name
+author: Michael Gangolf
 license: Specify your license
 copyright: Copyright (c) 2016 by Your Company
 
