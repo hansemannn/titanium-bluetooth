@@ -1,39 +1,99 @@
-// This is a test harness for your module
-// You should do something interesting in this harness
-// to test out the module and to provide instructions
-// to users on how to use it by example.
+var BLE = require('ti.bluetooth');
 
+// Initialize the BLE Central Manager
+BLE.initialize();
 
-// open a single window
 var win = Ti.UI.createWindow({
-	backgroundColor:'white'
+    backgroundColor: '#fff'
 });
-var label = Ti.UI.createLabel();
-win.add(label);
+
+var btn1 = Ti.UI.createButton({
+    title: 'Start scan',
+    top: 40
+});
+
+btn1.addEventListener('click', function() {
+    if (BLE.isScanning()) {
+        alert('Already scanning, please stop scan first!');
+        return;
+    } else if (BLE.getState() != BLE.MANAGER_STATE_POWERED_ON) {
+        alert('The BLE manager needs to be powered on before. Call initialize().');
+        return;
+    }
+
+    //BLE.scanForPeripheralsWithServices(['384DF4C0-8BAE-419D-9A65-2D67942C2DB7']);
+    BLE.startScan();
+});
+
+var btn2 = Ti.UI.createButton({
+    title: 'Stop scan',
+    top: 100
+});
+
+btn2.addEventListener('click', function() {
+    if (!BLE.isScanning()) {
+        alert('Not scanning!');
+        return;
+    }
+    BLE.stopScan();
+});
+
+// BLE.addEventListener('didConnectPeripheral', function(e) {
+//     Ti.API.info('didConnectPeripheral');
+//     Ti.API.info(e);
+// });
+
+BLE.addEventListener('didDiscoverPeripheral', function(e) {
+    Ti.API.info('didDiscoverPeripheral');
+    Ti.API.info(JSON.stringify(e));
+});
+
+BLE.addEventListener('didUpdateState', function(e) {
+    Ti.API.info('didUpdateState');
+
+    switch (e.state) {
+        case BLE.MANAGER_STATE_RESETTING:
+            Ti.API.info('Resetting');
+            break;
+
+        case BLE.MANAGER_STATE_UNSUPPORTED:
+            Ti.API.info('Unsupported');
+            break;
+
+        case BLE.MANAGER_STATE_UNAUTHORIZED:
+            Ti.API.info('Unauthorized');
+            break;
+
+        case BLE.MANAGER_STATE_POWERED_OFF:
+            Ti.API.info('Powered Off');
+            break;
+
+        case BLE.MANAGER_STATE_POWERED_ON:
+            Ti.API.info('Powered On');
+            break;
+
+        case BLE.MANAGER_STATE_UNKNOWN:
+        default:
+            Ti.API.info('Unknown');
+            break;
+    }
+});
+
+// BLE.addEventListener('didDiscoverServices', function(e) {
+//     Ti.API.info('didDiscoverServices');
+//     Ti.API.info(e);
+// });
+// 
+// BLE.addEventListener('didDiscoverCharacteristicsForService', function(e) {
+//     Ti.API.info('didDiscoverCharacteristicsForService');
+//     Ti.API.info(e);
+// });
+// 
+// BLE.addEventListener('didUpdateValueForCharacteristic', function(e) {
+//     Ti.API.info('didUpdateValueForCharacteristic');
+//     Ti.API.info(e);
+// });
+
+win.add(btn1);
+win.add(btn2);
 win.open();
-
-// TODO: write your module tests here
-var ti_bluetooth = require('ti.bluetooth');
-Ti.API.info("module is => " + ti_bluetooth);
-
-label.text = ti_bluetooth.example();
-
-Ti.API.info("module exampleProp is => " + ti_bluetooth.exampleProp);
-ti_bluetooth.exampleProp = "This is a test value";
-
-if (Ti.Platform.name == "android") {
-	var proxy = ti_bluetooth.createExample({
-		message: "Creating an example Proxy",
-		backgroundColor: "red",
-		width: 100,
-		height: 100,
-		top: 100,
-		left: 150
-	});
-
-	proxy.printMessage("Hello world!");
-	proxy.message = "Hi world!.  It's me again.";
-	proxy.printMessage("Hello world!");
-	win.add(proxy);
-}
-
