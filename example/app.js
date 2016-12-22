@@ -1,4 +1,4 @@
-/** Info.plist entries
+/** Info.plist entries (for iOS)
 
 <plist>
   <dict>
@@ -15,6 +15,7 @@
 **/
 
 var BLE = require('ti.bluetooth');
+var isAndroid = (Ti.Platform.osname == 'android');
 
 // Initialize the BLE Central Manager
 BLE.initialize();
@@ -37,7 +38,12 @@ btn1.addEventListener('click', function() {
         return;
     }
     
-    BLE.scanForPeripheralsWithServices(['384DF4C0-8BAE-419D-9A65-2D67942C2DB7']);
+	// Todo: Parity
+	if (isAndroid) {
+		BLE.startScan();
+	} else {
+	    BLE.scanForPeripheralsWithServices([]);
+	}
 });
 
 var btn2 = Ti.UI.createButton({
@@ -51,11 +57,6 @@ btn2.addEventListener('click', function() {
         return;
     }
     BLE.stopScan();
-});
-
-BLE.addEventListener('didConnectPeripheral', function(e) {
-    Ti.API.info('didConnectPeripheral');
-    Ti.API.info(e);
 });
 
 BLE.addEventListener('didDiscoverPeripheral', function(e) {
@@ -82,16 +83,25 @@ BLE.addEventListener('didUpdateState', function(e) {
     }
 });
 
+// iOS only
+BLE.addEventListener('didConnectPeripheral', function(e) {
+    Ti.API.info('didConnectPeripheral');
+    Ti.API.info(e);
+});
+
+// iOS only
 BLE.addEventListener('didDiscoverServices', function(e) {
     Ti.API.info('didDiscoverServices');
     Ti.API.info(e);
 });
 
+// iOS only
 BLE.addEventListener('didDiscoverCharacteristicsForService', function(e) {
     Ti.API.info('didDiscoverCharacteristicsForService');
     Ti.API.info(e);
 });
 
+// iOS only
 BLE.addEventListener('didUpdateValueForCharacteristic', function(e) {
     Ti.API.info('didUpdateValueForCharacteristic');
     Ti.API.info(e);
