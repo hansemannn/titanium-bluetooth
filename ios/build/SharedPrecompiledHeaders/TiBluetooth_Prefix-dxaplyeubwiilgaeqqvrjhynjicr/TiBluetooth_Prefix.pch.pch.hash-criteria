@@ -1,0 +1,27 @@
+-x
+objective-c
+-arch
+x86_64
+-std=c99
+-fpascal-strings
+-Os
+-DTI_VERSION=
+-isysroot
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator10.2.sdk
+-fasm-blocks
+-mios-simulator-version-min=6.0
+-g
+-fobjc-abi-version=2
+-fobjc-legacy-dispatch
+-iquote
+-iquote
+-I/Users/hknoechel/Documents/appcelerator_modules/ti.bluetooth/iphone/build/Release-iphonesimulator/include
+-I/Users/hknoechel/Library/Application Support/Titanium/mobilesdk/osx/6.0.0.GA/iphone/include
+-I/Users/hknoechel/Library/Application Support/Titanium/mobilesdk/osx/6.0.0.GA/iphone/include/TiCore
+-I/Users/hknoechel/Library/Application Support/Titanium/mobilesdk/osx/6.0.0.GA/iphone/include/JavaScriptCore
+-F/Users/hknoechel/Documents/appcelerator_modules/ti.bluetooth/iphone/build/Release-iphonesimulator
+-DTI_POST_1_2
+x86_64-apple-darwin16.4.0
+"4.2.1 Compatible Apple LLVM 8.0.0 (clang-800.0.42.1)"
+SDK_PRODUCT_BUILD_VERSION=14C89
+14C89

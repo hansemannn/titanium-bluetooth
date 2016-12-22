@@ -2,13 +2,12 @@
 
 Summary
 ---------------
-Ti.Bluetooth is an open source project to support the iOS CoreBluetooth framework in Titanium Mobile.
-For the Android version of this module, please check [miga/ti.bluetooth](https://github.com/m1ga/ti.bluetooth).
+Ti.Bluetooth is an open source project to support the Bluetooth in Titanium Mobile.
 
 Requirements
 ---------------
 - Titanium Mobile SDK 6.0.0.GA or later
-- iOS 7.1 or later
+- iOS 7.1 / Android 4.0.0 or later
 - Xcode 8.0 or later
 
 Download + Setup
@@ -19,14 +18,14 @@ Download + Setup
 * Install from gitTio    <a href="http://gitt.io/component/ti.bluetooth" target="_blank"><img src="http://gitt.io/badge@2x.png" width="120" height="18" alt="Available on gitTio" /></a>
 
 ### Setup
-Unpack the module and place it inside the `modules/iphone/` folder of your project.
+Unpack the module and place it inside the `modules/` folder of your project.
 Edit the modules section of your `tiapp.xml` file to include this module:
 ```xml
 <modules>
-    <module platform="iphone">ti.bluetooth</module>
+    <module>ti.bluetooth</module>
 </modules>
 ```
-Add the following to your plist:
+Add the following to your plist (only neccessary for iOS):
 ```xml
 <plist>
     <dict>
@@ -50,6 +49,7 @@ Features
 #### Example
 ```js
 var BLE = require('ti.bluetooth');
+var isAndroid = (Ti.Platform.osname == 'android');
 
 // Initialize the BLE Central Manager
 BLE.initialize();
@@ -72,7 +72,12 @@ btn1.addEventListener('click', function() {
         return;
     }
 
-    BLE.scanForPeripheralsWithServices(['384DF4C0-8BAE-419D-9A65-2D67942C2DB7']);
+    // Todo: API Parity
+    if (isAndroid) {
+        BLE.startScan();
+    } else {
+        BLE.scanForPeripheralsWithServices(['384DF4C0-8BAE-419D-9A65-2D67942C2DB7']);
+    }
 });
 
 var btn2 = Ti.UI.createButton({
@@ -86,11 +91,6 @@ btn2.addEventListener('click', function() {
         return;
     }
     BLE.stopScan();
-});
-
-BLE.addEventListener('didConnectPeripheral', function(e) {
-    Ti.API.info('didConnectPeripheral');
-    Ti.API.info(e);
 });
 
 BLE.addEventListener('didDiscoverPeripheral', function(e) {
@@ -129,16 +129,25 @@ BLE.addEventListener('didUpdateState', function(e) {
     }
 });
 
+// iOS only
+BLE.addEventListener('didConnectPeripheral', function(e) {
+    Ti.API.info('didConnectPeripheral');
+    Ti.API.info(e);
+});
+
+// iOS only
 BLE.addEventListener('didDiscoverServices', function(e) {
     Ti.API.info('didDiscoverServices');
     Ti.API.info(e);
 });
 
+// iOS only
 BLE.addEventListener('didDiscoverCharacteristicsForService', function(e) {
     Ti.API.info('didDiscoverCharacteristicsForService');
     Ti.API.info(e);
 });
 
+// iOS only
 BLE.addEventListener('didUpdateValueForCharacteristic', function(e) {
     Ti.API.info('didUpdateValueForCharacteristic');
     Ti.API.info(e);
@@ -149,9 +158,10 @@ win.add(btn2);
 win.open();
 ```
 
-Author
+Authors
 ---------------
-Hans Knoechel ([@hansemannnn](https://twitter.com/hansemannnn) / [Web](http://hans-knoechel.de))
+- [x] Hans Knoechel ([@hansemannnn](https://twitter.com/hansemannnn) / [Web](http://hans-knoechel.de))
+- [x] Michael Gangolf ([@MichaelGangolf](https://twitter.com/MichaelGangolf) / [Web](http://migaweb.de))
 
 License
 ---------------
