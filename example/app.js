@@ -38,12 +38,10 @@ btn1.addEventListener('click', function() {
         return;
     }
     
-	// Todo: Parity
-	if (isAndroid) {
-		BLE.startScan();
-	} else {
-	    BLE.scanForPeripheralsWithServices([]);
-	}
+    BLE.startScan();
+
+    // iOS only (optional): Search for specified services
+    // BLE.startScanWithServices(['384DF4C0-8BAE-419D-9A65-2D67942C2DB7']);
 });
 
 var btn2 = Ti.UI.createButton({

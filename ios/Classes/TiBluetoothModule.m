@@ -110,12 +110,19 @@
     [self centralManager];
 }
 
-- (void)scanForPeripheralsWithServices:(id)args
+- (void)startScan:(id)unused
 {
-    ENSURE_SINGLE_ARG(args, NSArray);
+    ENSURE_ARG_COUNT(unused, 0);
+    
+    [[self centralManager] scanForPeripheralsWithServices:nil options:nil];
+}
+
+- (void)startScanWithPeripherals:(id)args
+{
+    ENSURE_SINGLE_ARG_OR_NIL(args, NSArray);
     
     NSMutableArray<CBUUID*> *uuids = [NSMutableArray array];
-
+    
     for (id uuid in args) {
         ENSURE_TYPE(uuid, NSString);
         [uuids addObject:[CBUUID UUIDWithString:[TiUtils stringValue:uuid]]];
