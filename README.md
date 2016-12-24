@@ -74,7 +74,7 @@ btn1.addEventListener('click', function() {
 
     BLE.startScan();
 
-    // iOS only (optional): Search for specified services
+    // Optional: Search for specified services
     // BLE.startScanWithServices(['384DF4C0-8BAE-419D-9A65-2D67942C2DB7']);
 });
 
