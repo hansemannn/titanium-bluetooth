@@ -18,7 +18,7 @@ import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.KrollDict;
 import android.os.ParcelUuid;
 import org.appcelerator.kroll.KrollProxy;
-      
+
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner ;
 import android.bluetooth.le.ScanResult ;
@@ -233,28 +233,35 @@ public class TiBluetoothModule extends KrollModule
 
 	@Kroll.method
 	public void startScan() {
-        // KrollDict arg = new KrollDict(args);
-	    // onFound = (KrollFunction) arg.get("didDiscoverPeripheral");
-        // 
 		if (btAdapter != null) {
             ScanSettings settings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_BALANCED).build();
             btScanner = btAdapter.getBluetoothLeScanner();
-			//btScanner.startScan(scanFilters(), settings, scanCallback);
-			btScanner.startScan(scanCallback);
+			btScanner.startScan(new ArrayList<ScanFilter>(), settings, scanCallback);
+            isScanning = true;
+		}
+	}
+
+    private List<ScanFilter> scanFilters(String[] ids) {
+        List<ScanFilter> list = new ArrayList<ScanFilter>(1);
+
+        for (int i=0; i < ids.length; i++) {
+            ScanFilter filter = new ScanFilter.Builder().setServiceUuid(ParcelUuid.fromString(ids[i])).build();
+            list.add(filter);
+        }
+        return list;
+    }
+
+    @Kroll.method
+	public void startScanWithServices(String[] obj) {
+		if (btAdapter != null) {
+            ScanSettings settings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_BALANCED).build();
+            btScanner = btAdapter.getBluetoothLeScanner();
+			btScanner.startScan(scanFilters(obj), settings, scanCallback);
             isScanning = true;
 		}
 	}
 	
     
-	// @Override
-	// public void eventListenerAdded(String eventName, int count, KrollProxy proxy) {
-	// 	super.eventListenerAdded(eventName, count, proxy);
-	// 	
-	// 	if (eventName.equals("didDiscoverPeripheral")) {
-	// 		
-	// 	}
-    // }
-
 	@Kroll.method
 	public void stopScan() {
 		if (btAdapter != null) {
