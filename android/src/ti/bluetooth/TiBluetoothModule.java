@@ -16,6 +16,7 @@ import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.Log;
+import org.appcelerator.kroll.common.TiConfig;
 import org.appcelerator.titanium.TiApplication;
 
 import android.app.Activity;
@@ -29,7 +30,6 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
-import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.BroadcastReceiver;
@@ -46,12 +46,14 @@ public class TiBluetoothModule extends KrollModule {
 	}
 
 	private static final String LCAT = "BLE";
+	private static final boolean DBG = TiConfig.LOGD;
 	private static int kJobId = 0;
 	private BluetoothManager btManager;
 	private BluetoothAdapter btAdapter;
 	private TiApplication appContext;
 	private Activity activity;
 	private KrollFunction onFound;
+
 	private KrollFunction onConnections;
 	private BluetoothLeScanner btScanner;
 
@@ -71,12 +73,23 @@ public class TiBluetoothModule extends KrollModule {
 	@Kroll.constant
 	public static final int MANAGER_STATE_RESETTING = 5;
 
+	@Kroll.constant
+	public static final int SCAN_MODE_BALANCED = ScanSettings.SCAN_MODE_BALANCED;
+	@Kroll.constant
+	public static final int SCAN_MODE_LOW_LATENCY = ScanSettings.SCAN_MODE_LOW_LATENCY;
+	@Kroll.constant
+	public static final int SCAN_MODE_LOW_POWER = ScanSettings.SCAN_MODE_LOW_POWER;
+	@Kroll.constant
+	public static final int CAN_MODE_OPPORTUNISTIC = ScanSettings.SCAN_MODE_OPPORTUNISTIC;
+
+	public final int DEFAULT_SCAN_MODE = SCAN_MODE_BALANCED;
+	private int scanmode = DEFAULT_SCAN_MODE;
+
 	public TiBluetoothModule() {
 		super();
 		appContext = TiApplication.getInstance();
 		activity = appContext.getCurrentActivity();
-		// appContext.registerReceiver(mMessageReceiver, new
-		// IntentFilter(MyJobService.BROADCAST_ACTION));
+
 		appContext.registerReceiver(mReceiver, new IntentFilter(
 				BluetoothAdapter.ACTION_STATE_CHANGED));
 	}
@@ -109,10 +122,10 @@ public class TiBluetoothModule extends KrollModule {
 					// The user bluetooth is already disabled.
 					currentState = MANAGER_STATE_POWERED_ON;
 				}
-
 				KrollDict kd = new KrollDict();
 				kd.put("state", btAdapter.getState());
 				fireEvent("didUpdateState", kd);
+
 			}
 		}
 	};
@@ -132,9 +145,9 @@ public class TiBluetoothModule extends KrollModule {
 						ids.add(id.toString());
 					}
 					KrollDict kd = new KrollDict();
-					kd.put("ids", ids.toArray());
 					kd.put("name", device.getName());
 					kd.put("address", device.getAddress());
+					kd.put("ids", ids.toArray());
 					fireEvent("didDiscoverPeripheral", kd);
 
 					BluetoothGatt bluetoothGatt = device.connectGatt(
@@ -203,6 +216,7 @@ public class TiBluetoothModule extends KrollModule {
 					}
 					gatt.readCharacteristic(btc);
 				}
+
 			}
 		}
 	};
@@ -234,33 +248,32 @@ public class TiBluetoothModule extends KrollModule {
 	public void startScan() {
 		if (btAdapter != null) {
 			ScanSettings settings = new ScanSettings.Builder().setScanMode(
-					ScanSettings.SCAN_MODE_BALANCED).build();
+					scanmode).build();
 			btScanner = btAdapter.getBluetoothLeScanner();
-			btScanner.startScan(new ArrayList<ScanFilter>(), settings,
-					scanCallback);
+			// btScanner.startScan(scanFilters(), settings, scanCallback);
+			btScanner.startScan(scanCallback);
 			isScanning = true;
 		}
 	}
 
-	private List<ScanFilter> scanFilters(String[] ids) {
-		List<ScanFilter> list = new ArrayList<ScanFilter>(1);
-		for (int i = 0; i < ids.length; i++) {
-			ScanFilter filter = new ScanFilter.Builder().setServiceUuid(
-					ParcelUuid.fromString(ids[i])).build();
-			list.add(filter);
-		}
-		return list;
+	// @Override
+	// public void eventListenerAdded(String eventName, int count, KrollProxy
+	// proxy) {
+	// super.eventListenerAdded(eventName, count, proxy);
+	//
+	// if (eventName.equals("didDiscoverPeripheral")) {
+	//
+	// }
+	// }
+
+	@Kroll.method
+	public void setScanMode(int sm) {
+		scanmode = sm;
 	}
 
 	@Kroll.method
-	public void startScanWithServices(String[] ids) {
-		if (btAdapter != null) {
-			ScanSettings settings = new ScanSettings.Builder().setScanMode(
-					ScanSettings.SCAN_MODE_BALANCED).build();
-			btScanner = btAdapter.getBluetoothLeScanner();
-			btScanner.startScan(scanFilters(ids), settings, scanCallback);
-			isScanning = true;
-		}
+	public int getScanMode() {
+		return scanmode;
 	}
 
 	@Kroll.method
@@ -270,19 +283,4 @@ public class TiBluetoothModule extends KrollModule {
 			isScanning = false;
 		}
 	}
-
-	/*
-	 * Flush pending batch scan results stored in Bluetooth controller. This
-	 * will return Bluetooth LE scan results batched on bluetooth controller.
-	 * Returns immediately, batch scan results data will be delivered through
-	 * the callback.
-	 */
-	@Kroll.method
-	public void flushPendingScanResults() {
-		if (btAdapter != null) {
-			btScanner.flushPendingScanResults(scanCallback);
-			// isScanning = false; ?
-		}
-	}
-
 }
