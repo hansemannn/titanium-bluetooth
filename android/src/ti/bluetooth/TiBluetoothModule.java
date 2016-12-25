@@ -145,8 +145,12 @@ public class TiBluetoothModule extends KrollModule {
 					Log.d(LCAT,
 							"Found: " + device.getName() + " "
 									+ device.getAddress());
-					ParcelUuid ids[] = device.getUuids();
+					ArrayList<String> ids = new ArrayList<String>();
+					for (ParcelUuid id : device.getUuids()) {
+						ids.add(id.toString());
+					}
 					KrollDict kd = new KrollDict();
+					kd.put("ids", ids.toArray());
 					kd.put("name", device.getName());
 					kd.put("address", device.getAddress());
 					fireEvent("didDiscoverPeripheral", kd);

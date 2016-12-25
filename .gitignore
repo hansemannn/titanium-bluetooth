@@ -1,1 +1,8 @@
-.deployables
+LICENSE
+README.md
+android/build
+assets
+documentation
+example
+ios
+start.sh
