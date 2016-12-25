@@ -75,9 +75,6 @@ public class TiBluetoothModule extends KrollModule
     private KrollFunction onConnections;
     private BluetoothLeScanner btScanner;
     
-    private int currentState = 0;
-    private boolean isScanning = false;
-    
     @Kroll.constant
     public static final int MANAGER_STATE_UNKNOWN = 0;
     @Kroll.constant
@@ -90,6 +87,18 @@ public class TiBluetoothModule extends KrollModule
     public static final int MANAGER_STATE_POWERED_ON = 12;
     @Kroll.constant
     public static final int MANAGER_STATE_RESETTING = 5;
+    @Kroll.constant
+    public static final int SCAN_MODE_BALANCED = 1;
+    @Kroll.constant
+    public static final int SCAN_MODE_LOW_LATENCY = 2;
+    @Kroll.constant
+    public static final int SCAN_MODE_LOW_POWER = 0;
+    @Kroll.constant
+    public static final int SCAN_MODE_OPPORTUNISTIC = -1;
+    
+    private int currentState = MANAGER_STATE_UNKNOWN;
+    private int currentScanMode = SCAN_MODE_LOW_POWER;
+    private boolean isScanning = false;
 
 	public TiBluetoothModule() {
 		super();
@@ -229,12 +238,30 @@ public class TiBluetoothModule extends KrollModule
             currentState = MANAGER_STATE_UNSUPPORTED;
         }
 	}
+    
+    @Kroll.getProperty @Kroll.method
+    public int getScanMode() {
+        return currentScanMode;
+    }
+
+    @Kroll.setProperty @Kroll.method
+    public void setScanMode(int scanMode) {
+        if (scanMode == SCAN_MODE_BALANCED || 
+            scanMode == SCAN_MODE_LOW_POWER || 
+            scanMode == SCAN_MODE_LOW_LATENCY || 
+            scanMode == SCAN_MODE_OPPORTUNISTIC) {
+                currentScanMode = scanMode;
+            } else {
+                currentScanMode = SCAN_MODE_LOW_POWER;
+            }
+        
+    }
 	
 
 	@Kroll.method
 	public void startScan() {
 		if (btAdapter != null) {
-            ScanSettings settings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_BALANCED).build();
+            ScanSettings settings = new ScanSettings.Builder().setScanMode(currentScanMode).build();
             btScanner = btAdapter.getBluetoothLeScanner();
 			btScanner.startScan(new ArrayList<ScanFilter>(), settings, scanCallback);
             isScanning = true;
@@ -254,7 +281,7 @@ public class TiBluetoothModule extends KrollModule
     @Kroll.method
 	public void startScanWithServices(String[] obj) {
 		if (btAdapter != null) {
-            ScanSettings settings = new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_BALANCED).build();
+            ScanSettings settings = new ScanSettings.Builder().setScanMode(currentScanMode).build();
             btScanner = btAdapter.getBluetoothLeScanner();
 			btScanner.startScan(scanFilters(obj), settings, scanCallback);
             isScanning = true;

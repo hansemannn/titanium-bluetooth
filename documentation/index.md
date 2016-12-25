@@ -1,39 +1,33 @@
-# ti.bluetooth Module
+# API documentation
 
-## Description
+## Properties
 
-TODO: Enter your module description here
 
-## Accessing the ti.bluetooth Module
 
-To access this module from JavaScript, you would do the following:
+* `MANAGER_STATE_UNKNOWN` _(int)_
+* `MANAGER_STATE_UNSUPPORTED` _(int)_
+* `MANAGER_STATE_UNAUTHORIZED` _(int)_
+* `MANAGER_STATE_POWERED_OFF` _(int)_
+* `MANAGER_STATE_POWERED_ON` _(int)_
+* `MANAGER_STATE_RESETTING` _(int)_
+* `SCAN_MODE_BALANCED` _(int)_ - (Android only)
+* `SCAN_MODE_LOW_LATENCY` _(int)_ - (Android only)
+* `SCAN_MODE_LOW_POWER` _(int)_ - (Android only)
+* `SCAN_MODE_OPPORTUNISTIC` _(int)_ - (Android only)
 
-    var ti_bluetooth = require("ti.bluetooth");
+## Methods
+* `isScanning()`
+* `startScan()`
+* `getScanMode()`
+* `setScanMode()`
+* `initialize()`
+* `stopScan()`
+* `startScanWithServices([Array])`
 
-The ti_bluetooth variable is a reference to the Module object.
-
-## Reference
-
-TODO: If your module has an API, you should document
-the reference here.
-
-### ti_bluetooth.function
-
-TODO: This is an example of a module function.
-
-### ti_bluetooth.property
-
-TODO: This is an example of a module property.
-
-## Usage
-
-TODO: Enter your usage example here
-
-## Author
-
-TODO: Enter your author name, email and other contact
-details you want to share here.
-
-## License
-
-TODO: Enter your license/legal information here.
+## Events
+* `didUpdateState`
+* `didDiscoverPeripheral`
+* `didConnectPeripheral` - (iOS only)
+* `didDiscoverServices` - (iOS only)
+* `didDiscoverCharacteristicsForService` - (iOS only)
+* `didUpdateValueForCharacteristic`  - (iOS only)
