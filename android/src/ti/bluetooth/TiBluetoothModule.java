@@ -145,7 +145,7 @@ public class TiBluetoothModule extends KrollModule {
 					Log.d(LCAT,
 							"Found: " + device.getName() + " "
 									+ device.getAddress());
-
+					ParcelUuid ids[] = device.getUuids();
 					KrollDict kd = new KrollDict();
 					kd.put("name", device.getName());
 					kd.put("address", device.getAddress());
@@ -233,7 +233,6 @@ public class TiBluetoothModule extends KrollModule {
 
 	@Kroll.method
 	public void initialize() {
-
 		btManager = (BluetoothManager) appContext
 				.getSystemService(Context.BLUETOOTH_SERVICE);
 		btAdapter = btManager.getAdapter();
@@ -259,7 +258,6 @@ public class TiBluetoothModule extends KrollModule {
 
 	private List<ScanFilter> scanFilters(String[] ids) {
 		List<ScanFilter> list = new ArrayList<ScanFilter>(1);
-
 		for (int i = 0; i < ids.length; i++) {
 			ScanFilter filter = new ScanFilter.Builder().setServiceUuid(
 					ParcelUuid.fromString(ids[i])).build();
