@@ -1,6 +1,7 @@
 LICENSE
 README.md
 android/build
+android/libs
 assets
 documentation
 example
