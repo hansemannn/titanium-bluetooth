@@ -1,17 +1,20 @@
-<<<<<<< HEAD
 LICENSE
 README.md
-android/build
-android/libs
-assets
+assets/*
 documentation
-example
-ios/
+example/*
+ios/*
 .gitignore
-android/build.properties
 start.sh
-=======
-/iphone/build
-iphone/ti.bluetooth-iphone-*
-iphone/ti.bluetooth.xcodeproj/project.xcworkspace/xcuserdata/*.xcuserdatad
->>>>>>> bace0db53d97279743b0c80c722f34ca6401f6dc
+android/LICENSE
+android/Resources
+amdroid/assets
+android/build/*
+android/build.properties
+android/build.xml
+android/dist/*
+android/documentation
+android/example
+android/libs/*
+android/manifest
+src

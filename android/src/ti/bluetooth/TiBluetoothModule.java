@@ -149,10 +149,8 @@ public class TiBluetoothModule extends KrollModule {
 					kd.put("address", device.getAddress());
 					kd.put("ids", ids.toArray());
 					fireEvent("didDiscoverPeripheral", kd);
-
 					BluetoothGatt bluetoothGatt = device.connectGatt(
 							appContext, false, btleGattCallback);
-
 					btScanner.stopScan(scanCallback);
 				}
 			}
