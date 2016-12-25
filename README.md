@@ -46,6 +46,10 @@ Features
 - [x] Start / Stop peripheral scanning
 - [x] Receive state events
 
+#### Documentation 
+
+API documentation can be found at [documentation/index.md](documentation/index.md)
+
 #### Example
 ```js
 var BLE = require('ti.bluetooth');
