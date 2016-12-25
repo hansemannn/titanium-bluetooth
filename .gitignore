@@ -5,5 +5,5 @@ android/libs
 assets
 documentation
 example
-ios
+ios/
 start.sh
