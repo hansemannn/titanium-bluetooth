@@ -8,52 +8,36 @@
  */
 package ti.bluetooth;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.appcelerator.kroll.KrollDict;
+import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
-import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.kroll.common.Log;
 import org.appcelerator.kroll.common.TiConfig;
-import org.appcelerator.titanium.util.TiConvert;
-import org.appcelerator.kroll.KrollFunction;
-import org.appcelerator.kroll.KrollDict;
-import android.os.ParcelUuid;
-import org.appcelerator.kroll.KrollProxy;
+import org.appcelerator.titanium.TiApplication;
 
-import android.bluetooth.BluetoothManager;
-import android.bluetooth.le.BluetoothLeScanner;
-import android.bluetooth.le.ScanResult;
-import android.bluetooth.le.ScanCallback;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
-import android.bluetooth.BluetoothGattServer;
-import android.bluetooth.BluetoothGattServerCallback;
 import android.bluetooth.BluetoothGattService;
-import android.bluetooth.le.AdvertiseCallback;
-import android.bluetooth.le.AdvertiseData;
-import android.bluetooth.le.AdvertiseSettings;
-import android.bluetooth.le.BluetoothLeAdvertiser;
-import android.bluetooth.BluetoothProfile;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
-
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 import android.content.BroadcastReceiver;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.app.Activity;
-import java.util.List;
-import android.os.Handler;
-import java.util.UUID;
-import java.util.HashMap;
-import java.util.ArrayList;
+import android.os.ParcelUuid;
 
 @Kroll.module(name = "TiBluetooth", id = "ti.bluetooth")
 public class TiBluetoothModule extends KrollModule {
@@ -63,7 +47,6 @@ public class TiBluetoothModule extends KrollModule {
 	}
 
 	private static final String LCAT = "BLE";
-	private static final boolean DBG = TiConfig.LOGD;
 	private static int kJobId = 0;
 	private BluetoothManager btManager;
 	private BluetoothAdapter btAdapter;
