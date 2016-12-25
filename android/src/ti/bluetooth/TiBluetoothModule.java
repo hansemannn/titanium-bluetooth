@@ -20,9 +20,9 @@ import android.os.ParcelUuid;
 import org.appcelerator.kroll.KrollProxy;
 
 import android.bluetooth.BluetoothManager;
-import android.bluetooth.le.BluetoothLeScanner ;
-import android.bluetooth.le.ScanResult ;
-import android.bluetooth.le.ScanCallback ;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanCallback;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -44,7 +44,7 @@ import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.BroadcastReceiver;
- 
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -55,246 +55,221 @@ import java.util.UUID;
 import java.util.HashMap;
 import java.util.ArrayList;
 
+@Kroll.module(name = "TiBluetooth", id = "ti.bluetooth")
+public class TiBluetoothModule extends KrollModule {
 
-@Kroll.module(name="TiBluetooth", id="ti.bluetooth")
-public class TiBluetoothModule extends KrollModule
-{
-
-	public interface ConnectionCallback {
+    public interface ConnectionCallback {
         void onConnectionStateChange(BluetoothDevice device, int newState);
     }
 
-	private static final String LCAT = "BLE";
-	private static final boolean DBG = TiConfig.LOGD;
-	private static int kJobId = 0;
-	private BluetoothManager btManager; 
-	private BluetoothAdapter btAdapter;
-	private TiApplication appContext;
-	private Activity activity;
-	private KrollFunction onFound;
+    private static final String LCAT = "BLE";
+    private static final boolean DBG = TiConfig.LOGD;
+    private BluetoothManager btManager;
+    private BluetoothAdapter btAdapter;
+    private TiApplication appContext;
+    private Activity activity;
+    private KrollFunction onFound;
     private KrollFunction onConnections;
     private BluetoothLeScanner btScanner;
-    
-    @Kroll.constant
-    public static final int MANAGER_STATE_UNKNOWN = 0;
-    @Kroll.constant
-    public static final int MANAGER_STATE_UNSUPPORTED = 1;
-    @Kroll.constant
+
+    @Kroll.constant 
+    public static final int MANAGER_STATE_UNKNOWN      = 0;
+    @Kroll.constant 
+    public static final int MANAGER_STATE_UNSUPPORTED  = 1;
+    @Kroll.constant 
     public static final int MANAGER_STATE_UNAUTHORIZED = 2;
-    @Kroll.constant
-    public static final int MANAGER_STATE_POWERED_OFF = 10;
-    @Kroll.constant
-    public static final int MANAGER_STATE_POWERED_ON = 12;
-    @Kroll.constant
-    public static final int MANAGER_STATE_RESETTING = 5;
-    @Kroll.constant
-    public static final int SCAN_MODE_BALANCED = 1;
-    @Kroll.constant
-    public static final int SCAN_MODE_LOW_LATENCY = 2;
-    @Kroll.constant
-    public static final int SCAN_MODE_LOW_POWER = 0;
-    @Kroll.constant
-    public static final int SCAN_MODE_OPPORTUNISTIC = -1;
-    
+    @Kroll.constant 
+    public static final int MANAGER_STATE_POWERED_OFF  = 10;
+    @Kroll.constant 
+    public static final int MANAGER_STATE_POWERED_ON   = 12;
+    @Kroll.constant 
+    public static final int MANAGER_STATE_RESETTING    = 5;
+    @Kroll.constant 
+    public static final int SCAN_MODE_BALANCED         = 1;
+    @Kroll.constant 
+    public static final int SCAN_MODE_LOW_LATENCY      = 2;
+    @Kroll.constant 
+    public static final int SCAN_MODE_LOW_POWER        = 0;
+    @Kroll.constant 
+    public static final int SCAN_MODE_OPPORTUNISTIC    = -1;
+
     private int currentState = MANAGER_STATE_UNKNOWN;
     private int currentScanMode = SCAN_MODE_LOW_POWER;
     private boolean isScanning = false;
 
-	public TiBluetoothModule() {
-		super();
-		appContext = TiApplication.getInstance();
-		activity = appContext.getCurrentActivity();
-		//appContext.registerReceiver(mMessageReceiver, new IntentFilter(MyJobService.BROADCAST_ACTION));
-		appContext.registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));    
-	}
+    public TiBluetoothModule() {
+        super();
+        appContext = TiApplication.getInstance();
+        activity   = appContext.getCurrentActivity();
+        appContext.registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+    }
 
-	@Kroll.onAppCreate
-	public static void onAppCreate(TiApplication app) {
-		Log.d(LCAT, "inside onAppCreate");
-	}
-	
-	
-	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-	    @Override
-	    public void onReceive(Context context, Intent intent) {
+    @Kroll.onAppCreate public static void onAppCreate(TiApplication app) {
+        Log.d(LCAT, "inside onAppCreate");
+    }
 
-	        String action = intent.getAction();
+    private final BroadcastReceiver mReceiver            = new BroadcastReceiver() {
+        @Override public void onReceive(Context context, Intent intent) {
 
-	        // It means the user has changed his bluetooth state.
-	        if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+            String action = intent.getAction();
 
-	            if (btAdapter.getState() == BluetoothAdapter.STATE_TURNING_OFF) {
-	                // The user bluetooth is turning off yet, but it is not disabled yet.
-					currentState = MANAGER_STATE_POWERED_OFF;
-	            }
+            // It means the user has changed his bluetooth state.
+            if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
 
-	            if (btAdapter.getState() == BluetoothAdapter.STATE_OFF) {
-	                // The user bluetooth is already disabled.
-					currentState = MANAGER_STATE_POWERED_OFF;
-	            }
-	            if (btAdapter.getState() == BluetoothAdapter.STATE_ON) {
-	                // The user bluetooth is already disabled.
-					currentState = MANAGER_STATE_POWERED_ON;
-	            }
+                if (btAdapter.getState() == BluetoothAdapter.STATE_TURNING_OFF) {
+                    // The user bluetooth is turning off yet, but it is not disabled yet.
+                    currentState = MANAGER_STATE_POWERED_OFF;
+                }
 
-				KrollDict kd = new KrollDict();
-				kd.put("state", btAdapter.getState());
-				fireEvent("didUpdateState", kd);
-	        }
-	    }
-	};    
+                if (btAdapter.getState() == BluetoothAdapter.STATE_OFF) {
+                    // The user bluetooth is already disabled.
+                    currentState = MANAGER_STATE_POWERED_OFF;
+                }
+                if (btAdapter.getState() == BluetoothAdapter.STATE_ON) {
+                    // The user bluetooth is already disabled.
+                    currentState = MANAGER_STATE_POWERED_ON;
+                }
 
-	private final ScanCallback scanCallback = new ScanCallback() {
-        @Override
-        public void onScanResult(int callbackType, ScanResult result) {
+                KrollDict kd = new KrollDict();
+                kd.put("state", btAdapter.getState());
+                fireEvent("didUpdateState", kd);
+            }
+        }
+    };
+
+    private final ScanCallback scanCallback = new ScanCallback() {
+        @Override public void onScanResult(int callbackType, ScanResult result) {
             BluetoothDevice device = result.getDevice();
             if (device != null) {
                 Log.d(LCAT, "Found something " + device.getName());
-                if (device.getName() != null){
-        			Log.d(LCAT, "Found: " + device.getName() + " " + device.getAddress());
-                    
+                if (device.getName() != null) {
+                    Log.d(LCAT, "Found: " + device.getName() + " " + device.getAddress());
+
                     KrollDict kd = new KrollDict();
                     kd.put("name", device.getName());
                     kd.put("address", device.getAddress());
                     fireEvent("didDiscoverPeripheral", kd);
-                    
-        			BluetoothGatt bluetoothGatt = device.connectGatt(appContext, false, btleGattCallback);
-                    
+
+                    BluetoothGatt bluetoothGatt = device.connectGatt(appContext, false, btleGattCallback);
+
                     btScanner.stopScan(scanCallback);
                 }
             }
-		}
-	};
+        }
+    };
 
+    private final BluetoothGattCallback btleGattCallback = new BluetoothGattCallback() {
 
-	private final BluetoothGattCallback btleGattCallback = new BluetoothGattCallback() {
+        @Override public void onCharacteristicChanged(BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic) {
+            // this will get called anytime you perform a read or write characteristic
+            // operation
+            byte[] data = characteristic.getValue();
+            Log.i(LCAT, "Char changed " + data.toString());
+            for (BluetoothGattDescriptor descriptor : characteristic.getDescriptors()) {
+                // find descriptor UUID that matches Client Characteristic Configuration
+                // (0x2902) and then call setValue on that descriptor
+                descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                //bluetoothGatt.writeDescriptor(descriptor);
+            }
+        }
 
-		@Override
-		public void onCharacteristicChanged(BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic) {
-			// this will get called anytime you perform a read or write characteristic operation
-			byte[] data = characteristic.getValue();
-			Log.i(LCAT, "Char changed " + data.toString());
-			for (BluetoothGattDescriptor descriptor : characteristic.getDescriptors()) {
-				//find descriptor UUID that matches Client Characteristic Configuration (0x2902)
-				// and then call setValue on that descriptor
-				descriptor.setValue( BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-				//bluetoothGatt.writeDescriptor(descriptor);
-			}
-		}
-
-		@Override
-		public void onConnectionStateChange(final BluetoothGatt gatt, final int status, final int newState) { 
-			// this will get called when a device connects or disconnects	
+        @Override public void onConnectionStateChange(final BluetoothGatt gatt, final int status, final int newState) {
+            // this will get called when a device connects or disconnects
             Log.i(LCAT, "connected/disconnected " + status);
-            gatt.discoverServices();		
-		}
+            gatt.discoverServices();
+        }
 
-		@Override
-		public void onServicesDiscovered(final BluetoothGatt gatt, final int status) { 
-			// this will get called after the client initiates a 			BluetoothGatt.discoverServices() call
+        @Override public void onServicesDiscovered(final BluetoothGatt gatt, final int status) {
+            // this will get called after the client initiates a
+            // BluetoothGatt.discoverServices() call
 
-			List<BluetoothGattService> services = gatt.getServices();
+            List<BluetoothGattService> services = gatt.getServices();
             Log.i(LCAT, "Services: " + services.size());
-			for (BluetoothGattService service : services) {
-				List<BluetoothGattCharacteristic> characteristics = service.getCharacteristics();
+            for (BluetoothGattService service : services) {
+                List<BluetoothGattCharacteristic> characteristics = service.getCharacteristics();
                 for (BluetoothGattCharacteristic btc : characteristics) {
                     Log.i(LCAT, "uuid: " + btc.getUuid());
                     byte[] data = btc.getValue();
-                     if (data != null && data.length > 0) {
+                    if (data != null && data.length > 0) {
                         final StringBuilder stringBuilder = new StringBuilder(data.length);
-                        for(byte byteChar : data) {
+                        for (byte byteChar : data) {
                             stringBuilder.append(String.format("%02X ", byteChar));
                         }
-                        
-                        Log.i(LCAT, "String val: " + btc.getUuid() + " " + btc.getValue()+ " " + stringBuilder.toString());
+
+                        Log.i(LCAT, "String val: " + btc.getUuid() + " " + btc.getValue() + " " + stringBuilder.toString());
                     }
                     gatt.readCharacteristic(btc);
                 }
-			}
-		}
-	};
+            }
+        }
+    };
 
-	
-
-	@Kroll.method
-	public int getState() {
+    @Kroll.method public int getState() {
         return currentState;
     }
-    
-    @Kroll.method
-	public boolean isScanning() {
+
+    @Kroll.method public boolean isScanning() {
         return isScanning;
     }
-        
-	@Kroll.method
-	public void initialize() {
-        
-		btManager = (BluetoothManager)appContext.getSystemService(appContext.BLUETOOTH_SERVICE);
-		btAdapter = btManager.getAdapter();
-		if (btAdapter != null) {
-			Log.d(LCAT,"BT init");
-			currentState = btAdapter.getState();
-		} else {
+
+    @Kroll.method public void initialize() {
+
+        btManager = (BluetoothManager)appContext.getSystemService(appContext.BLUETOOTH_SERVICE);
+        btAdapter = btManager.getAdapter();
+        if (btAdapter != null) {
+            Log.d(LCAT, "BT init");
+            currentState = btAdapter.getState();
+        } else {
             currentState = MANAGER_STATE_UNSUPPORTED;
         }
-	}
-    
-    @Kroll.getProperty @Kroll.method
-    public int getScanMode() {
+    }
+
+    @Kroll.getProperty @Kroll.method public int getScanMode() {
         return currentScanMode;
     }
 
-    @Kroll.setProperty @Kroll.method
-    public void setScanMode(int scanMode) {
-        if (scanMode == SCAN_MODE_BALANCED || 
-            scanMode == SCAN_MODE_LOW_POWER || 
-            scanMode == SCAN_MODE_LOW_LATENCY || 
-            scanMode == SCAN_MODE_OPPORTUNISTIC) {
-                currentScanMode = scanMode;
-            } else {
-                currentScanMode = SCAN_MODE_LOW_POWER;
-            }
-        
-    }
-	
+    @Kroll.setProperty @Kroll.method public void setScanMode(int scanMode) {
+        if (scanMode == SCAN_MODE_BALANCED || scanMode == SCAN_MODE_LOW_POWER || scanMode == SCAN_MODE_LOW_LATENCY || scanMode == SCAN_MODE_OPPORTUNISTIC) {
+            currentScanMode = scanMode;
+        } else {
+            currentScanMode = SCAN_MODE_LOW_POWER;
+        }
 
-	@Kroll.method
-	public void startScan() {
-		if (btAdapter != null) {
+    }
+
+    @Kroll.method public void startScan() {
+        if (btAdapter != null) {
             ScanSettings settings = new ScanSettings.Builder().setScanMode(currentScanMode).build();
             btScanner = btAdapter.getBluetoothLeScanner();
-			btScanner.startScan(new ArrayList<ScanFilter>(), settings, scanCallback);
+            btScanner.startScan(new ArrayList<ScanFilter>(), settings, scanCallback);
             isScanning = true;
-		}
-	}
+        }
+    }
 
     private List<ScanFilter> scanFilters(String[] ids) {
         List<ScanFilter> list = new ArrayList<ScanFilter>(1);
 
-        for (int i=0; i < ids.length; i++) {
+        for (int i = 0; i < ids.length; i++) {
             ScanFilter filter = new ScanFilter.Builder().setServiceUuid(ParcelUuid.fromString(ids[i])).build();
             list.add(filter);
         }
         return list;
     }
 
-    @Kroll.method
-	public void startScanWithServices(String[] obj) {
-		if (btAdapter != null) {
+    @Kroll.method public void startScanWithServices(String[] obj) {
+        if (btAdapter != null) {
             ScanSettings settings = new ScanSettings.Builder().setScanMode(currentScanMode).build();
             btScanner = btAdapter.getBluetoothLeScanner();
-			btScanner.startScan(scanFilters(obj), settings, scanCallback);
+            btScanner.startScan(scanFilters(obj), settings, scanCallback);
             isScanning = true;
-		}
-	}
-	
-    
-	@Kroll.method
-	public void stopScan() {
-		if (btAdapter != null) {
-			btScanner.stopScan(scanCallback);
+        }
+    }
+
+    @Kroll.method public void stopScan() {
+        if (btAdapter != null) {
+            btScanner.stopScan(scanCallback);
             isScanning = false;
-		}
-	}
+        }
+    }
 
 }
