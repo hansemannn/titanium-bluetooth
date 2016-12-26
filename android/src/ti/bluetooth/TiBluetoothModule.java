@@ -155,7 +155,9 @@ public class TiBluetoothModule extends KrollModule {
 		public void onScanResult(int callbackType, ScanResult result) {
 			BluetoothDevice device = result.getDevice();
 			if (device != null) {
-				device.Log.d(LCAT, "Found something " + device.getName());
+				BluetoothDeviceProxy btDeviceProxy = new BluetoothDeviceProxy(
+						device);
+				Log.d(LCAT, "Found something " + device.getName());
 				if (device.getName() != null) {
 					Log.d(LCAT,
 							"Found: " + device.getName() + " "
