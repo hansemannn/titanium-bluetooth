@@ -53,4 +53,5 @@ public class BluetoothSocketProxy extends KrollProxy {
 	public boolean isConnected() {
 		return btSocket.isConnected();
 	}
+
 }
