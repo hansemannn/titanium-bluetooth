@@ -88,7 +88,6 @@ public class TiBluetoothModule extends KrollModule {
 		super();
 		appContext = TiApplication.getInstance();
 		activity = appContext.getCurrentActivity();
-
 		appContext.registerReceiver(mReceiver, new IntentFilter(
 				BluetoothAdapter.ACTION_STATE_CHANGED));
 	}
@@ -101,12 +100,9 @@ public class TiBluetoothModule extends KrollModule {
 	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-
 			String action = intent.getAction();
-
 			// It means the user has changed his bluetooth state.
 			if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
-
 				if (btAdapter.getState() == BluetoothAdapter.STATE_TURNING_OFF) {
 					// The user bluetooth is turning off yet, but it is not
 					// disabled yet.
@@ -123,8 +119,17 @@ public class TiBluetoothModule extends KrollModule {
 				}
 				KrollDict kd = new KrollDict();
 				kd.put("state", btAdapter.getState());
+				kd.put("address", btAdapter.getAddress());
+				kd.put("name", btAdapter.getName());
+				kd.put("discovering", btAdapter.isDiscovering());
+				kd.put("enabled", btAdapter.isEnabled());
+				kd.put("multipleAdvertisementSupported",
+						btAdapter.isMultipleAdvertisementSupported());
+				kd.put("offloadedFilteringSupported",
+						btAdapter.isOffloadedFilteringSupported());
+				kd.put("offloadedScanBatchingSupported",
+						btAdapter.isOffloadedScanBatchingSupported());
 				fireEvent("didUpdateState", kd);
-
 			}
 		}
 	};
