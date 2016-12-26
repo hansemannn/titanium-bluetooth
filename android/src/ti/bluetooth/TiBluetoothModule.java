@@ -47,7 +47,7 @@ public class TiBluetoothModule extends KrollModule {
 		void onConnectionStateChange(BluetoothDevice device, int newState);
 	}
 
-	private static final String LCAT = "BLE";
+	public static final String LCAT = "BLE";
 	private static int kJobId = 0;
 	private BluetoothManager btManager;
 	private BluetoothAdapter btAdapter;
@@ -146,7 +146,6 @@ public class TiBluetoothModule extends KrollModule {
 				kd.put("offloadedScanBatchingSupported",
 						btAdapter.isOffloadedScanBatchingSupported());
 				fireEvent("didUpdateState", kd);
-
 			}
 		}
 	};
@@ -156,7 +155,7 @@ public class TiBluetoothModule extends KrollModule {
 		public void onScanResult(int callbackType, ScanResult result) {
 			BluetoothDevice device = result.getDevice();
 			if (device != null) {
-				Log.d(LCAT, "Found something " + device.getName());
+				device.Log.d(LCAT, "Found something " + device.getName());
 				if (device.getName() != null) {
 					Log.d(LCAT,
 							"Found: " + device.getName() + " "
