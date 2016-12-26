@@ -19,6 +19,7 @@ import org.appcelerator.kroll.common.Log;
 import org.appcelerator.kroll.common.TiConfig;
 import org.appcelerator.titanium.TiApplication;
 
+import android.bluetooth.BluetoothProfile;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -81,6 +82,14 @@ public class TiBluetoothModule extends KrollModule {
 	@Kroll.constant
 	public static final int SCAN_MODE_OPPORTUNISTIC = ScanSettings.SCAN_MODE_OPPORTUNISTIC;
 
+	@Kroll.constant
+	public static final int PROFILE_ADP = BluetoothProfile.A2DP;
+
+	@Kroll.constant
+	public static final int PROFILE_HEADSET = BluetoothProfile.HEADSET;
+	@Kroll.constant
+	public static final int PROFILE_HEALTH = BluetoothProfile.HEALTH;
+
 	public final int DEFAULT_SCAN_MODE = SCAN_MODE_BALANCED;
 	private int scanmode = DEFAULT_SCAN_MODE;
 
@@ -130,6 +139,7 @@ public class TiBluetoothModule extends KrollModule {
 				kd.put("offloadedScanBatchingSupported",
 						btAdapter.isOffloadedScanBatchingSupported());
 				fireEvent("didUpdateState", kd);
+
 			}
 		}
 	};
@@ -316,4 +326,13 @@ public class TiBluetoothModule extends KrollModule {
 			isScanning = false;
 		}
 	}
+
+	@Kroll.method
+	public void flushPendingScanResults() {
+		if (btAdapter != null) {
+			btScanner.flushPendingScanResults(scanCallback);
+			// isScanning = false;
+		}
+	}
+
 }
