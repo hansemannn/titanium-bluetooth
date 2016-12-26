@@ -30,6 +30,7 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.BroadcastReceiver;
@@ -244,12 +245,43 @@ public class TiBluetoothModule extends KrollModule {
 
 	@Kroll.method
 	public void startScan() {
+		startScan(scanmode);
+	}
+
+	@Kroll.method
+	public void startScan(int _scanmode) {
+		if (btAdapter != null) {
+			ScanSettings scanSettings = new ScanSettings.Builder().setScanMode(
+					_scanmode).build();
+			btScanner = btAdapter.getBluetoothLeScanner();
+			btScanner.startScan(scanFilters(), scanSettings, scanCallback);
+			// btScanner.startScan(scanCallback);
+			isScanning = true;
+		}
+	}
+
+	private List<ScanFilter> scanFilters() {
+		String[] ids = {};
+		return scanFilters(ids);
+	}
+
+	private List<ScanFilter> scanFilters(String[] ids) {
+		List<ScanFilter> list = new ArrayList<ScanFilter>(1);
+		for (int i = 0; i < ids.length; i++) {
+			ScanFilter filter = new ScanFilter.Builder().setServiceUuid(
+					ParcelUuid.fromString(ids[i])).build();
+			list.add(filter);
+		}
+		return list;
+	}
+
+	@Kroll.method
+	public void startScanWithServices(String[] ids) {
 		if (btAdapter != null) {
 			ScanSettings settings = new ScanSettings.Builder().setScanMode(
-					scanmode).build();
+					ScanSettings.SCAN_MODE_BALANCED).build();
 			btScanner = btAdapter.getBluetoothLeScanner();
-			// btScanner.startScan(scanFilters(), settings, scanCallback);
-			btScanner.startScan(scanCallback);
+			btScanner.startScan(scanFilters(ids), settings, scanCallback);
 			isScanning = true;
 		}
 	}
