@@ -47,14 +47,12 @@ public class TiBluetoothModule extends KrollModule {
 	}
 
 	private static final String LCAT = "BLE";
-	private static final boolean DBG = TiConfig.LOGD;
 	private static int kJobId = 0;
 	private BluetoothManager btManager;
 	private BluetoothAdapter btAdapter;
 	private TiApplication appContext;
 	private Activity activity;
 	private KrollFunction onFound;
-
 	private KrollFunction onConnections;
 	private BluetoothLeScanner btScanner;
 
@@ -81,7 +79,7 @@ public class TiBluetoothModule extends KrollModule {
 	@Kroll.constant
 	public static final int SCAN_MODE_LOW_POWER = ScanSettings.SCAN_MODE_LOW_POWER;
 	@Kroll.constant
-	public static final int CAN_MODE_OPPORTUNISTIC = ScanSettings.SCAN_MODE_OPPORTUNISTIC;
+	public static final int SCAN_MODE_OPPORTUNISTIC = ScanSettings.SCAN_MODE_OPPORTUNISTIC;
 
 	public final int DEFAULT_SCAN_MODE = SCAN_MODE_BALANCED;
 	private int scanmode = DEFAULT_SCAN_MODE;
