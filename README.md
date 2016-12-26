@@ -2,7 +2,7 @@
 
 Summary
 ---------------
-Ti.Bluetooth is an open source project to support the Bluetooth in Titanium Mobile.
+Ti.Bluetooth is an open source project to support Bluetooth / BLE in Appcelerator Titanium.
 
 Requirements
 ---------------
