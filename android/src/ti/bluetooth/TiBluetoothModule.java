@@ -90,6 +90,13 @@ public class TiBluetoothModule extends KrollModule {
 	@Kroll.constant
 	public static final int PROFILE_HEALTH = BluetoothProfile.HEALTH;
 
+	@Kroll.constant
+	public static final int DEVICE_BOND_BONDED = BluetoothDevice.BOND_BONDED;
+	@Kroll.constant
+	public static final int DEVICE_BOND_BONDING = BluetoothDevice.BOND_BONDING;
+	@Kroll.constant
+	public static final int DEVICE_BOND_NONE = BluetoothDevice.BOND_NONE;
+
 	public final int DEFAULT_SCAN_MODE = SCAN_MODE_BALANCED;
 	private int scanmode = DEFAULT_SCAN_MODE;
 
@@ -161,7 +168,9 @@ public class TiBluetoothModule extends KrollModule {
 					KrollDict kd = new KrollDict();
 					kd.put("name", device.getName());
 					kd.put("address", device.getAddress());
+					kd.put("bondState", device.getBondState());
 					kd.put("ids", ids.toArray());
+
 					fireEvent("didDiscoverPeripheral", kd);
 					BluetoothGatt bluetoothGatt = device.connectGatt(
 							appContext, false, btleGattCallback);
