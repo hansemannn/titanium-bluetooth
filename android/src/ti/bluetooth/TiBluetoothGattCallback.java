@@ -2,6 +2,8 @@ package ti.bluetooth;
 
 import java.util.List;
 
+import org.appcelerator.kroll.KrollDict;
+import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.common.Log;
 
 import android.bluetooth.BluetoothGatt;
@@ -12,6 +14,13 @@ import android.bluetooth.BluetoothGattService;
 
 public final class TiBluetoothGattCallback extends BluetoothGattCallback {
 	private static final String LCAT = TiBluetoothModule.LCAT;
+
+	private KrollProxy proxy;
+
+	public TiBluetoothGattCallback(KrollProxy proxy) {
+		super();
+		this.proxy = proxy;
+	}
 
 	@Override
 	public void onCharacteristicChanged(BluetoothGatt gatt,
@@ -36,6 +45,9 @@ public final class TiBluetoothGattCallback extends BluetoothGattCallback {
 			final int status, final int newState) {
 		// this will get called when a device connects or disconnects
 		Log.i(LCAT, "connected/disconnected " + status);
+		if (proxy.hasListeners("state")) {
+			proxy.fireEvent("state", status);
+		}
 		gatt.discoverServices();
 	}
 
@@ -43,9 +55,10 @@ public final class TiBluetoothGattCallback extends BluetoothGattCallback {
 	public void onServicesDiscovered(final BluetoothGatt gatt, final int status) {
 		// this will get called after the client initiates a
 		// BluetoothGatt.discoverServices() call
-
+		KrollDict kd = new KrollDict();
 		List<BluetoothGattService> services = gatt.getServices();
 		Log.i(LCAT, "Services: " + services.size());
+		kd.put("size", services.size());
 		for (BluetoothGattService service : services) {
 			List<BluetoothGattCharacteristic> characteristics = service
 					.getCharacteristics();
@@ -67,5 +80,7 @@ public final class TiBluetoothGattCallback extends BluetoothGattCallback {
 				gatt.readCharacteristic(btc);
 			}
 		}
+		if (proxy.hasListeners("services"))
+			proxy.fireEvent("services", kd);
 	}
 }
