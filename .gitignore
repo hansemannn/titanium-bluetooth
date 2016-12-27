@@ -16,5 +16,4 @@ android/dist/*
 android/documentation
 android/example
 android/libs/*
-android/manifest
-src
+android/manifest2

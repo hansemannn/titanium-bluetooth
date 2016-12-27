@@ -105,5 +105,4 @@ public class BluetoothDeviceProxy extends KrollProxy {
 	public boolean fetchUuidsWithSdp() {
 		return btDevice.fetchUuidsWithSdp();
 	}
-
 }
