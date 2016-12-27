@@ -112,7 +112,8 @@ public class TiBluetoothModule extends KrollModule {
 		super();
 		appContext = TiApplication.getInstance();
 		activity = appContext.getCurrentActivity();
-		appContext.registerReceiver(mReceiver, new IntentFilter(
+		appContext.registerReceiver(new BlutoothStateChangedBroadcastReceiver(
+				this, btAdapter), new IntentFilter(
 				BluetoothAdapter.ACTION_STATE_CHANGED));
 	}
 
@@ -120,43 +121,6 @@ public class TiBluetoothModule extends KrollModule {
 	public static void onAppCreate(TiApplication app) {
 		Log.d(LCAT, "inside onAppCreate");
 	}
-
-	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String action = intent.getAction();
-			// It means the user has changed his bluetooth state.
-			if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
-				if (btAdapter.getState() == BluetoothAdapter.STATE_TURNING_OFF) {
-					// The user bluetooth is turning off yet, but it is not
-					// disabled yet.
-					currentState = MANAGER_STATE_POWERED_OFF;
-				}
-
-				if (btAdapter.getState() == BluetoothAdapter.STATE_OFF) {
-					// The user bluetooth is already disabled.
-					currentState = MANAGER_STATE_POWERED_OFF;
-				}
-				if (btAdapter.getState() == BluetoothAdapter.STATE_ON) {
-					// The user bluetooth is already disabled.
-					currentState = MANAGER_STATE_POWERED_ON;
-				}
-				KrollDict kd = new KrollDict();
-				kd.put("state", btAdapter.getState());
-				kd.put("address", btAdapter.getAddress());
-				kd.put("name", btAdapter.getName());
-				kd.put("discovering", btAdapter.isDiscovering());
-				kd.put("enabled", btAdapter.isEnabled());
-				kd.put("multipleAdvertisementSupported",
-						btAdapter.isMultipleAdvertisementSupported());
-				kd.put("offloadedFilteringSupported",
-						btAdapter.isOffloadedFilteringSupported());
-				kd.put("offloadedScanBatchingSupported",
-						btAdapter.isOffloadedScanBatchingSupported());
-				fireEvent("didUpdateState", kd);
-			}
-		}
-	};
 
 	private final ScanCallback scanCallback = new ScanCallback() {
 		@Override
@@ -182,7 +146,8 @@ public class TiBluetoothModule extends KrollModule {
 
 					fireEvent("didDiscoverPeripheral", kd);
 					BluetoothGatt bluetoothGatt = device.connectGatt(
-							appContext, false, new TiBluetoothGattCallback());
+							appContext, false, new TiBluetoothGattCallback(
+									TiBluetoothModule.this));
 					btScanner.stopScan(scanCallback);
 				}
 			}
@@ -205,16 +170,15 @@ public class TiBluetoothModule extends KrollModule {
 				.getSystemService(Context.BLUETOOTH_SERVICE);
 		btAdapter = btManager.getAdapter();
 		if (btAdapter != null) {
-			Log.d(LCAT, "BT init");
-			currentState = btAdapter.getState();
+			setCurrentState(btAdapter.getState());
 		} else {
-			currentState = MANAGER_STATE_UNSUPPORTED;
+			setCurrentState(MANAGER_STATE_UNSUPPORTED);
 		}
 	}
 
 	@Kroll.method
 	public void startScan() {
-		startScan(scanmode);
+		this.startScan(scanmode);
 	}
 
 	@Kroll.method
@@ -222,10 +186,10 @@ public class TiBluetoothModule extends KrollModule {
 		if (btAdapter != null) {
 			ScanSettings scanSettings = new ScanSettings.Builder().setScanMode(
 					_scanmode).build();
-			btScanner = btAdapter.getBluetoothLeScanner();
-			btScanner.startScan(scanFilters(), scanSettings, scanCallback);
+			this.btScanner = btAdapter.getBluetoothLeScanner();
+			this.btScanner.startScan(scanFilters(), scanSettings, scanCallback);
 			// btScanner.startScan(scanCallback);
-			isScanning = true;
+			this.isScanning = true;
 		}
 	}
 
@@ -264,6 +228,10 @@ public class TiBluetoothModule extends KrollModule {
 	//
 	// }
 	// }
+
+	public void setCurrentState(int currentState) {
+		this.currentState = currentState;
+	}
 
 	@Kroll.method
 	public void setScanMode(int sm) {
