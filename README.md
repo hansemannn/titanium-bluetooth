@@ -1,8 +1,8 @@
-# Ti.Bluetooth [![Build Status](https://travis-ci.org/hansemannn/ti.bluetooth.svg?branch=master)](https://travis-ci.org/hansemannn/ti.bluetooth)
+# Ti.Bluetooth
 
 Summary
 ---------------
-Ti.Bluetooth is an open source project to support Bluetooth / BLE in Appcelerator Titanium.
+Ti.Bluetooth is an open source project to support the Bluetooth in Titanium Mobile.
 
 Requirements
 ---------------
@@ -46,10 +46,6 @@ Features
 - [x] Start / Stop peripheral scanning
 - [x] Receive state events
 
-#### Documentation 
-
-API documentation can be found at [documentation/index.md](documentation/index.md)
-
 #### Example
 ```js
 var BLE = require('ti.bluetooth');
@@ -76,10 +72,12 @@ btn1.addEventListener('click', function() {
         return;
     }
 
-    BLE.startScan();
-
-    // Optional: Search for specified services
-    // BLE.startScanWithServices(['384DF4C0-8BAE-419D-9A65-2D67942C2DB7']);
+    // Todo: API Parity
+    if (isAndroid) {
+        BLE.startScan();
+    } else {
+        BLE.scanForPeripheralsWithServices(['384DF4C0-8BAE-419D-9A65-2D67942C2DB7']);
+    }
 });
 
 var btn2 = Ti.UI.createButton({

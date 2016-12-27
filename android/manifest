@@ -4,7 +4,7 @@
 #
 version: 1.0.0
 apiversion: 3
-architectures: armeabi-v7a x86
+architectures: armeabi-v7a; x86
 description: ti.bluetooth
 author: Michael Gangolf
 license: Specify your license
