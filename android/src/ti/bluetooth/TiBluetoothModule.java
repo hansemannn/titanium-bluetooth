@@ -35,9 +35,7 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.ParcelUuid;
 
@@ -49,7 +47,6 @@ public class TiBluetoothModule extends KrollModule {
 	}
 
 	public static final String LCAT = "BLE";
-	private static int kJobId = 0;
 	private BluetoothManager btManager;
 	private BluetoothAdapter btAdapter;
 	private TiApplication appContext;
@@ -140,6 +137,7 @@ public class TiBluetoothModule extends KrollModule {
 						ids.add(id.toString());
 					}
 					KrollDict kd = new KrollDict();
+					kd.put("device", btDeviceProxy);
 					kd.put("name", device.getName());
 					kd.put("address", device.getAddress());
 					kd.put("bondState", device.getBondState());
