@@ -113,7 +113,7 @@ public class TiBluetoothModule extends KrollModule {
 		appContext = TiApplication.getInstance();
 		activity = appContext.getCurrentActivity();
 		appContext.registerReceiver(new BlutoothStateChangedBroadcastReceiver(
-				this, btAdapter), new IntentFilter(
+				TiBluetoothModule.this, btAdapter), new IntentFilter(
 				BluetoothAdapter.ACTION_STATE_CHANGED));
 	}
 
@@ -129,6 +129,7 @@ public class TiBluetoothModule extends KrollModule {
 			if (device != null) {
 				BluetoothDeviceProxy btDeviceProxy = new BluetoothDeviceProxy(
 						device);
+				// TODO resultpayload is array of btDeviceProxy's
 				Log.d(LCAT, "Found something " + device.getName());
 				if (device.getName() != null) {
 					Log.d(LCAT,
