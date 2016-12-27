@@ -16,19 +16,14 @@ import org.appcelerator.kroll.KrollFunction;
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.kroll.common.Log;
-import org.appcelerator.kroll.common.TiConfig;
 import org.appcelerator.titanium.TiApplication;
 
-import android.bluetooth.BluetoothProfile;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCallback;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattDescriptor;
-import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothSocket;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
@@ -142,10 +137,10 @@ public class TiBluetoothModule extends KrollModule {
 					kd.put("address", device.getAddress());
 					kd.put("bondState", device.getBondState());
 					kd.put("ids", ids.toArray());
-
 					fireEvent("didDiscoverPeripheral", kd);
 					BluetoothGatt bluetoothGatt = device.connectGatt(
-							appContext, false, new TiBluetoothGattCallback(
+							appContext, false,
+							new onBluetoothGattCallbackHandler(
 									TiBluetoothModule.this));
 					btScanner.stopScan(scanCallback);
 				}

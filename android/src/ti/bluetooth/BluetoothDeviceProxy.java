@@ -28,7 +28,7 @@ public class BluetoothDeviceProxy extends KrollProxy {
 	@Kroll.method
 	public void connectGatt(boolean autoConnect) {
 		btDevice.connectGatt(ctx, autoConnect,
-				new TiBluetoothGattCallback(this));
+				new onBluetoothGattCallbackHandler(this));
 	}
 
 	// Get the friendly Bluetooth name of the remote device.

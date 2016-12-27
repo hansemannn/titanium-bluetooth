@@ -12,12 +12,12 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 
-public final class TiBluetoothGattCallback extends BluetoothGattCallback {
+public final class onBluetoothGattCallbackHandler extends BluetoothGattCallback {
 	private static final String LCAT = TiBluetoothModule.LCAT;
 
 	private KrollProxy proxy;
 
-	public TiBluetoothGattCallback(KrollProxy proxy) {
+	public onBluetoothGattCallbackHandler(KrollProxy proxy) {
 		super();
 		this.proxy = proxy;
 	}

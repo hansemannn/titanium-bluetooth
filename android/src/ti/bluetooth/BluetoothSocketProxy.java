@@ -1,6 +1,8 @@
 package ti.bluetooth;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
@@ -54,4 +56,25 @@ public class BluetoothSocketProxy extends KrollProxy {
 		return btSocket.isConnected();
 	}
 
+	@Kroll.method
+	public OutputStream getOutputStream() {
+		try {
+			return btSocket.getOutputStream();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Kroll.method
+	public InputStream getInputStream() {
+		InputStream in = null;
+		try {
+			in = btSocket.getInputStream();
+			return in;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return in;
+		}
+	}
 }
