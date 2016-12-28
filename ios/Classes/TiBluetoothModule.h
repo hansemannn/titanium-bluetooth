@@ -7,12 +7,12 @@
 
 #import "TiModule.h"
 
-@class CBCentralManager, CBPeripheral;
+@class CBCentralManager, CBPeripheralManager, CBPeripheral;
 
-@interface TiBluetoothModule : TiModule <CBCentralManagerDelegate, CBPeripheralDelegate>
+@interface TiBluetoothModule : TiModule <CBCentralManagerDelegate, CBPeripheralManagerDelegate, CBPeripheralDelegate>
 {
     CBCentralManager *centralManager;
-    CBPeripheral *polarH7HRMPeripheral;
+    CBPeripheralManager *peripheralManager;
 }
 
 @end

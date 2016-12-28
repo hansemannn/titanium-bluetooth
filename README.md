@@ -68,6 +68,11 @@ var btn1 = Ti.UI.createButton({
     top: 40
 });
 
+if (!isAndroid) {
+    initializeCentralManager();
+    initializePeripheralManager();
+}
+
 btn1.addEventListener('click', function() {
     if (BLE.isScanning()) {
         alert('Already scanning, please stop scan first!');
@@ -96,13 +101,13 @@ btn2.addEventListener('click', function() {
     BLE.stopScan();
 });
 
-BLE.addEventListener('didDiscoverPeripheral', function(e) {
-    Ti.API.info('didDiscoverPeripheral');
+BLE.addEventListener('centralManager:didDiscoverPeripheral', function(e) {
+    Ti.API.info('centralManager:didDiscoverPeripheral');
     Ti.API.info(e);
 });
 
-BLE.addEventListener('didUpdateState', function(e) {
-    Ti.API.info('didUpdateState');
+BLE.addEventListener('centralManager:didUpdateState', function(e) {
+    Ti.API.info('centralManager:didUpdateState');
     
     switch (e.state) {
         case BLE.MANAGER_STATE_RESETTING: 
@@ -133,26 +138,26 @@ BLE.addEventListener('didUpdateState', function(e) {
 });
 
 // iOS only
-BLE.addEventListener('didConnectPeripheral', function(e) {
-    Ti.API.info('didConnectPeripheral');
+BLE.addEventListener('centralManager:didConnectPeripheral', function(e) {
+    Ti.API.info('centralManager:didConnectPeripheral');
     Ti.API.info(e);
 });
 
 // iOS only
-BLE.addEventListener('didDiscoverServices', function(e) {
-    Ti.API.info('didDiscoverServices');
+BLE.addEventListener('centralManager:didDiscoverServices', function(e) {
+    Ti.API.info('centralManager:didDiscoverServices');
     Ti.API.info(e);
 });
 
 // iOS only
-BLE.addEventListener('didDiscoverCharacteristicsForService', function(e) {
-    Ti.API.info('didDiscoverCharacteristicsForService');
+BLE.addEventListener('centralManager:didDiscoverCharacteristicsForService', function(e) {
+    Ti.API.info('centralManager:didDiscoverCharacteristicsForService');
     Ti.API.info(e);
 });
 
 // iOS only
-BLE.addEventListener('didUpdateValueForCharacteristic', function(e) {
-    Ti.API.info('didUpdateValueForCharacteristic');
+BLE.addEventListener('centralManager:didUpdateValueForCharacteristic', function(e) {
+    Ti.API.info('centralManager:didUpdateValueForCharacteristic');
     Ti.API.info(e);
 });
 
