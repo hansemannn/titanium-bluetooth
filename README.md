@@ -1,5 +1,5 @@
 # Ti.Bluetooth 
-[![Build Status](https://travis-ci.org/hansemannn/ti.bluetooth.svg?branch=master)](https://travis-ci.org/hansemannn/ti.bluetooth) [![License](http://hans-knoechel.de/shields/shield-license.svg)](./LICENSE)  [![Support](http://hans-knoechel.de/shields/shield-slack.svg)](http://tislack.org)
+[![Build Status](https://travis-ci.org/hansemannn/ti.bluetooth.svg?branch=master)](https://travis-ci.org/hansemannn/ti.bluetooth) [![License](http://hans-knoechel.de/shields/shield-license.svg)](./LICENSE) [![Support](http://hans-knoechel.de/shields/shield-slack.svg)](http://tislack.org)
 
 Summary
 ---------------
@@ -16,7 +16,7 @@ Download + Setup
 
 ### Download
 * [Stable release](https://github.com/hansemannn/ti.bluetooth/releases)
-* Install from gitTio    <a href="http://gitt.io/component/ti.bluetooth" target="_blank"><img src="http://gitt.io/badge@2x.png" width="120" height="18" alt="Available on gitTio" /></a>
+* Install from gitTio [![gitTio](http://hans-knoechel.de/shields/shield-gittio.svg)](http://gitt.io/component/ti.bluetooth)
 
 ### Setup
 Unpack the module and place it inside the `modules/` folder of your project.
