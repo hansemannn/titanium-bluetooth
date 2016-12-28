@@ -2,10 +2,12 @@ package ti.bluetooth;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
+import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiApplication;
 
 import android.bluetooth.BluetoothDevice;
@@ -66,11 +68,14 @@ public class BluetoothDeviceProxy extends KrollProxy {
 	// service UUIDs are returned.
 	@Kroll.method
 	public Object[] getUUIDs() {
-		ArrayList<String> ids = new ArrayList<String>();
-		for (ParcelUuid id : btDevice.getUuids()) {
-			ids.add(id.toString());
+		List<String> uuids = new ArrayList<String>();
+		ParcelUuid[] puuids = btDevice.getUuids();
+		if (puuids != null && puuids.length > 0) {
+			for (ParcelUuid pid : puuids) {
+				uuids.add(pid.toString());
+			}
 		}
-		return ids.toArray();
+		return uuids.toArray();
 	}
 
 	@Kroll.method

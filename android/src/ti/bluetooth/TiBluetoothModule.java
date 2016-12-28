@@ -41,7 +41,7 @@ public class TiBluetoothModule extends KrollModule {
 		void onConnectionStateChange(BluetoothDevice device, int newState);
 	}
 
-	public static final String LCAT = "BLE";
+	public static final String LCAT = "BLE🔵";
 	private BluetoothManager btManager;
 	private BluetoothAdapter btAdapter;
 	private TiApplication appContext;
@@ -119,16 +119,14 @@ public class TiBluetoothModule extends KrollModule {
 		public void onScanResult(int callbackType, ScanResult result) {
 			BluetoothDevice device = result.getDevice();
 			if (device != null) {
-				// BluetoothDeviceProxy btDeviceProxy = new
-				// BluetoothDeviceProxy(
-				// device);
+				BluetoothDeviceProxy btDeviceProxy = new BluetoothDeviceProxy(
+						device);
 				// TODO resultpayload is array of btDeviceProxy's
 				Log.d(LCAT, "Found something " + device.getName());
 				if (device.getName() != null) {
 					Log.d(LCAT,
 							"Found: " + device.getName() + " "
 									+ device.getAddress());
-
 					ArrayList<String> ids = new ArrayList<String>();
 					if (device.getUuids() != null) {
 						for (ParcelUuid id : device.getUuids()) {
@@ -136,7 +134,7 @@ public class TiBluetoothModule extends KrollModule {
 						}
 					}
 					KrollDict kd = new KrollDict();
-					// kd.put("device", btDeviceProxy);
+					kd.put("device", btDeviceProxy);
 
 					kd.put("name", device.getName());
 					kd.put("address", device.getAddress());
@@ -260,5 +258,4 @@ public class TiBluetoothModule extends KrollModule {
 			// isScanning = false;
 		}
 	}
-
 }
