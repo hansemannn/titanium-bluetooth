@@ -97,8 +97,8 @@ public class TiBluetoothModule extends KrollModule {
 	@Kroll.constant
 	public static final int TYPE_SCO = BluetoothSocket.TYPE_SCO;
 
-	public final int DEFAULT_SCAN_MODE = SCAN_MODE_BALANCED;
-	private int scanmode = DEFAULT_SCAN_MODE;
+	public final int DEFAULT_SCAN_MODE = SCAN_MODE_LOW_POWER;
+	private int currentScanmode = DEFAULT_SCAN_MODE;
 
 	public TiBluetoothModule() {
 		super();
@@ -129,8 +129,10 @@ public class TiBluetoothModule extends KrollModule {
 									+ device.getAddress());
 
 					ArrayList<String> ids = new ArrayList<String>();
-					for (ParcelUuid id : device.getUuids()) {
-						ids.add(id.toString());
+					if (device.getUuids() != null) {
+						for (ParcelUuid id : device.getUuids()) {
+							ids.add(id.toString());
+						}
 					}
 					KrollDict kd = new KrollDict();
 					kd.put("device", btDeviceProxy);
@@ -187,13 +189,7 @@ public class TiBluetoothModule extends KrollModule {
 		}
 	}
 
-	@Kroll.method
-	public void startScan() {
-		this.startScan(scanmode);
-	}
-
-	@Kroll.method
-	public void startScan(int _scanmode) {
+	public void startScan(@Kroll.argument(optional = true) int _scanmode) {
 		if (btAdapter != null) {
 			ScanSettings scanSettings = new ScanSettings.Builder().setScanMode(
 					_scanmode).build();
@@ -229,14 +225,22 @@ public class TiBluetoothModule extends KrollModule {
 		this.currentState = currentState;
 	}
 
+	@Kroll.setProperty
 	@Kroll.method
-	public void setScanMode(int sm) {
-		scanmode = sm;
+	public void setScanMode(int scanMode) {
+		if (scanMode == SCAN_MODE_BALANCED || scanMode == SCAN_MODE_LOW_POWER
+				|| scanMode == SCAN_MODE_LOW_LATENCY
+				|| scanMode == SCAN_MODE_OPPORTUNISTIC) {
+			currentScanmode = scanMode;
+		} else {
+			currentScanmode = SCAN_MODE_LOW_POWER;
+		}
+
 	}
 
 	@Kroll.method
 	public int getScanMode() {
-		return scanmode;
+		return currentScanmode;
 	}
 
 	@Kroll.method
