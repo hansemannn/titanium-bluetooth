@@ -41,6 +41,17 @@ Add the following to your plist (only neccessary for iOS):
 </plist>
 ```
 
+Initialize your central- and/or peripheral-manager before start interacting:
+```js
+if (!isAndroid) {
+    BLE.initializeCentralManager();
+    BLE.initializePeripheralManager();
+} else {
+    // Initialize the BLE Central Manager
+    BLE.initialize();
+}
+```
+
 Features
 --------------------------------
 - [x] Create descriptors, services and descriptors
@@ -56,9 +67,6 @@ API documentation can be found at [documentation/index.md](documentation/index.m
 var BLE = require('ti.bluetooth');
 var isAndroid = (Ti.Platform.osname == 'android');
 
-// Initialize the BLE Central Manager
-BLE.initialize();
-
 var win = Ti.UI.createWindow({
     backgroundColor: '#fff'
 });
@@ -69,8 +77,11 @@ var btn1 = Ti.UI.createButton({
 });
 
 if (!isAndroid) {
-    initializeCentralManager();
-    initializePeripheralManager();
+    BLE.initializeCentralManager();
+    BLE.initializePeripheralManager();
+} else {
+    // Initialize the BLE Central Manager
+    BLE.initialize();
 }
 
 btn1.addEventListener('click', function() {
@@ -140,6 +151,24 @@ BLE.addEventListener('centralManager:didUpdateState', function(e) {
 // iOS only
 BLE.addEventListener('centralManager:didConnectPeripheral', function(e) {
     Ti.API.info('centralManager:didConnectPeripheral');
+    Ti.API.info(e);
+});
+
+// iOS only
+BLE.addEventListener('centralManager:didDisconnectPeripheral', function(e) {
+    Ti.API.info('centralManager:didDisconnectPeripheral');
+    Ti.API.info(e);
+});
+
+// iOS only
+BLE.addEventListener('centralManager:willRestoreState', function(e) {
+    Ti.API.info('centralManager:willRestoreState');
+    Ti.API.info(e);
+});
+
+// iOS only
+BLE.addEventListener('centralManager:didFailToConnectPeripheral', function(e) {
+    Ti.API.info('centralManager:didFailToConnectPeripheral');
     Ti.API.info(e);
 });
 

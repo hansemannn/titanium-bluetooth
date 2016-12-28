@@ -194,6 +194,8 @@
 
 - (void)initialize:(id)unused
 {
+    NSLog(@"[WARN] The `initialize` method is deprecated. Use `initializeCentralManager` and/or `initializePeripheralManager` instead");
+    
     [self centralManager];
 }
 
@@ -265,6 +267,15 @@
     }
 }
 
+- (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
+{
+    if ([self _hasListeners:@"centralManager:didDisconnectPeripheral"]) {
+        [self fireEvent:@"centralManager:didDisconnectPeripheral" withObject:@{
+            @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral]
+        }];
+    }
+}
+
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
     if ([self _hasListeners:@"centralManager:didDiscoverPeripheral"]) {
@@ -272,6 +283,25 @@
             @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
             @"advertisementData": [self dictionaryFromAdvertisementData:advertisementData],
             @"rssi": NUMINT(RSSI)
+        }];
+    }
+}
+
+- (void)centralManager:(CBCentralManager *)central willRestoreState:(NSDictionary<NSString *,id> *)dict
+{
+    if ([self _hasListeners:@"centralManager:willRestoreState"]) {
+        [self fireEvent:@"centralManager:willRestoreState" withObject:@{
+            @"state":NUMINT(central.state)
+        }];
+    }
+}
+
+- (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
+{
+    if ([self _hasListeners:@"centralManager:didDisconnectPeripheral"]) {
+        [self fireEvent:@"centralManager:didDisconnectPeripheral" withObject:@{
+            @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
+            @"error": [error localizedDescription] ?: [NSNull null]
         }];
     }
 }
@@ -376,7 +406,7 @@
     if ([self _hasListeners:@"peripheral:didDiscoverServices"]) {
         [self fireEvent:@"didDiscoverServices" withObject:@{
             @"peripheral": [[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
-            @"error": [error localizedDescription] ?: @""
+            @"error": [error localizedDescription] ?: [NSNull null]
         }];
     }
 }
@@ -387,7 +417,7 @@
         [self fireEvent:@"peripheral:didDiscoverCharacteristicsForService" withObject:@{
             @"peripheral": [[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
             @"service": [[TiBluetoothServiceProxy alloc] _initWithPageContext:[self pageContext] andService:service],
-            @"error": [error localizedDescription] ?: @""
+            @"error": [error localizedDescription] ?: [NSNull null]
         }];
     }
 }
@@ -397,7 +427,7 @@
     if ([self _hasListeners:@"peripheral:didUpdateValueForCharacteristic"]) {
         [self fireEvent:@"peripheral:didUpdateValueForCharacteristic" withObject:@{
             @"characteristic": [[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:characteristic],
-            @"error": [error localizedDescription] ?: @""
+            @"error": [error localizedDescription] ?: [NSNull null]
         }];
     }
 }
