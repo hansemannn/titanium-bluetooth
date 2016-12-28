@@ -189,6 +189,7 @@ public class TiBluetoothModule extends KrollModule {
 		}
 	}
 
+	@Kroll.method
 	public void startScan(@Kroll.argument(optional = true) int _scanmode) {
 		if (btAdapter != null) {
 			ScanSettings scanSettings = new ScanSettings.Builder().setScanMode(
