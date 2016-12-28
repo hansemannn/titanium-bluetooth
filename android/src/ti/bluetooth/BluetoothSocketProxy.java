@@ -9,6 +9,7 @@ import org.appcelerator.kroll.annotations.Kroll;
 
 import android.bluetooth.BluetoothSocket;
 
+@Kroll.proxy(parentModule = TiBluetoothModule.class)
 public class BluetoothSocketProxy extends KrollProxy {
 	BluetoothSocket btSocket;
 

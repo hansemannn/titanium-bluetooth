@@ -119,8 +119,9 @@ public class TiBluetoothModule extends KrollModule {
 		public void onScanResult(int callbackType, ScanResult result) {
 			BluetoothDevice device = result.getDevice();
 			if (device != null) {
-				BluetoothDeviceProxy btDeviceProxy = new BluetoothDeviceProxy(
-						device);
+				// BluetoothDeviceProxy btDeviceProxy = new
+				// BluetoothDeviceProxy(
+				// device);
 				// TODO resultpayload is array of btDeviceProxy's
 				Log.d(LCAT, "Found something " + device.getName());
 				if (device.getName() != null) {
@@ -135,7 +136,7 @@ public class TiBluetoothModule extends KrollModule {
 						}
 					}
 					KrollDict kd = new KrollDict();
-					kd.put("device", btDeviceProxy);
+					// kd.put("device", btDeviceProxy);
 
 					kd.put("name", device.getName());
 					kd.put("address", device.getAddress());

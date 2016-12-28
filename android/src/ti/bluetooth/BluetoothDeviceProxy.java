@@ -1,5 +1,7 @@
 package ti.bluetooth;
 
+import CalendarModule;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -13,6 +15,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.os.ParcelUuid;
 
+@Kroll.proxy(parentModule = TiBluetoothModule.class)
 public class BluetoothDeviceProxy extends KrollProxy {
 
 	private BluetoothDevice btDevice;
