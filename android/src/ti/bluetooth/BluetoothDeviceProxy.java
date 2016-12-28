@@ -1,7 +1,5 @@
 package ti.bluetooth;
 
-import CalendarModule;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
