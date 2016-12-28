@@ -9,10 +9,9 @@
 
 @class CBCentralManager, CBPeripheralManager, CBPeripheral;
 
-@interface TiBluetoothModule : TiModule <CBCentralManagerDelegate, CBPeripheralManagerDelegate, CBPeripheralDelegate>
+@interface TiBluetoothModule : TiModule <CBPeripheralDelegate>
 {
-    CBCentralManager *centralManager;
-    CBPeripheralManager *peripheralManager;
+
 }
 
 @end

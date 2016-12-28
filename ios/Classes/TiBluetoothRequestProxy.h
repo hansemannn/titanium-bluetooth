@@ -7,11 +7,11 @@
 #import "TiProxy.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 
-@interface TiBluetoothPeripheralProxy : TiProxy<CBPeripheralDelegate> {
-    CBPeripheral *_peripheral;
+@interface TiBluetoothRequestProxy : TiProxy {
+    CBATTRequest *request;
 }
 
-- (id)_initWithPageContext:(id<TiEvaluator>)context andPeripheral:(CBPeripheral*)__peripheral;
-- (CBPeripheral*)peripheral;
+- (id)_initWithPageContext:(id<TiEvaluator>)context andRequest:(CBATTRequest *)_request;
+- (CBATTRequest *)request;
 
 @end
