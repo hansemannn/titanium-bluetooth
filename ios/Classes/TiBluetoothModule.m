@@ -117,7 +117,7 @@
     [[self centralManager] scanForPeripheralsWithServices:nil options:nil];
 }
 
-- (void)startScanWithPeripherals:(id)args
+- (void)startScanWithServices:(id)args
 {
     ENSURE_SINGLE_ARG_OR_NIL(args, NSArray);
     
