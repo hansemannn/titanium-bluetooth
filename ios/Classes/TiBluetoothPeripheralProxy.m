@@ -14,10 +14,10 @@
 
 @implementation TiBluetoothPeripheralProxy
 
-- (id)_initWithPageContext:(id<TiEvaluator>)context andPeripheral:(CBPeripheral*)_peripheral
+- (id)_initWithPageContext:(id<TiEvaluator>)context andPeripheral:(CBPeripheral*)__peripheral
 {
     if ([super _initWithPageContext:[self pageContext]]) {
-        peripheral = _peripheral;
+        _peripheral = __peripheral;
     }
     
     return self;
@@ -25,39 +25,39 @@
     
 - (CBPeripheral*)peripheral
 {
-    return peripheral;
+    return _peripheral;
 }
 
 #pragma mark Public API's
 
 - (id)name
 {
-    return peripheral.name;
+    return _peripheral.name;
 }
     
 - (id)rssi
 {
-    return NUMINT(peripheral.RSSI);
+    return NUMINT(_peripheral.RSSI);
 }
     
 - (id)state
 {
-    return NUMINT(peripheral.state);
+    return NUMINT(_peripheral.state);
 }
     
 - (id)services
 {
-    return [self arrayFromServices:peripheral.services];
+    return [self arrayFromServices:_peripheral.services];
 }
 
 - (void)readRSSI:(id)unused
 {
-    [peripheral readRSSI];
+    [_peripheral readRSSI];
 }
 
 - (void)discoverServices:(id)args
 {
-    [peripheral discoverServices:[TiBluetoothUtils UUIDArrayFromStringArray:args]];
+    [_peripheral discoverServices:[TiBluetoothUtils UUIDArrayFromStringArray:args]];
 }
 
 - (void)discoverIncludedServicesForService:(id)args
@@ -70,8 +70,8 @@
     ENSURE_TYPE(includedServices, NSArray);
     ENSURE_TYPE(service, TiBluetoothServiceProxy);
     
-    [peripheral discoverIncludedServices:[TiBluetoothUtils UUIDArrayFromStringArray:includedServices]
-                              forService:[(TiBluetoothServiceProxy *)service service]];
+    [_peripheral discoverIncludedServices:[TiBluetoothUtils UUIDArrayFromStringArray:includedServices]
+                               forService:[(TiBluetoothServiceProxy *)service service]];
 }
 
 - (void)discoverCharacteristicsForService:(id)args
@@ -84,20 +84,20 @@
     ENSURE_TYPE(characteristics, NSArray);
     ENSURE_TYPE(service, TiBluetoothServiceProxy);
 
-    [peripheral discoverCharacteristics:[TiBluetoothUtils UUIDArrayFromStringArray:characteristics]
-                             forService:[(TiBluetoothServiceProxy *)service service]];
+    [_peripheral discoverCharacteristics:[TiBluetoothUtils UUIDArrayFromStringArray:characteristics]
+                              forService:[(TiBluetoothServiceProxy *)service service]];
 }
 
 - (void)readValueForCharacteristic:(id)value
 {
     ENSURE_SINGLE_ARG(value, TiBluetoothCharacteristicProxy);
     
-    [peripheral readValueForCharacteristic:[(TiBluetoothCharacteristicProxy*)value characteristic]];
+    [_peripheral readValueForCharacteristic:[(TiBluetoothCharacteristicProxy*)value characteristic]];
 }
 
 - (id)maximumWriteValueLengthForType:(id)value
 {
-    return NUMUINTEGER([peripheral maximumWriteValueLengthForType:[TiUtils intValue:value]]);
+    return NUMUINTEGER([_peripheral maximumWriteValueLengthForType:[TiUtils intValue:value]]);
 }
 
 - (void)writeValueForCharacteristicWithType:(id)args
@@ -113,7 +113,7 @@
     ENSURE_TYPE(type, NSNumber);
 
     
-    [peripheral writeValue:[(TiBlob*)value data]
+    [_peripheral writeValue:[(TiBlob*)value data]
          forCharacteristic:[(TiBluetoothCharacteristicProxy*)characteristic characteristic]
                       type:[TiUtils intValue:type]];
 }
@@ -128,7 +128,7 @@
     ENSURE_TYPE(notifyValue, NSNumber);
     ENSURE_TYPE(characteristic, TiBluetoothCharacteristicProxy);
     
-    [peripheral setNotifyValue:[TiUtils boolValue:notifyValue]
+    [_peripheral setNotifyValue:[TiUtils boolValue:notifyValue]
              forCharacteristic:[(TiBluetoothCharacteristicProxy*)characteristic characteristic]];
 }
 
@@ -136,14 +136,14 @@
 {
     ENSURE_SINGLE_ARG(value, TiBluetoothCharacteristicProxy);
     
-    [peripheral discoverDescriptorsForCharacteristic:[(TiBluetoothCharacteristicProxy*)value characteristic]];
+    [_peripheral discoverDescriptorsForCharacteristic:[(TiBluetoothCharacteristicProxy*)value characteristic]];
 }
 
 - (void)readValueForDescriptor:(id)value
 {
     ENSURE_SINGLE_ARG(value, TiBluetoothDescriptorProxy);
 
-    [peripheral readValueForDescriptor:[(TiBluetoothDescriptorProxy*)value descriptor]];
+    [_peripheral readValueForDescriptor:[(TiBluetoothDescriptorProxy*)value descriptor]];
 }
 
 - (void)writeValueForDescriptor:(id)args
@@ -156,8 +156,42 @@
     ENSURE_TYPE(value, TiBlob);
     ENSURE_TYPE(descriptor, TiBluetoothDescriptorProxy);
     
-    [peripheral writeValue:[(TiBlob*)value data]
+    [_peripheral writeValue:[(TiBlob*)value data]
              forDescriptor:[(TiBluetoothDescriptorProxy*)descriptor descriptor]];
+}
+
+
+#pragma mark Peripheral Delegates
+
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error
+{
+    if ([self _hasListeners:@"peripheral:didDiscoverServices"]) {
+        [self fireEvent:@"didDiscoverServices" withObject:@{
+            @"peripheral": [[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
+            @"error": [error localizedDescription] ?: [NSNull null]
+        }];
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error
+{
+    if ([self _hasListeners:@"peripheral:didDiscoverCharacteristicsForService"]) {
+        [self fireEvent:@"peripheral:didDiscoverCharacteristicsForService" withObject:@{
+            @"peripheral": [[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
+            @"service": [[TiBluetoothServiceProxy alloc] _initWithPageContext:[self pageContext] andService:service],
+            @"error": [error localizedDescription] ?: [NSNull null]
+        }];
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
+{
+    if ([self _hasListeners:@"peripheral:didUpdateValueForCharacteristic"]) {
+        [self fireEvent:@"peripheral:didUpdateValueForCharacteristic" withObject:@{
+            @"characteristic": [[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:characteristic],
+            @"error": [error localizedDescription] ?: [NSNull null]
+        }];
+    }
 }
 
 #pragma mark Utilities
