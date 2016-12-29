@@ -13,6 +13,8 @@
 #import "TiBluetoothCharacteristicProxy.h"
 #import "TiBluetoothServiceProxy.h"
 #import "TiBluetoothDescriptorProxy.h"
+#import "TiBluetoothPeripheralManagerProxy.h"
+#import "TiBluetoothCentralManagerProxy.h"
 #import "TiBase.h"
 #import "TiHost.h"
 #import "TiUtils.h"
@@ -110,6 +112,20 @@
     
     return [[TiBluetoothDescriptorProxy alloc] _initWithPageContext:[self pageContext]
                                                       andDescriptor:descriptor];
+}
+
+- (TiBluetoothCentralManagerProxy *)createCentralManager:(id)args
+{
+    ENSURE_SINGLE_ARG(args, NSDictionary);
+    
+    return [[TiBluetoothCentralManagerProxy alloc] _initWithPageContext:[self pageContext] andProperties:args];
+}
+
+- (TiBluetoothPeripheralManagerProxy *)createPeripheralManager:(id)args
+{
+    ENSURE_SINGLE_ARG(args, NSDictionary);
+    
+    return [[TiBluetoothPeripheralManagerProxy alloc] _initWithPageContext:[self pageContext] andProperties:args];
 }
 
 #pragma mark Constants
