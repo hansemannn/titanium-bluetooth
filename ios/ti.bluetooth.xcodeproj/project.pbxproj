@@ -137,8 +137,7 @@
 				24DE9E1011C5FE74003F90F6 /* TiBluetoothModuleAssets.m */,
 				24DD6CF71134B3F500162E58 /* TiBluetoothModule.h */,
 				24DD6CF81134B3F500162E58 /* TiBluetoothModule.m */,
-				DBE7ACD11E09294400DE0A8A /* TiBluetoothUtils.h */,
-				DBE7ACD21E09294400DE0A8A /* TiBluetoothUtils.m */,
+				DBE6DCB71E14F57700D6DBCF /* Utils */,
 				DB4955C61E0896C700A1C8A6 /* Characteristic */,
 				DB4955C51E0896BF00A1C8A6 /* Peripheral */,
 				DB4955C41E0896BA00A1C8A6 /* Descriptor */,
@@ -230,6 +229,15 @@
 				DBB57D171E1487EE00D78BB6 /* TiBluetoothRequestProxy.m */,
 			);
 			name = Request;
+			sourceTree = "<group>";
+		};
+		DBE6DCB71E14F57700D6DBCF /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				DBE7ACD11E09294400DE0A8A /* TiBluetoothUtils.h */,
+				DBE7ACD21E09294400DE0A8A /* TiBluetoothUtils.m */,
+			);
+			name = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

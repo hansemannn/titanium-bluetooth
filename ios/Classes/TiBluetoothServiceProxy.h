@@ -8,10 +8,11 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 
 @interface TiBluetoothServiceProxy : TiProxy {
-    CBService *service;
+    CBMutableService *service;
 }
 
 - (id)_initWithPageContext:(id<TiEvaluator>)context andService:(CBService *)_service;
-- (CBService *)service;
+- (id)_initWithPageContext:(id<TiEvaluator>)context andProperties:(id)args;
+- (CBMutableService *)service;
 
 @end

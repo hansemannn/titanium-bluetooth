@@ -8,6 +8,7 @@
 #import "TiBluetoothCharacteristicProxy.h"
 #import "TiBluetoothServiceProxy.h"
 #import "TiBluetoothDescriptorProxy.h"
+#import "TiUtils.h"
 #import "TiBlob.h"
 
 @implementation TiBluetoothCharacteristicProxy
@@ -18,6 +19,23 @@
         characteristic = _characteristic;
     }
          
+    return self;
+}
+
+- (id)_initWithPageContext:(id<TiEvaluator>)context andProperties:(id)args
+{
+    if (self = [super _initWithPageContext:context]) {
+        id uuid = [args objectForKey:@"uuid"];
+        id properties = [args objectForKey:@"properties"];
+        id value = [args objectForKey:@"value"];
+        id permissions = [args objectForKey:@"permissions"];
+        
+        characteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:[TiUtils stringValue:uuid]]
+                                                            properties:[TiUtils intValue:properties]
+                                                                 value:[(TiBlob *)value data]
+                                                           permissions:[TiUtils intValue:permissions]];
+    }
+    
     return self;
 }
     

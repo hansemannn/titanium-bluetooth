@@ -12,6 +12,7 @@
 }
     
 - (id)_initWithPageContext:(id<TiEvaluator>)context andDescriptor:(CBDescriptor *)_descriptor;
+- (id)_initWithPageContext:(id<TiEvaluator>)context andProperties:(id)args;
 - (CBDescriptor *)descriptor;
 
 @end
