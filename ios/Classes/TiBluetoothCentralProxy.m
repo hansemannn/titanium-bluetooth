@@ -23,4 +23,16 @@
     return central;
 }
 
+#pragma mark Public APIs
+
+- (id)maximumUpdateValueLength
+{
+    return NUMUINTEGER(central.maximumUpdateValueLength);
+}
+
+- (id)identifier
+{
+    return central.identifier.UUIDString;
+}
+
 @end
