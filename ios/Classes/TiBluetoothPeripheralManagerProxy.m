@@ -40,7 +40,9 @@
             [options setObject:restoreIdentifier forKey:CBPeripheralManagerOptionRestoreIdentifierKey];
         }
         
-        peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue() options:options.count > 0 ? options : nil];
+        peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self
+                                                                    queue:dispatch_get_main_queue()
+                                                                  options:options.count > 0 ? options : nil];
     }
     
     return self;
@@ -70,7 +72,7 @@
     [peripheralManager stopAdvertising];
 }
 
-- (void)setDesiredConnectionLatencyForCentralManager:(id)args
+- (void)setDesiredConnectionLatencyForCentral:(id)args
 {
     ENSURE_TYPE(args, NSArray);
     ENSURE_ARG_COUNT(args, 2);
@@ -81,7 +83,8 @@
     ENSURE_TYPE(latency, NSNumber);
     ENSURE_TYPE(central, TiBluetoothCentralProxy);
     
-    [peripheralManager setDesiredConnectionLatency:[TiUtils intValue:latency] forCentral:[(TiBluetoothCentralProxy *)central central]];
+    [peripheralManager setDesiredConnectionLatency:[TiUtils intValue:latency]
+                                        forCentral:[(TiBluetoothCentralProxy *)central central]];
 }
 
 - (void)addService:(id)value
