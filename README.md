@@ -53,9 +53,7 @@ Features
 An API documentation can be found at [documentation/index.md](documentation/index.md).
 
 #### Example
-```js
-Please check `ios/example/app.js` and `android/example/app.js` for platform-specific examples.
-```
+> Please check `ios/example/app.js` and `android/example/app.js` for platform-specific examples.
 
 Authors
 ---------------
