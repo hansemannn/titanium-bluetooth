@@ -21,7 +21,7 @@
     return self;
 }
     
-- (CBCharacteristic*)characteristic
+- (CBCharacteristic *)characteristic
 {
     return characteristic;
 }
