@@ -157,7 +157,7 @@
     // Write own handler
     for (id key in advertisementData) {
         if ([[advertisementData objectForKey:key] isKindOfClass:[NSData class]]) {
-            [dict setObject:[[TiBlob alloc] initWithData:[advertisementData objectForKey:key] mimetype:@"text/plain"] forKey:key];
+            [dict setObject:[[TiBlob alloc] _initWithPageContext:[self pageContext] andData:[advertisementData objectForKey:key] mimetype:@"text/plain"] forKey:key];
         } else if ([[advertisementData objectForKey:key] isKindOfClass:[NSNumber class]]) {
             [dict setObject:NUMBOOL([advertisementData objectForKey:key]) forKey:key];
         } else if ([[advertisementData objectForKey:key] isKindOfClass:[NSString class]]) {

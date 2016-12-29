@@ -200,8 +200,7 @@
 {
     if ([self _hasListeners:@"didReceiveReadRequest"]) {
         [self fireEvent:@"didReceiveReadRequest" withObject:@{
-            @"characteristic":[[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:request.characteristic],
-            @"offset": NUMUINTEGER(request.offset)
+            @"request": [[TiBluetoothRequestProxy alloc] _initWithPageContext:[self pageContext] andRequest:request]
         }];
     }
 }
@@ -210,7 +209,7 @@
 {
     if ([self _hasListeners:@"didReceiveWriteRequests"]) {
         [self fireEvent:@"didReceiveWriteRequests" withObject:@{
-            @"characteristics":[self arrayFromReadWriteRequests:requests]
+            @"requests":[self arrayFromReadWriteRequests:requests]
         }];
     }
 }
@@ -229,7 +228,7 @@
     NSMutableArray *result = [NSMutableArray array];
     
     for (CBATTRequest *request in requests) {
-        [result addObject:[[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:request.characteristic]];
+        [result addObject:[[TiBluetoothRequestProxy alloc] _initWithPageContext:[self pageContext] andRequest:request]];
     }
     
     return result;
