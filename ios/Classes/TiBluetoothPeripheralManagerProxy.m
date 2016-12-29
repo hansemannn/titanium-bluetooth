@@ -48,7 +48,12 @@
 
 #pragma mark Public APIs
 
-- (id)isAdvertising:(id)unused
+- (id)state
+{
+    return NUMINTEGER([peripheralManager state]);
+}
+
+- (id)isAdvertising
 {
     return NUMBOOL([peripheralManager isAdvertising]);
 }
@@ -133,12 +138,12 @@
               onSubscribedCentrals:result];
 }
 
-#pragma mark Peripheral Manager Delegates
+#pragma mark Delegates
 
 - (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheral
 {
-    if ([self _hasListeners:@"peripheralManager:didUpdateState"]) {
-        [self fireEvent:@"peripheralManager:didUpdateState" withObject:@{
+    if ([self _hasListeners:@"didUpdateState"]) {
+        [self fireEvent:@"didUpdateState" withObject:@{
             @"state":NUMINT(peripheral.state)
         }];
     }
@@ -146,8 +151,8 @@
 
 - (void)peripheralManager:(CBPeripheralManager *)peripheral willRestoreState:(NSDictionary<NSString *, id> *)dict
 {
-    if ([self _hasListeners:@"peripheralManager:willRestoreState"]) {
-        [self fireEvent:@"peripheralManager:willRestoreState" withObject:@{
+    if ([self _hasListeners:@"willRestoreState"]) {
+        [self fireEvent:@"willRestoreState" withObject:@{
             @"state":NUMINT(peripheral.state)
         }];
     }
@@ -155,8 +160,8 @@
 
 - (void)peripheralManagerDidStartAdvertising:(CBPeripheralManager *)peripheral error:(nullable NSError *)error
 {
-    if ([self _hasListeners:@"peripheralManager:didStartAdvertising"]) {
-        [self fireEvent:@"peripheralManager:didStartAdvertising" withObject:@{
+    if ([self _hasListeners:@"didStartAdvertising"]) {
+        [self fireEvent:@"didStartAdvertising" withObject:@{
             @"success": NUMBOOL(error == nil),
             @"error": [error localizedDescription] ?: [NSNull null]
         }];
@@ -165,8 +170,8 @@
 
 - (void)peripheralManager:(CBPeripheralManager *)peripheral didAddService:(CBService *)service error:(nullable NSError *)error
 {
-    if ([self _hasListeners:@"peripheralManager:didAddService"]) {
-        [self fireEvent:@"peripheralManager:didAddService" withObject:@{
+    if ([self _hasListeners:@"didAddService"]) {
+        [self fireEvent:@"didAddService" withObject:@{
             @"service":[[TiBluetoothServiceProxy alloc] _initWithPageContext:[self pageContext] andService:service],
             @"error": [error localizedDescription] ?: [NSNull null]
         }];
@@ -175,8 +180,8 @@
 
 - (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didSubscribeToCharacteristic:(CBCharacteristic *)characteristic
 {
-    if ([self _hasListeners:@"peripheralManager:didSubscribeToCharacteristic"]) {
-        [self fireEvent:@"peripheralManager:didSubscribeToCharacteristic" withObject:@{
+    if ([self _hasListeners:@"didSubscribeToCharacteristic"]) {
+        [self fireEvent:@"didSubscribeToCharacteristic" withObject:@{
             @"characteristic":[[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:characteristic]
         }];
     }
@@ -184,8 +189,8 @@
 
 - (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didUnsubscribeFromCharacteristic:(CBCharacteristic *)characteristic
 {
-    if ([self _hasListeners:@"peripheralManager:didUnsubscribeFromCharacteristic"]) {
-        [self fireEvent:@"peripheralManager:didUnsubscribeFromCharacteristic" withObject:@{
+    if ([self _hasListeners:@"didUnsubscribeFromCharacteristic"]) {
+        [self fireEvent:@"didUnsubscribeFromCharacteristic" withObject:@{
             @"characteristic":[[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:characteristic]
         }];
     }
@@ -193,8 +198,8 @@
 
 - (void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveReadRequest:(CBATTRequest *)request;
 {
-    if ([self _hasListeners:@"peripheralManager:didReceiveReadRequest"]) {
-        [self fireEvent:@"peripheralManager:didReceiveReadRequest" withObject:@{
+    if ([self _hasListeners:@"didReceiveReadRequest"]) {
+        [self fireEvent:@"didReceiveReadRequest" withObject:@{
             @"characteristic":[[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:request.characteristic],
             @"offset": NUMUINTEGER(request.offset)
         }];
@@ -203,8 +208,8 @@
 
 - (void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveWriteRequests:(NSArray<CBATTRequest *> *)requests
 {
-    if ([self _hasListeners:@"peripheralManager:didReceiveWriteRequests"]) {
-        [self fireEvent:@"peripheralManager:didReceiveWriteRequests" withObject:@{
+    if ([self _hasListeners:@"didReceiveWriteRequests"]) {
+        [self fireEvent:@"didReceiveWriteRequests" withObject:@{
             @"characteristics":[self arrayFromReadWriteRequests:requests]
         }];
     }
@@ -212,8 +217,8 @@
 
 - (void)peripheralManagerIsReadyToUpdateSubscribers:(CBPeripheralManager *)peripheral
 {
-    if ([self _hasListeners:@"peripheralManager:readyToUpdateSubscribers"]) {
-        [self fireEvent:@"peripheralManager:readyToUpdateSubscribers" withObject:nil];
+    if ([self _hasListeners:@"readyToUpdateSubscribers"]) {
+        [self fireEvent:@"readyToUpdateSubscribers" withObject:nil];
     }
 }
 

@@ -58,8 +58,6 @@
     return [[TiBlob alloc] initWithData:characteristic.value mimetype:@"text/plain"];
 }
 
-
-
 #pragma mark Utilities
 
 - (NSArray*)arrayFromServices:(NSArray<CBService*>*)services

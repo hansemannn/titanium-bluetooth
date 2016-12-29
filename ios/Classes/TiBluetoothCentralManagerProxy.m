@@ -84,74 +84,67 @@
     [centralManager cancelPeripheralConnection:[(TiBluetoothPeripheralProxy *)value peripheral]];
 }
 
-- (id)centralManagerState
+- (id)state
 {
     return NUMINTEGER([centralManager state]);
 }
 
-- (id)peripheralManagerState
-{
-    return NUMINTEGER([centralManager state]);
-}
-
-#pragma mark - Delegates
-
-#pragma mark Central Manager Delegates
+#pragma mark Delegates
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
 {
-    if ([self _hasListeners:@"centralManager:didConnectPeripheral"]) {
-        [self fireEvent:@"centralManager:didConnectPeripheral" withObject:@{
-                                                                            @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral]
-                                                                            }];
+    if ([self _hasListeners:@"didConnectPeripheral"]) {
+        [self fireEvent:@"didConnectPeripheral" withObject:@{
+            @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral]
+        }];
     }
 }
 
 - (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
-    if ([self _hasListeners:@"centralManager:didDisconnectPeripheral"]) {
-        [self fireEvent:@"centralManager:didDisconnectPeripheral" withObject:@{
-                                                                               @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral]
-                                                                               }];
+    if ([self _hasListeners:@"didDisconnectPeripheral"]) {
+        [self fireEvent:@"didDisconnectPeripheral" withObject:@{
+            @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral]
+        }];
     }
 }
 
 - (void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI
 {
-    if ([self _hasListeners:@"centralManager:didDiscoverPeripheral"]) {
-        [self fireEvent:@"centralManager:didDiscoverPeripheral" withObject:@{
-                                                                             @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
-                                                                             @"advertisementData": [self dictionaryFromAdvertisementData:advertisementData],
-                                                                             @"rssi": NUMINT(RSSI)
-                                                                             }];
+    if ([self _hasListeners:@"didDiscoverPeripheral"]) {
+        [self fireEvent:@"didDiscoverPeripheral" withObject:@{
+            @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
+            @"advertisementData": [self dictionaryFromAdvertisementData:advertisementData],
+            @"rssi": NUMINT(RSSI)
+        }];
     }
 }
 
 - (void)centralManager:(CBCentralManager *)central willRestoreState:(NSDictionary<NSString *,id> *)dict
 {
-    if ([self _hasListeners:@"centralManager:willRestoreState"]) {
-        [self fireEvent:@"centralManager:willRestoreState" withObject:@{
-                                                                        @"state":NUMINT(central.state)
-                                                                        }];
+    if ([self _hasListeners:@"willRestoreState"]) {
+        [self fireEvent:@"willRestoreState" withObject:@{
+            @"state":NUMINT(central.state)
+        }];
     }
 }
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
-    if ([self _hasListeners:@"centralManager:didDisconnectPeripheral"]) {
-        [self fireEvent:@"centralManager:didDisconnectPeripheral" withObject:@{
-                                                                               @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
-                                                                               @"error": [error localizedDescription] ?: [NSNull null]
-                                                                               }];
+    if ([self _hasListeners:@"didDisconnectPeripheral"]) {
+        [self fireEvent:@"didDisconnectPeripheral" withObject:@{
+            @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
+            @"error": [error localizedDescription] ?: [NSNull null]
+        }];
     }
 }
 
 - (void)centralManagerDidUpdateState:(CBCentralManager *)central
 {
-    if ([self _hasListeners:@"centralManager:didUpdateState"]) {
-        [self fireEvent:@"centralManager:didUpdateState" withObject:@{
-                                                                      @"state":NUMINT(central.state)
-                                                                      }];
+    if ([self _hasListeners:@"didUpdateState"]) {
+        [self fireEvent:@"didUpdateState" withObject:@{
+            @"state":NUMINT(central.state)
+        }];
     }
 }
 
