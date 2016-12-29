@@ -11,7 +11,7 @@
     CBPeripheral *_peripheral;
 }
 
-- (id)_initWithPageContext:(id<TiEvaluator>)context andPeripheral:(CBPeripheral*)__peripheral;
-- (CBPeripheral*)peripheral;
+- (id)_initWithPageContext:(id<TiEvaluator>)context andPeripheral:(CBPeripheral *)__peripheral;
+- (CBPeripheral *)peripheral;
 
 @end

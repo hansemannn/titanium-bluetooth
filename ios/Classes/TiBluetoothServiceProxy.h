@@ -11,7 +11,7 @@
     CBService *service;
 }
 
-- (id)_initWithPageContext:(id<TiEvaluator>)context andService:(CBService*)_service;
-- (CBService*)service;
+- (id)_initWithPageContext:(id<TiEvaluator>)context andService:(CBService *)_service;
+- (CBService *)service;
 
 @end

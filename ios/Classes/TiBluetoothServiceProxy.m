@@ -20,7 +20,7 @@
     return self;
 }
 
-- (CBService*)service
+- (CBService *)service
 {
     return service;
 }
@@ -46,7 +46,7 @@
 
 #pragma mark Utilties
 
-- (NSArray*)arrayFromServices:(NSArray<CBService*>*)services
+- (NSArray *)arrayFromServices:(NSArray<CBService *> *)services
 {
     NSMutableArray *result = [NSMutableArray array];
     
@@ -57,7 +57,7 @@
     return result;
 }
 
-- (NSArray*)arrayFromCharacteristics:(NSArray<CBCharacteristic*>*)characteristics
+- (NSArray *)arrayFromCharacteristics:(NSArray<CBCharacteristic *> *)characteristics
 {
     NSMutableArray *result = [NSMutableArray array];
     

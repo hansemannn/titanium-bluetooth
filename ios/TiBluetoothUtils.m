@@ -10,7 +10,7 @@
 
 @implementation TiBluetoothUtils
 
-+ (NSArray<CBUUID *> *)UUIDArrayFromStringArray:(NSArray<id>*)array
++ (NSArray<CBUUID *> *)UUIDArrayFromStringArray:(NSArray<id> *)array
 {
     NSMutableArray<CBUUID*> *result = [NSMutableArray array];
     
