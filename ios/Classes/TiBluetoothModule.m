@@ -47,71 +47,22 @@
 - (TiBluetoothCharacteristicProxy *)createCharacteristic:(id)args
 {
     ENSURE_SINGLE_ARG(args, NSDictionary);
-    
-    id uuid = [args objectForKey:@"uuid"];
-    id properties = [args objectForKey:@"properties"];
-    id value = [args objectForKey:@"value"];
-    id permissions = [args objectForKey:@"permissions"];
-    
-    CBMutableCharacteristic *characteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:[TiUtils stringValue:uuid]]
-                                                                                 properties:[TiUtils intValue:properties]
-                                                                                      value:[(TiBlob *)value data]
-                                                                                permissions:[TiUtils intValue:permissions]];
-    
-    return [[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext]
-                                                      andCharacteristic:characteristic];
+
+    return [[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andProperties:args];
 }
 
 - (TiBluetoothServiceProxy *)createService:(id)args
 {
     ENSURE_SINGLE_ARG(args, NSDictionary);
     
-    id uuid = [args objectForKey:@"uuid"];
-    id primary = [args objectForKey:@"primary"];
-    id characteristics = [args objectForKey:@"characteristics"];
-    id includedServices = [args objectForKey:@"includedServices"];
-    
-    CBMutableService *service = [[CBMutableService alloc] initWithType:[CBUUID UUIDWithString:[TiUtils stringValue:uuid]]
-                                                               primary:[TiUtils boolValue:primary]];
-    
-    if (characteristics) {
-        NSMutableArray *result = [NSMutableArray array];
-        
-        for (id characteristic in characteristics) {
-            ENSURE_TYPE(characteristic, TiBluetoothCharacteristicProxy);
-            [result addObject:[(TiBluetoothCharacteristicProxy *)characteristic characteristic]];
-        }
-        
-        [service setCharacteristics:result];
-    }
-    
-    if (includedServices) {
-        NSMutableArray *result = [NSMutableArray array];
-        
-        for (id includedService in includedServices) {
-            ENSURE_TYPE(includedService, TiBluetoothServiceProxy);
-            [result addObject:[(TiBluetoothServiceProxy *)includedService service]];
-        }
-        
-        [service setIncludedServices:result];
-    }
-    
-    return [[TiBluetoothServiceProxy alloc] _initWithPageContext:[self pageContext]
-                                                      andService:service];
+    return [[TiBluetoothServiceProxy alloc] _initWithPageContext:[self pageContext] andProperties:args];
 }
 
 - (TiBluetoothDescriptorProxy *)createDescriptor:(id)args
 {
     ENSURE_SINGLE_ARG(args, NSDictionary);
     
-    id uuid = [args objectForKey:@"uuid"];
-    id value = [args objectForKey:@"value"];
-    
-    CBMutableDescriptor *descriptor = [[CBMutableDescriptor alloc] initWithType:[CBUUID UUIDWithString:[TiUtils stringValue:uuid]]
-                                                                          value:[(TiBlob *)value data]];
-    
-    return [[TiBluetoothDescriptorProxy alloc] _initWithPageContext:[self pageContext]
-                                                      andDescriptor:descriptor];
+    return [[TiBluetoothDescriptorProxy alloc] _initWithPageContext:[self pageContext] andProperties:args];
 }
 
 - (TiBluetoothCentralManagerProxy *)createCentralManager:(id)args

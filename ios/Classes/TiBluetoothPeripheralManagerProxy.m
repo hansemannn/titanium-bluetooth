@@ -182,6 +182,7 @@
 {
     if ([self _hasListeners:@"didSubscribeToCharacteristic"]) {
         [self fireEvent:@"didSubscribeToCharacteristic" withObject:@{
+            @"central": [[TiBluetoothCentralProxy alloc] _initWithPageContext:[self pageContext] andCentral:central],
             @"characteristic":[[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:characteristic]
         }];
     }
@@ -191,6 +192,7 @@
 {
     if ([self _hasListeners:@"didUnsubscribeFromCharacteristic"]) {
         [self fireEvent:@"didUnsubscribeFromCharacteristic" withObject:@{
+            @"central": [[TiBluetoothCentralProxy alloc] _initWithPageContext:[self pageContext] andCentral:central],
             @"characteristic":[[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:characteristic]
         }];
     }
