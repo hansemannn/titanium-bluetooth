@@ -24,11 +24,13 @@
         ENSURE_ARG_OR_NIL_FOR_KEY(restoreIdentifier, args, @"restoreIdentifier", NSString);
         
         if (showPowerAlert) {
-            [options setObject:showPowerAlert forKey:CBPeripheralManagerOptionShowPowerAlertKey];
+            [options setObject:showPowerAlert
+                        forKey:CBPeripheralManagerOptionShowPowerAlertKey];
         }
         
         if (restoreIdentifier) {
-            [options setObject:restoreIdentifier forKey:CBPeripheralManagerOptionRestoreIdentifierKey];
+            [options setObject:restoreIdentifier
+                        forKey:CBPeripheralManagerOptionRestoreIdentifierKey];
         }
         
         centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:dispatch_get_main_queue() options:options];
@@ -48,16 +50,34 @@
 
 - (void)startScanWithServices:(id)args
 {
-    ENSURE_SINGLE_ARG_OR_NIL(args, NSArray);
+    id services = [args objectAtIndex:0];
+
+    ENSURE_TYPE_OR_NIL(services, NSArray);
     
     NSMutableArray<CBUUID*> *uuids = [NSMutableArray array];
+    NSMutableDictionary *options = nil;
     
-    for (id uuid in args) {
+    for (id uuid in services) {
         ENSURE_TYPE(uuid, NSString);
         [uuids addObject:[CBUUID UUIDWithString:[TiUtils stringValue:uuid]]];
     }
     
-    [centralManager scanForPeripheralsWithServices:uuids options:nil];
+    if ([args count] == 2) {
+        id dict = [args objectAtIndex:1];
+        
+        if ([dict objectAtIndex:@"allowDuplicates"] != nil) {
+            [options setObject:[dict objectAtIndex:@"allowDuplicates"]
+                        forKey:CBCentralManagerScanOptionAllowDuplicatesKey];
+        }
+        
+        if ([dict objectAtIndex:@"solicitedServiceUUIDs"] != nil) {
+            [options setObject:[TiBluetoothUtils UUIDArrayFromStringArray:[dict objectAtIndex:@"solicitedServiceUUIDs"]]
+                        forKey:CBCentralManagerScanOptionSolicitedServiceUUIDsKey];
+        }
+    }
+    
+    [centralManager scanForPeripheralsWithServices:uuids
+                                           options:options];
 }
 
 - (void)stopScan:(id)unused
@@ -70,11 +90,32 @@
     return NUMBOOL([centralManager isScanning]);
 }
 
-- (void)connectPeripheral:(id)value
+- (void)connectPeripheral:(id)args
 {
-    ENSURE_SINGLE_ARG(value, TiBluetoothPeripheralProxy);
+    id peripheral = [args objectAtIndex:0];
+    NSMutableDictionary *options = nil;
     
-    [centralManager connectPeripheral:[(TiBluetoothPeripheralProxy *)value peripheral] options:nil];
+    ENSURE_TYPE(peripheral, TiBluetoothPeripheralProxy);
+    
+    if ([args count] == 2) {
+        ENSURE_TYPE([args objectAtIndex:1], NSDictionary);
+        id dict = [args objectAtIndex:1];
+        
+        if ([dict objectForKey:@"notifyOnConnection"] != nil) {
+            [dict setObject:[dict objectForKey:@"notifyOnConnection"] forKey:CBConnectPeripheralOptionNotifyOnConnectionKey];
+        }
+        
+        if ([dict objectForKey:@"notifyOnDisconnection"] != nil) {
+            [dict setObject:[dict objectForKey:@"notifyOnDisconnection"] forKey:CBConnectPeripheralOptionNotifyOnDisconnectionKey];
+        }
+        
+        if ([dict objectForKey:@"notifyOnNotification"] != nil) {
+            [dict setObject:[dict objectForKey:@"notifyOnNotification"] forKey:CBConnectPeripheralOptionNotifyOnNotificationKey];
+        }
+    }
+    
+    [centralManager connectPeripheral:[(TiBluetoothPeripheralProxy *)peripheral peripheral]
+                              options:options];
 }
 
 - (void)cancelPeripheralConnection:(id)value
