@@ -60,7 +60,7 @@
 
 #pragma mark Utilities
 
-- (NSArray*)arrayFromServices:(NSArray<CBService*>*)services
+- (NSArray *)arrayFromServices:(NSArray<CBService *> *)services
 {
     NSMutableArray *result = [NSMutableArray array];
     
@@ -71,7 +71,7 @@
     return result;
 }
 
-- (NSArray*)arrayFromCharacteristics:(NSArray<CBCharacteristic*>*)characteristics
+- (NSArray *)arrayFromCharacteristics:(NSArray<CBCharacteristic *> *)characteristics
 {
     NSMutableArray *result = [NSMutableArray array];
     
@@ -82,7 +82,7 @@
     return result;
 }
 
-- (NSArray*)arrayFromDescriptors:(NSArray<CBDescriptor*>*)descriptors
+- (NSArray *)arrayFromDescriptors:(NSArray<CBDescriptor *> *)descriptors
 {
     NSMutableArray *result = [NSMutableArray array];
     

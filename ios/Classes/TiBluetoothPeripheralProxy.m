@@ -14,7 +14,7 @@
 
 @implementation TiBluetoothPeripheralProxy
 
-- (id)_initWithPageContext:(id<TiEvaluator>)context andPeripheral:(CBPeripheral*)__peripheral
+- (id)_initWithPageContext:(id<TiEvaluator>)context andPeripheral:(CBPeripheral *)__peripheral
 {
     if ([super _initWithPageContext:[self pageContext]]) {
         _peripheral = __peripheral;
@@ -23,7 +23,7 @@
     return self;
 }
     
-- (CBPeripheral*)peripheral
+- (CBPeripheral *)peripheral
 {
     return _peripheral;
 }
@@ -92,7 +92,7 @@
 {
     ENSURE_SINGLE_ARG(value, TiBluetoothCharacteristicProxy);
     
-    [_peripheral readValueForCharacteristic:[(TiBluetoothCharacteristicProxy*)value characteristic]];
+    [_peripheral readValueForCharacteristic:[(TiBluetoothCharacteristicProxy *)value characteristic]];
 }
 
 - (id)maximumWriteValueLengthForType:(id)value
@@ -114,7 +114,7 @@
 
     
     [_peripheral writeValue:[(TiBlob*)value data]
-         forCharacteristic:[(TiBluetoothCharacteristicProxy*)characteristic characteristic]
+         forCharacteristic:[(TiBluetoothCharacteristicProxy *)characteristic characteristic]
                       type:[TiUtils intValue:type]];
 }
 
@@ -129,21 +129,21 @@
     ENSURE_TYPE(characteristic, TiBluetoothCharacteristicProxy);
     
     [_peripheral setNotifyValue:[TiUtils boolValue:notifyValue]
-             forCharacteristic:[(TiBluetoothCharacteristicProxy*)characteristic characteristic]];
+             forCharacteristic:[(TiBluetoothCharacteristicProxy *)characteristic characteristic]];
 }
 
 - (void)discoverDescriptorsForCharacteristic:(id)value
 {
     ENSURE_SINGLE_ARG(value, TiBluetoothCharacteristicProxy);
     
-    [_peripheral discoverDescriptorsForCharacteristic:[(TiBluetoothCharacteristicProxy*)value characteristic]];
+    [_peripheral discoverDescriptorsForCharacteristic:[(TiBluetoothCharacteristicProxy *)value characteristic]];
 }
 
 - (void)readValueForDescriptor:(id)value
 {
     ENSURE_SINGLE_ARG(value, TiBluetoothDescriptorProxy);
 
-    [_peripheral readValueForDescriptor:[(TiBluetoothDescriptorProxy*)value descriptor]];
+    [_peripheral readValueForDescriptor:[(TiBluetoothDescriptorProxy *)value descriptor]];
 }
 
 - (void)writeValueForDescriptor:(id)args
@@ -157,7 +157,7 @@
     ENSURE_TYPE(descriptor, TiBluetoothDescriptorProxy);
     
     [_peripheral writeValue:[(TiBlob*)value data]
-             forDescriptor:[(TiBluetoothDescriptorProxy*)descriptor descriptor]];
+             forDescriptor:[(TiBluetoothDescriptorProxy *)descriptor descriptor]];
 }
 
 
@@ -196,7 +196,7 @@
 
 #pragma mark Utilities
 
-- (NSArray*)arrayFromServices:(NSArray<CBService*>*)services
+- (NSArray *)arrayFromServices:(NSArray<CBService *> *)services
 {
     NSMutableArray *result = [NSMutableArray array];
     

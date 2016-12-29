@@ -224,7 +224,7 @@
 
 #pragma mark Utilities
 
-- (NSArray*)arrayFromReadWriteRequests:(NSArray<CBATTRequest *> *)requests
+- (NSArray *)arrayFromReadWriteRequests:(NSArray<CBATTRequest *> *)requests
 {
     NSMutableArray *result = [NSMutableArray array];
     
