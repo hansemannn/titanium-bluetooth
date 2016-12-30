@@ -2,18 +2,17 @@
 
 <plist>
   <dict>
-
-    <!-- Use when requiring background execution -->
+    	<!-- Use when requiring background execution -->
 	<key>UIBackgroundModes</key>
 	<array>
-        <!-- Use when acting as a central -->
+        	<!-- Use when acting as a central -->
 		<string>bluetooth-central</string>
         
-        <!-- Use when acting as a peripheral -->
+        	<!-- Use when acting as a peripheral -->
 		<string>bluetooth-peripheral</string>
 	</array>
     
-    <!-- Use when acting as a peripheral -->
+    	<!-- Use when acting as a peripheral -->
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Can we connect to Bluetooth devices?</string>
   </dict>
