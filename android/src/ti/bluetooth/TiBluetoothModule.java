@@ -41,7 +41,7 @@ public class TiBluetoothModule extends KrollModule {
 		void onConnectionStateChange(BluetoothDevice device, int newState);
 	}
 
-	public static final String LCAT = "BLE🔵";
+	public static final String LCAT = "BLE";
 	private BluetoothManager btManager;
 	private BluetoothAdapter btAdapter;
 	private TiApplication appContext;
@@ -104,9 +104,15 @@ public class TiBluetoothModule extends KrollModule {
 		super();
 		appContext = TiApplication.getInstance();
 		activity = appContext.getCurrentActivity();
+		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+		filter.addAction(BluetoothDevice.ACTION_UUID);
+		filter.addAction(BluetoothDevice.ACTION_FOUND);
+		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+		filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+		filter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
 		appContext.registerReceiver(new BlutoothStateChangedBroadcastReceiver(
-				TiBluetoothModule.this, btAdapter), new IntentFilter(
-				BluetoothAdapter.ACTION_STATE_CHANGED));
+				TiBluetoothModule.this, btAdapter), filter);
 	}
 
 	@Kroll.onAppCreate
@@ -121,8 +127,6 @@ public class TiBluetoothModule extends KrollModule {
 			if (device != null) {
 				BluetoothDeviceProxy btDeviceProxy = new BluetoothDeviceProxy(
 						device);
-				// TODO resultpayload is array of btDeviceProxy's
-				Log.d(LCAT, "Found something " + device.getName());
 				if (device.getName() != null) {
 					Log.d(LCAT,
 							"Found: " + device.getName() + " "
