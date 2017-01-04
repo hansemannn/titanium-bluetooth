@@ -8,19 +8,57 @@
 #import "TiBluetoothServiceProxy.h"
 #import "TiBluetoothPeripheralProxy.h"
 #import "TiBluetoothCharacteristicProxy.h"
+#import "TiUtils.h"
 
 @implementation TiBluetoothServiceProxy
 
 - (id)_initWithPageContext:(id<TiEvaluator>)context andService:(CBService *)_service
 {
     if ([super _initWithPageContext:[self pageContext]]) {
-        service = _service;
+        service = (CBMutableService *)_service;
     }
     
     return self;
 }
 
-- (CBService*)service
+- (id)_initWithPageContext:(id<TiEvaluator>)context andProperties:(id)args
+{
+    if (self = [super _initWithPageContext:context]) {
+        id uuid = [args objectForKey:@"uuid"];
+        id primary = [args objectForKey:@"primary"];
+        id characteristics = [args objectForKey:@"characteristics"];
+        id includedServices = [args objectForKey:@"includedServices"];
+        
+        service = [[CBMutableService alloc] initWithType:[CBUUID UUIDWithString:[TiUtils stringValue:uuid]]
+                                                                   primary:[TiUtils boolValue:primary]];
+        
+        if (characteristics) {
+            NSMutableArray *result = [NSMutableArray array];
+            
+            for (id characteristic in characteristics) {
+                ENSURE_TYPE(characteristic, TiBluetoothCharacteristicProxy);
+                [result addObject:[(TiBluetoothCharacteristicProxy *)characteristic characteristic]];
+            }
+            
+            [service setCharacteristics:result];
+        }
+        
+        if (includedServices) {
+            NSMutableArray *result = [NSMutableArray array];
+            
+            for (id includedService in includedServices) {
+                ENSURE_TYPE(includedService, TiBluetoothServiceProxy);
+                [result addObject:[(TiBluetoothServiceProxy *)includedService service]];
+            }
+            
+            [service setIncludedServices:result];
+        }
+    }
+    
+    return self;
+}
+
+- (CBService *)service
 {
     return service;
 }
@@ -46,18 +84,18 @@
 
 #pragma mark Utilties
 
-- (NSArray*)arrayFromServices:(NSArray<CBService*>*)services
+- (NSArray *)arrayFromServices:(NSArray<CBService *> *)services
 {
     NSMutableArray *result = [NSMutableArray array];
     
     for (CBService *_service in services) {
-        [result addObject:[[TiBluetoothServiceProxy alloc] _initWithPageContext:[self pageContext] andService:_service]];
+        [result addObject:[[TiBluetoothServiceProxy alloc] _initWithPageContext:[self pageContext] andService:(CBService *)_service]];
     }
     
     return result;
 }
 
-- (NSArray*)arrayFromCharacteristics:(NSArray<CBCharacteristic*>*)characteristics
+- (NSArray *)arrayFromCharacteristics:(NSArray<CBCharacteristic *> *)characteristics
 {
     NSMutableArray *result = [NSMutableArray array];
     

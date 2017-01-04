@@ -7,10 +7,12 @@
 
 #import "TiBluetoothDescriptorProxy.h"
 #import "TiBluetoothCharacteristicProxy.h"
+#import "TiUtils.h"
+#import "TiBlob.h"
 
 @implementation TiBluetoothDescriptorProxy
 
-- (id)_initWithPageContext:(id<TiEvaluator>)context andDescriptor:(CBDescriptor*)_descriptor
+- (id)_initWithPageContext:(id<TiEvaluator>)context andDescriptor:(CBDescriptor *)_descriptor
 {
     if ([super _initWithPageContext:[self pageContext]]) {
         descriptor = _descriptor;
@@ -19,7 +21,19 @@
     return self;
 }
 
-- (CBDescriptor*)descriptor
+- (id)_initWithPageContext:(id<TiEvaluator>)context andProperties:(id)args
+{
+    if (self = [super _initWithPageContext:context]) {
+        id uuid = [args objectForKey:@"uuid"];
+        id value = [args objectForKey:@"value"];
+        
+        descriptor = [[CBMutableDescriptor alloc] initWithType:[CBUUID UUIDWithString:[TiUtils stringValue:uuid]] value:[(TiBlob *)value data]];
+    }
+    
+    return self;
+}
+
+- (CBDescriptor *)descriptor
 {
     return descriptor;
 }
