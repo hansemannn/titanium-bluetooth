@@ -8,6 +8,7 @@
 #import "TiBluetoothCharacteristicProxy.h"
 #import "TiBluetoothServiceProxy.h"
 #import "TiBluetoothDescriptorProxy.h"
+#import "TiUtils.h"
 #import "TiBlob.h"
 
 @implementation TiBluetoothCharacteristicProxy
@@ -20,8 +21,25 @@
          
     return self;
 }
+
+- (id)_initWithPageContext:(id<TiEvaluator>)context andProperties:(id)args
+{
+    if (self = [super _initWithPageContext:context]) {
+        id uuid = [args objectForKey:@"uuid"];
+        id properties = [args objectForKey:@"properties"];
+        id value = [args objectForKey:@"value"];
+        id permissions = [args objectForKey:@"permissions"];
+        
+        characteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:[TiUtils stringValue:uuid]]
+                                                            properties:[TiUtils intValue:properties]
+                                                                 value:[(TiBlob *)value data]
+                                                           permissions:[TiUtils intValue:permissions]];
+    }
     
-- (CBCharacteristic*)characteristic
+    return self;
+}
+    
+- (CBCharacteristic *)characteristic
 {
     return characteristic;
 }
@@ -55,14 +73,12 @@
     
 - (id)value
 {
-    return [[TiBlob alloc] initWithData:characteristic.value mimetype:@"text/plain"];
+    return [[TiBlob alloc] _initWithPageContext:[self pageContext] andData:characteristic.value mimetype:@"text/plain"];
 }
-
-
 
 #pragma mark Utilities
 
-- (NSArray*)arrayFromServices:(NSArray<CBService*>*)services
+- (NSArray *)arrayFromServices:(NSArray<CBService *> *)services
 {
     NSMutableArray *result = [NSMutableArray array];
     
@@ -73,7 +89,7 @@
     return result;
 }
 
-- (NSArray*)arrayFromCharacteristics:(NSArray<CBCharacteristic*>*)characteristics
+- (NSArray *)arrayFromCharacteristics:(NSArray<CBCharacteristic *> *)characteristics
 {
     NSMutableArray *result = [NSMutableArray array];
     
@@ -84,7 +100,7 @@
     return result;
 }
 
-- (NSArray*)arrayFromDescriptors:(NSArray<CBDescriptor*>*)descriptors
+- (NSArray *)arrayFromDescriptors:(NSArray<CBDescriptor *> *)descriptors
 {
     NSMutableArray *result = [NSMutableArray array];
     

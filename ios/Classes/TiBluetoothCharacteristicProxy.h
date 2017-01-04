@@ -12,6 +12,7 @@
 }
 
 - (id)_initWithPageContext:(id<TiEvaluator>)context andCharacteristic:(CBCharacteristic*)_characteristic;
+- (id)_initWithPageContext:(id<TiEvaluator>)context andProperties:(id)args;
 - (CBCharacteristic*)characteristic;
 
 @end

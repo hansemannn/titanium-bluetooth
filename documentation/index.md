@@ -16,13 +16,13 @@
 * `SCAN_MODE_OPPORTUNISTIC` _(int)_ - (Android only)
 
 ## Methods
+* `initialize()`
 * `isScanning()`
 * `startScan()`
-* `getScanMode()`
-* `setScanMode()`
-* `initialize()`
+* `startScanWithServices([Array])` - (iOS only)
+* `getScanMode()` - (Android only)
+* `setScanMode()` - (Android only)
 * `stopScan()`
-* `startScanWithServices([Array])`
 
 ## Events
 * `didUpdateState`
