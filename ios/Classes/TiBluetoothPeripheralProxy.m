@@ -18,6 +18,7 @@
 {
     if ([super _initWithPageContext:[self pageContext]]) {
         _peripheral = __peripheral;
+        [_peripheral setDelegate:self];
     }
     
     return self;
@@ -165,7 +166,7 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error
 {
-    if ([self _hasListeners:@"peripheral:didDiscoverServices"]) {
+    if ([self _hasListeners:@"didDiscoverServices"]) {
         [self fireEvent:@"didDiscoverServices" withObject:@{
             @"peripheral": [[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
             @"error": [error localizedDescription] ?: [NSNull null]
@@ -175,8 +176,8 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error
 {
-    if ([self _hasListeners:@"peripheral:didDiscoverCharacteristicsForService"]) {
-        [self fireEvent:@"peripheral:didDiscoverCharacteristicsForService" withObject:@{
+    if ([self _hasListeners:@"didDiscoverCharacteristicsForService"]) {
+        [self fireEvent:@"didDiscoverCharacteristicsForService" withObject:@{
             @"peripheral": [[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
             @"service": [[TiBluetoothServiceProxy alloc] _initWithPageContext:[self pageContext] andService:service],
             @"error": [error localizedDescription] ?: [NSNull null]
@@ -186,8 +187,8 @@
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
-    if ([self _hasListeners:@"peripheral:didUpdateValueForCharacteristic"]) {
-        [self fireEvent:@"peripheral:didUpdateValueForCharacteristic" withObject:@{
+    if ([self _hasListeners:@"didUpdateValueForCharacteristic"]) {
+        [self fireEvent:@"didUpdateValueForCharacteristic" withObject:@{
             @"characteristic": [[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:characteristic],
             @"error": [error localizedDescription] ?: [NSNull null]
         }];

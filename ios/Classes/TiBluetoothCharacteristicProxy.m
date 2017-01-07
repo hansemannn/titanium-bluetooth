@@ -56,11 +56,6 @@
     return NUMUINTEGER(characteristic.properties);
 }
     
-- (id)isBroadcasted
-{
-    return NUMBOOL(characteristic.isBroadcasted);
-}
-    
 - (id)isNotifying
 {
     return NUMBOOL(characteristic.isNotifying);
