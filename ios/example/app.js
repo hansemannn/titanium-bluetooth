@@ -22,6 +22,7 @@
 **/
 
 var BLE = require('ti.bluetooth');
+var myPeripheral;
 
 var win = Ti.UI.createWindow({
     backgroundColor: '#fff'
@@ -106,6 +107,27 @@ centralManager.addEventListener('didUpdateState', function(e) {
 centralManager.addEventListener('didConnectPeripheral', function(e) {
     Ti.API.info('didConnectPeripheral');
     Ti.API.info(e);
+    
+    // Now you can add event listener to the found peripheral.
+    // Make sure to handle event listeners properly and remove them
+    // when you don't need them anymore
+    
+    myPeripheral = e.peripheral;
+        
+    myPeripheral.addEventListener('didDiscoverServices', function(e) {
+        Ti.API.info('didDiscoverServices');
+        Ti.API.info(e);
+    });
+
+    myPeripheral.addEventListener('didDiscoverCharacteristicsForService', function(e) {
+        Ti.API.info('didDiscoverCharacteristicsForService');
+        Ti.API.info(e);
+    });
+
+    myPeripheral.addEventListener('didUpdateValueForCharacteristic', function(e) {
+        Ti.API.info('didUpdateValueForCharacteristic');
+        Ti.API.info(e);
+    });
 });
 
 centralManager.addEventListener('didDisconnectPeripheral', function(e) {
@@ -120,21 +142,6 @@ centralManager.addEventListener('willRestoreState', function(e) {
 
 centralManager.addEventListener('didFailToConnectPeripheral', function(e) {
     Ti.API.info('didFailToConnectPeripheral');
-    Ti.API.info(e);
-});
-
-centralManager.addEventListener('didDiscoverServices', function(e) {
-    Ti.API.info('didDiscoverServices');
-    Ti.API.info(e);
-});
-
-centralManager.addEventListener('didDiscoverCharacteristicsForService', function(e) {
-    Ti.API.info('didDiscoverCharacteristicsForService');
-    Ti.API.info(e);
-});
-
-centralManager.addEventListener('didUpdateValueForCharacteristic', function(e) {
-    Ti.API.info('didUpdateValueForCharacteristic');
     Ti.API.info(e);
 });
 
