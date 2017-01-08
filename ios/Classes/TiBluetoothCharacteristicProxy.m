@@ -73,28 +73,6 @@
 
 #pragma mark Utilities
 
-- (NSArray *)arrayFromServices:(NSArray<CBService *> *)services
-{
-    NSMutableArray *result = [NSMutableArray array];
-    
-    for (CBService *service in services) {
-        [result addObject:[[TiBluetoothServiceProxy alloc] _initWithPageContext:[self pageContext] andService:service]];
-    }
-    
-    return result;
-}
-
-- (NSArray *)arrayFromCharacteristics:(NSArray<CBCharacteristic *> *)characteristics
-{
-    NSMutableArray *result = [NSMutableArray array];
-    
-    for (CBCharacteristic *_characteristic in characteristics) {
-        [result addObject:[[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:_characteristic]];
-    }
-    
-    return result;
-}
-
 - (NSArray *)arrayFromDescriptors:(NSArray<CBDescriptor *> *)descriptors
 {
     NSMutableArray *result = [NSMutableArray array];

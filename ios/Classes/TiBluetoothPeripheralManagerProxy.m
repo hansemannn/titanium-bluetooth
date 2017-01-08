@@ -64,6 +64,7 @@
 {
     ENSURE_SINGLE_ARG_OR_NIL(args, NSDictionary);
     
+    // FIXME: Handle CBAdvertisementDataServiceUUIDsKey and CBAdvertisementDataLocalNameKey
     [peripheralManager startAdvertising:nil];
 }
 
