@@ -10,8 +10,12 @@
 
 @implementation TiBluetoothUtils
 
-+ (NSArray<CBUUID *> *)UUIDArrayFromStringArray:(NSArray<id> *)array
++ ( NSArray<CBUUID *> * _Nullable)UUIDArrayFromStringArray:(NSArray<id> *)array
 {
+    if (array == nil) {
+        return nil;
+    }
+    
     NSMutableArray<CBUUID*> *result = [NSMutableArray array];
     
     for (id uuid in array) {
@@ -22,8 +26,12 @@
     return result;
 }
 
-+ (NSArray<id> *)stringArrayFromUUIDArray:(NSArray<CBUUID *> *)array
++ (NSArray<id> * _Nullable)stringArrayFromUUIDArray:(NSArray<CBUUID *> *)array
 {
+    if (array == nil) {
+        return nil;
+    }
+    
     NSMutableArray *result = [NSMutableArray array];
     
     for (CBUUID *uuid in array) {

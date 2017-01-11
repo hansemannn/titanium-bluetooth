@@ -77,16 +77,32 @@
 
 - (void)discoverCharacteristicsForService:(id)args
 {
-    ENSURE_ARG_COUNT(args, 2);
-    
-    id characteristics = [args objectAtIndex:0];
-    id service = [args objectAtIndex:1];
-    
-    ENSURE_TYPE(characteristics, NSArray);
-    ENSURE_TYPE(service, TiBluetoothServiceProxy);
+    // Deprecated, requires the first arg to be set or null'd
+    if ([args count] == 2) {
+        NSLog(@"[WARN] Using discoverCharacteristicsForService with two arguments is deprecated. Use it with an object of keys instead. Example:");
+        NSLog(@"[WARN] \tdiscoverCharacteristicsForService({\n\t\tcharacteristics: ['<uuid>', '<uuid>'],\n\t\tservice: myService\n\t})")
+        
+        id characteristics = [args objectAtIndex:0];
+        id service = [args objectAtIndex:1];
+        
+        ENSURE_TYPE_OR_NIL(characteristics, NSArray);
+        ENSURE_TYPE(service, TiBluetoothServiceProxy);
 
-    [_peripheral discoverCharacteristics:[TiBluetoothUtils UUIDArrayFromStringArray:characteristics]
-                              forService:[(TiBluetoothServiceProxy *)service service]];
+        [_peripheral discoverCharacteristics:[TiBluetoothUtils UUIDArrayFromStringArray:characteristics]
+                                  forService:[(TiBluetoothServiceProxy *)service service]];
+    } else {
+        ENSURE_SINGLE_ARG(args, NSDictionary);
+        
+        id characteristics = [args objectForKey:@"characteristics"];
+        id service = [args objectForKey:@"service"];
+
+        ENSURE_TYPE_OR_NIL(characteristics, NSArray);
+        ENSURE_TYPE(service, TiBluetoothServiceProxy);
+        
+        [_peripheral discoverCharacteristics:[TiBluetoothUtils UUIDArrayFromStringArray:characteristics]
+                                  forService:[(TiBluetoothServiceProxy *)service service]];
+
+    }
 }
 
 - (void)readValueForCharacteristic:(id)value
