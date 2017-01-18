@@ -6,10 +6,12 @@
  */
 
 #import "TiBluetoothCentralManagerProxy.h"
-#import "TiBluetoothPeripheralProxy.h"
-#import "TiBluetoothCharacteristicProxy.h"
 #import "TiUtils.h"
 #import "TiBluetoothUtils.h"
+#import "TiBluetoothPeripheralProvider.h"
+
+#import "TiBluetoothPeripheralProxy.h"
+#import "TiBluetoothCharacteristicProxy.h"
 
 @implementation TiBluetoothCentralManagerProxy
 
@@ -114,6 +116,10 @@
         }
     }
     
+    if (![[TiBluetoothPeripheralProvider sharedInstance] hasPeripheral:peripheral]) {
+        [[TiBluetoothPeripheralProvider sharedInstance] addPeripheral:peripheral];
+    }
+    
     [centralManager connectPeripheral:[(TiBluetoothPeripheralProxy *)peripheral peripheral]
                               options:options];
 }
@@ -136,7 +142,7 @@
 {
     if ([self _hasListeners:@"didConnectPeripheral"]) {
         [self fireEvent:@"didConnectPeripheral" withObject:@{
-            @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral]
+            @"peripheral": [self peripheralProxyFromPeripheral:peripheral]
         }];
     }
 }
@@ -145,7 +151,7 @@
 {
     if ([self _hasListeners:@"didDisconnectPeripheral"]) {
         [self fireEvent:@"didDisconnectPeripheral" withObject:@{
-            @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral]
+            @"peripheral": [self peripheralProxyFromPeripheral:peripheral]
         }];
     }
 }
@@ -154,7 +160,7 @@
 {
     if ([self _hasListeners:@"didDiscoverPeripheral"]) {
         [self fireEvent:@"didDiscoverPeripheral" withObject:@{
-            @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
+            @"peripheral": [self peripheralProxyFromPeripheral:peripheral],
             @"advertisementData": [self dictionaryFromAdvertisementData:advertisementData],
             @"rssi": NUMINT(RSSI)
         }];
@@ -174,7 +180,7 @@
 {
     if ([self _hasListeners:@"didDisconnectPeripheral"]) {
         [self fireEvent:@"didDisconnectPeripheral" withObject:@{
-            @"peripheral":[[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
+            @"peripheral": [self peripheralProxyFromPeripheral:peripheral],
             @"error": [error localizedDescription] ?: [NSNull null]
         }];
     }
@@ -190,6 +196,20 @@
 }
 
 #pragma mark Utilities
+
+- (TiBluetoothPeripheralProxy *)peripheralProxyFromPeripheral:(CBPeripheral *)peripheral
+{
+    __block TiBluetoothPeripheralProxy *result = [[TiBluetoothPeripheralProvider sharedInstance] peripheralProxyFromPeripheral:peripheral];
+    
+    if (!result) {
+        NSLog(@"[DEBUG] Could not find cached instance of Ti.Bluetooth.Peripheral proxy. Adding and returning it now.");
+        
+        result = [[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral];
+        [[TiBluetoothPeripheralProvider sharedInstance] addPeripheral:result];
+    }
+    
+    return result;
+}
 
 - (NSDictionary *)dictionaryFromAdvertisementData:(NSDictionary *)advertisementData
 {

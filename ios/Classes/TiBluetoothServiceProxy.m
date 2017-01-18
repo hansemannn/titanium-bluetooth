@@ -9,6 +9,7 @@
 #import "TiBluetoothPeripheralProxy.h"
 #import "TiBluetoothCharacteristicProxy.h"
 #import "TiUtils.h"
+#import "TiBluetoothPeripheralProvider.h"
 
 @implementation TiBluetoothServiceProxy
 
@@ -69,20 +70,37 @@
 {
     return NUMBOOL(service.isPrimary);
 }
+
 - (id)peripheral
 {
-    return [[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:service.peripheral];
+    return [self peripheralProxyFromPeripheral:service.peripheral];
 }
+
 - (id)includedServices
 {
     return [self arrayFromServices:service.includedServices];
 }
+
 - (id)characteristics
 {
     return [self arrayFromCharacteristics:service.characteristics];
 }
 
 #pragma mark Utilties
+
+- (TiBluetoothPeripheralProxy *)peripheralProxyFromPeripheral:(CBPeripheral *)peripheral
+{
+    __block TiBluetoothPeripheralProxy *result = [[TiBluetoothPeripheralProvider sharedInstance] peripheralProxyFromPeripheral:peripheral];
+    
+    if (!result) {
+        NSLog(@"[DEBUG] Could not find cached instance of Ti.Bluetooth.Peripheral proxy. Adding and returning it now.");
+        
+        result = [[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral];
+        [[TiBluetoothPeripheralProvider sharedInstance] addPeripheral:result];
+    }
+    
+    return result;
+}
 
 - (NSArray *)arrayFromServices:(NSArray<CBService *> *)services
 {

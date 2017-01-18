@@ -11,6 +11,7 @@
 #import "TiBluetoothDescriptorProxy.h"
 #import "TiBluetoothUtils.h"
 #import "TiUtils.h"
+#import "TiBluetoothPeripheralProvider.h"
 
 @implementation TiBluetoothPeripheralProxy
 
@@ -184,7 +185,7 @@
 {
     if ([self _hasListeners:@"didDiscoverServices"]) {
         [self fireEvent:@"didDiscoverServices" withObject:@{
-            @"peripheral": [[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
+            @"peripheral": [self peripheralProxyFromPeripheral:peripheral],
             @"error": [error localizedDescription] ?: [NSNull null]
         }];
     }
@@ -194,7 +195,7 @@
 {
     if ([self _hasListeners:@"didDiscoverCharacteristicsForService"]) {
         [self fireEvent:@"didDiscoverCharacteristicsForService" withObject:@{
-            @"peripheral": [[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral],
+            @"peripheral": [self peripheralProxyFromPeripheral:peripheral],
             @"service": [[TiBluetoothServiceProxy alloc] _initWithPageContext:[self pageContext] andService:service],
             @"error": [error localizedDescription] ?: [NSNull null]
         }];
@@ -212,6 +213,20 @@
 }
 
 #pragma mark Utilities
+
+- (TiBluetoothPeripheralProxy *)peripheralProxyFromPeripheral:(CBPeripheral *)peripheral
+{
+    __block TiBluetoothPeripheralProxy *result = [[TiBluetoothPeripheralProvider sharedInstance] peripheralProxyFromPeripheral:peripheral];
+    
+    if (!result) {
+        NSLog(@"[DEBUG] Could not find cached instance of Ti.Bluetooth.Peripheral proxy. Adding and returning it now.");
+        
+        result = [[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral];
+        [[TiBluetoothPeripheralProvider sharedInstance] addPeripheral:result];
+    }
+    
+    return result;
+}
 
 - (NSArray *)arrayFromServices:(NSArray<CBService *> *)services
 {

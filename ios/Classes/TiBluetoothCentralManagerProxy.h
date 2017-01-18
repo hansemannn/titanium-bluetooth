@@ -7,8 +7,11 @@
 #import "TiProxy.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 
+@class TiBluetoothPeripheralProxy;
+@class TiBluetoothCharacteristicProxy;
+
 @interface TiBluetoothCentralManagerProxy : TiProxy<CBCentralManagerDelegate> {
-    CBCentralManager *centralManager;
+    CBCentralManager *centralManager;    
 }
 
 - (id)_initWithPageContext:(id<TiEvaluator>)context andProperties:(id)args;
