@@ -77,8 +77,14 @@ public class TiBluetoothModule extends KrollModule {
         super();
         appContext = TiApplication.getInstance();
         activity   = appContext.getCurrentActivity();
-        IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        appContext.registerReceiver(new TiBluetoohBroadcastReceiver(TiBluetoothModule.this, btAdapter), filter);
+        
+        IntentFilter intentFilter = new IntentFilter();
+        
+        intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
+        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+        appContext.registerReceiver(new TiBluetoohBroadcastReceiver(TiBluetoothModule.this, btAdapter), intentFilter);
     }
 
     @Kroll.onAppCreate
@@ -98,86 +104,17 @@ public class TiBluetoothModule extends KrollModule {
                     
                     KrollDict kd = new KrollDict();
                     kd.put("name", btDeviceProxy.getName());
-                    //kd.put("device", btDeviceProxy);
+                    //kd.put("device", btDeviceProxy);  // will crash
                     kd.put("address", btDeviceProxy.getAddress());
                     kd.put("ids", btDeviceProxy.getUuids());
                     fireEvent("didDiscoverPeripheral", kd);
 
-                    BluetoothGatt bluetoothGatt = device.connectGatt(appContext, false, btleGattCallback);
-
+                    BluetoothGatt bluetoothGatt = device.connectGatt(appContext, false, new TiBluetoothGattCallbackHandler(TiBluetoothModule.this));
                     btScanner.stopScan(scanCallback);
                 }
             }
         }
     };
-
-    private final BluetoothGattCallback btleGattCallback = new BluetoothGattCallback() {
-
-        @Override
-        public void onConnectionStateChange(final BluetoothGatt gatt, final int status, final int newState) {
-            // this will get called when a device connects or disconnects
-            Log.i(LCAT, "connected/disconnected " + status);
-            gatt.discoverServices();
-        }
-
-        @Override
-        public void onServicesDiscovered(final BluetoothGatt gatt, final int status) {
-            // this will get called after the client initiates a
-            // BluetoothGatt.discoverServices() call
-            BluetoothDevice device = gatt.getDevice();
-            KrollDict kdServices = new KrollDict();
-            KrollDict kdCharacteristics = new KrollDict();
-
-            List<BluetoothGattService> services = gatt.getServices();
-            kdServices.put("device", device.getAddress());
-            kdCharacteristics.put("device", device.getAddress());
-
-            Log.i(LCAT, device.getAddress() + " services count: " + services.size());
-
-            ArrayList listServices = new ArrayList();
-            HashMap<String, Object> hashChar = new HashMap<String, Object>();
-
-            for (BluetoothGattService service : services) {
-                Log.i(LCAT, "Service: " + service.getType() + " " + service.getUuid());
-
-                HashMap<String, Object> listService = new HashMap<String, Object>();
-                listService.put("serviceType", service.getType());
-                listService.put("serviceUuid", service.getUuid());
-                listServices.add(listService);
-
-                ArrayList listChars = new ArrayList();
-                List<BluetoothGattCharacteristic> characteristics = service.getCharacteristics();
-                for (BluetoothGattCharacteristic btc : characteristics) {
-                    Log.i(LCAT, "uuid: " + btc.getUuid());
-                    
-                    HashMap<String, Object> listChar = new HashMap<String, Object>();
-                    listChar.put("uuid", btc.getUuid());
-                    listChar.put("value", btc.getValue());
-                    
-                    listChars.add(listChar);
-                    // TODO not needed at the moment
-                    // byte[] data = btc.getValue();
-                    // if (data != null && data.length > 0) {
-                    //     final StringBuilder stringBuilder = new StringBuilder(data.length);
-                    //     for (byte byteChar : data) {
-                    //         stringBuilder.append(String.format("%02X ", byteChar));
-                    //     }
-                    // 
-                    //     Log.i(LCAT, "String val: " + btc.getUuid() + " " + btc.getValue() + " " + stringBuilder.toString());
-                    // }
-                    gatt.readCharacteristic(btc);
-                }
-                hashChar.put("seriveUuid",service.getUuid());
-                hashChar.put("chars",listChars);
-            }
-            kdServices.put("services", listServices);
-            kdCharacteristics.put("characteristics", hashChar);
-
-            fireEvent("didDiscoverServices", kdServices);
-            fireEvent("didDiscoverCharacteristicsForService", kdCharacteristics);
-        }
-    };
-
 
     private List<ScanFilter> scanFilters(String[] ids) {
         List<ScanFilter> list = new ArrayList<ScanFilter>(1);

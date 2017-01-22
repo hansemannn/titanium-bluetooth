@@ -3,6 +3,7 @@ package ti.bluetooth;
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.KrollProxy;
+import org.appcelerator.kroll.common.Log;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -40,6 +41,10 @@ public final class TiBluetoohBroadcastReceiver extends BroadcastReceiver {
             KrollDict kd = new KrollDict();
             kd.put("state", btAdapter.getState());
             module.fireEvent("didUpdateState", kd);
-        }
+        } else if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
+			Log.i(module.LCAT, "Discovery finished");
+		} else if (action.equals(BluetoothDevice.ACTION_FOUND)) {
+			Log.i(module.LCAT, "Action found");
+		}
     }
 };
