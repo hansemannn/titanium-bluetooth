@@ -1,5 +1,5 @@
 # Ti.Bluetooth 
-[![Build Status](https://travis-ci.org/hansemannn/ti.bluetooth.svg?branch=master)](https://travis-ci.org/hansemannn/ti.bluetooth) [![License](http://hans-knoechel.de/shields/shield-license.svg)](./LICENSE) [![Support](http://hans-knoechel.de/shields/shield-slack.svg)](http://tislack.org)
+[![Build Status](https://travis-ci.org/hansemannn/ti.bluetooth.svg?branch=master)](https://travis-ci.org/hansemannn/ti.bluetooth) [![License](http://hans-knoechel.de/shields/shield-license.svg?v=1)](./LICENSE) [![Support](http://hans-knoechel.de/shields/shield-slack.svg?v=1)](http://tislack.org)
 
 Summary
 ---------------
