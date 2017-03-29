@@ -42,7 +42,7 @@
 - (void)removePeripheral:(TiBluetoothPeripheralProxy *)peripheral;
 {
     if ([peripherals containsObject:peripheral]) {
-        NSLog(@"[ERROR] Trying to remove a peripheral with UUID = %@ that doesn't exist in the provider.");
+        NSLog(@"[ERROR] Trying to remove a peripheral with UUID = %@ that doesn't exist in the provider.", peripheral.peripheral.identifier);
         return;
     }
     

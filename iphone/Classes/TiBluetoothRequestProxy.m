@@ -8,6 +8,7 @@
 #import "TiBluetoothRequestProxy.h"
 #import "TiBluetoothCentralProxy.h"
 #import "TiBluetoothCharacteristicProxy.h"
+#import "TiBluetoothCharacteristicProvider.h"
 #import "TiBlob.h"
 
 @implementation TiBluetoothRequestProxy
@@ -35,7 +36,7 @@
 
 - (TiBluetoothCharacteristicProxy *)characteristic
 {
-    return [[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:request.characteristic];
+    return [self characteristicProxyFromCharacteristic:request.characteristic];
 }
 
 - (NSNumber *)offset
@@ -46,6 +47,20 @@
 - (TiBlob *)value
 {
     return [[TiBlob alloc] _initWithPageContext:[self pageContext] andData:request.value mimetype:@"text/plain"];
+}
+
+- (TiBluetoothCharacteristicProxy *)characteristicProxyFromCharacteristic:(CBCharacteristic *)characteristic
+{
+    __block TiBluetoothCharacteristicProxy *result = [[TiBluetoothCharacteristicProvider sharedInstance] characteristicProxyFromCharacteristic:characteristic];
+    
+    if (!result) {
+        NSLog(@"[DEBUG] Could not find cached instance of Ti.Bluetooth.Characteristic proxy. Adding and returning it now.");
+        
+        result = [[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:characteristic];
+        [[TiBluetoothCharacteristicProvider sharedInstance] addCharacteristic:result];
+    }
+    
+    return result;
 }
 
 @end

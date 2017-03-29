@@ -8,6 +8,7 @@
 #import "TiBluetoothPeripheralProxy.h"
 #import "TiBluetoothServiceProxy.h"
 #import "TiBluetoothCharacteristicProxy.h"
+#import "TiBluetoothCharacteristicProvider.h"
 #import "TiBluetoothDescriptorProxy.h"
 #import "TiBluetoothUtils.h"
 #import "TiUtils.h"
@@ -206,7 +207,7 @@
 {
     if ([self _hasListeners:@"didUpdateValueForCharacteristic"]) {
         [self fireEvent:@"didUpdateValueForCharacteristic" withObject:@{
-            @"characteristic": [[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:characteristic],
+            @"characteristic": [self characteristicProxyFromCharacteristic:characteristic],
             @"error": [error localizedDescription] ?: [NSNull null]
         }];
     }
@@ -223,6 +224,20 @@
         
         result = [[TiBluetoothPeripheralProxy alloc] _initWithPageContext:[self pageContext] andPeripheral:peripheral];
         [[TiBluetoothPeripheralProvider sharedInstance] addPeripheral:result];
+    }
+    
+    return result;
+}
+
+- (TiBluetoothCharacteristicProxy *)characteristicProxyFromCharacteristic:(CBCharacteristic *)characteristic
+{
+    __block TiBluetoothCharacteristicProxy *result = [[TiBluetoothCharacteristicProvider sharedInstance] characteristicProxyFromCharacteristic:characteristic];
+    
+    if (!result) {
+        NSLog(@"[DEBUG] Could not find cached instance of Ti.Bluetooth.Characteristic proxy. Adding and returning it now.");
+        
+        result = [[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:characteristic];
+        [[TiBluetoothCharacteristicProvider sharedInstance] addCharacteristic:result];
     }
     
     return result;

@@ -7,9 +7,10 @@
 
 #import "TiBluetoothServiceProxy.h"
 #import "TiBluetoothPeripheralProxy.h"
-#import "TiBluetoothCharacteristicProxy.h"
-#import "TiUtils.h"
 #import "TiBluetoothPeripheralProvider.h"
+#import "TiBluetoothCharacteristicProxy.h"
+#import "TiBluetoothCharacteristicProvider.h"
+#import "TiUtils.h"
 
 @implementation TiBluetoothServiceProxy
 
@@ -102,6 +103,21 @@
     return result;
 }
 
+- (TiBluetoothCharacteristicProxy *)characteristicProxyFromCharacteristic:(CBCharacteristic *)characteristic
+{
+    __block TiBluetoothCharacteristicProxy *result = [[TiBluetoothCharacteristicProvider sharedInstance] characteristicProxyFromCharacteristic:characteristic];
+    
+    if (!result) {
+        NSLog(@"[DEBUG] Could not find cached instance of Ti.Bluetooth.Characteristic proxy. Adding and returning it now.");
+        
+        result = [[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:characteristic];
+        [[TiBluetoothCharacteristicProvider sharedInstance] addCharacteristic:result];
+    }
+    
+    return result;
+}
+
+
 - (NSArray *)arrayFromServices:(NSArray<CBService *> *)services
 {
     NSMutableArray *result = [NSMutableArray array];
@@ -118,7 +134,7 @@
     NSMutableArray *result = [NSMutableArray array];
     
     for (CBCharacteristic *characteristic in characteristics) {
-        [result addObject:[[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:characteristic]];
+        [result addObject:[self characteristicProxyFromCharacteristic:characteristic]];
     }
     
     return result;

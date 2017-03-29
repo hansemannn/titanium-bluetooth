@@ -7,6 +7,7 @@
 
 #import "TiBluetoothPeripheralManagerProxy.h"
 #import "TiBluetoothCharacteristicProxy.h"
+#import "TiBluetoothCharacteristicProvider.h"
 #import "TiBluetoothServiceProxy.h"
 #import "TiBluetoothDescriptorProxy.h"
 #import "TiBluetoothCentralProxy.h"
@@ -187,7 +188,7 @@
     if ([self _hasListeners:@"didSubscribeToCharacteristic"]) {
         [self fireEvent:@"didSubscribeToCharacteristic" withObject:@{
             @"central": [[TiBluetoothCentralProxy alloc] _initWithPageContext:[self pageContext] andCentral:central],
-            @"characteristic":[[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:characteristic]
+            @"characteristic": [self characteristicProxyFromCharacteristic:characteristic]
         }];
     }
 }
@@ -197,7 +198,7 @@
     if ([self _hasListeners:@"didUnsubscribeFromCharacteristic"]) {
         [self fireEvent:@"didUnsubscribeFromCharacteristic" withObject:@{
             @"central": [[TiBluetoothCentralProxy alloc] _initWithPageContext:[self pageContext] andCentral:central],
-            @"characteristic":[[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:characteristic]
+            @"characteristic": [self characteristicProxyFromCharacteristic:characteristic]
         }];
     }
 }
@@ -235,6 +236,20 @@
     
     for (CBATTRequest *request in requests) {
         [result addObject:[[TiBluetoothRequestProxy alloc] _initWithPageContext:[self pageContext] andRequest:request]];
+    }
+    
+    return result;
+}
+
+- (TiBluetoothCharacteristicProxy *)characteristicProxyFromCharacteristic:(CBCharacteristic *)characteristic
+{
+    __block TiBluetoothCharacteristicProxy *result = [[TiBluetoothCharacteristicProvider sharedInstance] characteristicProxyFromCharacteristic:characteristic];
+    
+    if (!result) {
+        NSLog(@"[DEBUG] Could not find cached instance of Ti.Bluetooth.Characteristic proxy. Adding and returning it now.");
+        
+        result = [[TiBluetoothCharacteristicProxy alloc] _initWithPageContext:[self pageContext] andCharacteristic:characteristic];
+        [[TiBluetoothCharacteristicProvider sharedInstance] addCharacteristic:result];
     }
     
     return result;

@@ -38,6 +38,8 @@
 		DB94F45F1E08944C00C3B173 /* TiBluetoothDescriptorProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = DB94F45D1E08944C00C3B173 /* TiBluetoothDescriptorProxy.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		DB986AA21E2F640A0038A7E3 /* TiBluetoothPeripheralProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = DB986AA01E2F640A0038A7E3 /* TiBluetoothPeripheralProvider.h */; };
 		DB986AA31E2F640A0038A7E3 /* TiBluetoothPeripheralProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = DB986AA11E2F640A0038A7E3 /* TiBluetoothPeripheralProvider.m */; };
+		DBA2CAE81E35238E00593923 /* TiBluetoothCharacteristicProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = DBA2CAE61E35238E00593923 /* TiBluetoothCharacteristicProvider.h */; };
+		DBA2CAE91E35238E00593923 /* TiBluetoothCharacteristicProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = DBA2CAE71E35238E00593923 /* TiBluetoothCharacteristicProvider.m */; };
 		DBB57D091E147EC400D78BB6 /* TiBluetoothCentralManagerProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = DBB57D071E147EC400D78BB6 /* TiBluetoothCentralManagerProxy.h */; };
 		DBB57D0A1E147EC400D78BB6 /* TiBluetoothCentralManagerProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = DBB57D081E147EC400D78BB6 /* TiBluetoothCentralManagerProxy.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		DBB57D0E1E147EEE00D78BB6 /* TiBluetoothPeripheralManagerProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = DBB57D0C1E147EEE00D78BB6 /* TiBluetoothPeripheralManagerProxy.h */; };
@@ -80,6 +82,8 @@
 		DB94F45D1E08944C00C3B173 /* TiBluetoothDescriptorProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiBluetoothDescriptorProxy.m; path = Classes/TiBluetoothDescriptorProxy.m; sourceTree = "<group>"; };
 		DB986AA01E2F640A0038A7E3 /* TiBluetoothPeripheralProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiBluetoothPeripheralProvider.h; path = Classes/TiBluetoothPeripheralProvider.h; sourceTree = "<group>"; };
 		DB986AA11E2F640A0038A7E3 /* TiBluetoothPeripheralProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiBluetoothPeripheralProvider.m; path = Classes/TiBluetoothPeripheralProvider.m; sourceTree = "<group>"; };
+		DBA2CAE61E35238E00593923 /* TiBluetoothCharacteristicProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiBluetoothCharacteristicProvider.h; path = Classes/TiBluetoothCharacteristicProvider.h; sourceTree = "<group>"; };
+		DBA2CAE71E35238E00593923 /* TiBluetoothCharacteristicProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiBluetoothCharacteristicProvider.m; path = Classes/TiBluetoothCharacteristicProvider.m; sourceTree = "<group>"; };
 		DBB57D071E147EC400D78BB6 /* TiBluetoothCentralManagerProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiBluetoothCentralManagerProxy.h; path = Classes/TiBluetoothCentralManagerProxy.h; sourceTree = "<group>"; };
 		DBB57D081E147EC400D78BB6 /* TiBluetoothCentralManagerProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiBluetoothCentralManagerProxy.m; path = Classes/TiBluetoothCentralManagerProxy.m; sourceTree = "<group>"; };
 		DBB57D0C1E147EEE00D78BB6 /* TiBluetoothPeripheralManagerProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiBluetoothPeripheralManagerProxy.h; path = Classes/TiBluetoothPeripheralManagerProxy.h; sourceTree = "<group>"; };
@@ -242,6 +246,8 @@
 				DBE6DCB91E1500FD00D6DBCF /* TiBluetoothUtils.m */,
 				DB986AA01E2F640A0038A7E3 /* TiBluetoothPeripheralProvider.h */,
 				DB986AA11E2F640A0038A7E3 /* TiBluetoothPeripheralProvider.m */,
+				DBA2CAE61E35238E00593923 /* TiBluetoothCharacteristicProvider.h */,
+				DBA2CAE71E35238E00593923 /* TiBluetoothCharacteristicProvider.m */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -261,6 +267,7 @@
 				DBB57D091E147EC400D78BB6 /* TiBluetoothCentralManagerProxy.h in Headers */,
 				24DE9E1111C5FE74003F90F6 /* TiBluetoothModuleAssets.h in Headers */,
 				DBB57D0E1E147EEE00D78BB6 /* TiBluetoothPeripheralManagerProxy.h in Headers */,
+				DBA2CAE81E35238E00593923 /* TiBluetoothCharacteristicProvider.h in Headers */,
 				DBE6DCBA1E1500FD00D6DBCF /* TiBluetoothUtils.h in Headers */,
 				DB94F45A1E08943500C3B173 /* TiBluetoothServiceProxy.h in Headers */,
 				DBB57D131E14841900D78BB6 /* TiBluetoothCentralProxy.h in Headers */,
@@ -347,6 +354,7 @@
 				DB94F45F1E08944C00C3B173 /* TiBluetoothDescriptorProxy.m in Sources */,
 				DB986AA31E2F640A0038A7E3 /* TiBluetoothPeripheralProvider.m in Sources */,
 				DBB57D0F1E147EEE00D78BB6 /* TiBluetoothPeripheralManagerProxy.m in Sources */,
+				DBA2CAE91E35238E00593923 /* TiBluetoothCharacteristicProvider.m in Sources */,
 				DB32140C1E088B8700996E31 /* TiBluetoothCharacteristicProxy.m in Sources */,
 				DBB57D191E1487EE00D78BB6 /* TiBluetoothRequestProxy.m in Sources */,
 				24DE9E1211C5FE74003F90F6 /* TiBluetoothModuleAssets.m in Sources */,
