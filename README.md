@@ -43,7 +43,7 @@ Add the following to your plist (only neccessary for iOS):
 
 Features
 --------------------------------
-- [x] Create central managers, peripheral managers, descriptors, characteristics, centrals, services and requests
+- [x] Create central managers, peripheral managers, descriptors, beacons, characteristics, centrals, services and requests
 - [x] Start / Stop peripheral scanning
 - [x] Send data between devices
 - [x] Receive state events
