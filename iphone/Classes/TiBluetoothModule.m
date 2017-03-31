@@ -44,6 +44,11 @@
 
 #pragma mark Public APIs
 
+- (id)hasBluetoothPermissions:(id)unused
+{
+    return NUMBOOL([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSBluetoothPeripheralUsageDescription"] != nil);
+}
+
 - (TiBluetoothCharacteristicProxy *)createCharacteristic:(id)args
 {
     ENSURE_SINGLE_ARG(args, NSDictionary);
