@@ -12,6 +12,7 @@
 #import "TiBluetoothDescriptorProxy.h"
 #import "TiBluetoothCentralProxy.h"
 #import "TiBluetoothRequestProxy.h"
+#import "TiBluetoothBeaconRegionProxy.h"
 #import "TiUtils.h"
 #import "TiBluetoothUtils.h"
 
@@ -63,10 +64,15 @@
 
 - (void)startAdvertising:(id)args
 {
-    ENSURE_SINGLE_ARG_OR_NIL(args, NSDictionary);
+    args = [args objectAtIndex:0];
     
-    // FIXME: Handle CBAdvertisementDataServiceUUIDsKey and CBAdvertisementDataLocalNameKey
-    [peripheralManager startAdvertising:nil];
+    if ([args isKindOfClass:[NSDictionary class]]) {
+        [peripheralManager startAdvertising:args];
+    } else if ([args isKindOfClass:[TiBluetoothBeaconRegionProxy class]]) {
+        [peripheralManager startAdvertising:[[args beaconRegion] peripheralDataWithMeasuredPower:[args measuredPower]]];
+    } else {
+        [peripheralManager startAdvertising:nil];
+    }    
 }
 
 - (void)stopAdvertising:(id)unused
