@@ -8,11 +8,13 @@ bin/**
 libs
 dist
 
+# General
 .DS_Store
 tmp
 bin
 build
 
+# Ti
 */*/modules
 */*/modules*
 .apt_generated
@@ -31,6 +33,7 @@ xcuserdata
 *.xcuserstate
 *.xcuserdata*
 
+# Android
 .idea/
 libs/
 
@@ -41,5 +44,4 @@ android/.settings
 
 android/launch-*
 nbproject
-ios/FacebookIOS.xcodeproj/project.xcworkspace/xcuserdata/
 /android/java-sources.txt
