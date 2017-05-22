@@ -1,18 +1,15 @@
 # Bluetooth in Appcelerator Titanium 
 [![Build Status](https://travis-ci.org/hansemannn/titanium-bluetooth.svg?branch=master)](https://travis-ci.org/hansemannn/titanium-bluetooth) [![License](http://hans-knoechel.de/shields/shield-license.svg?v=1)](./LICENSE) [![Support](http://hans-knoechel.de/shields/shield-slack.svg?v=1)](http://tislack.org)
 
-Summary
----------------
+## Summary
 Ti.Bluetooth is an open source project to support Bluetooth / BLE in Appcelerator Titanium.
 
-Requirements
----------------
+## Requirements
 - Titanium Mobile SDK 6.0.0.GA or later
-- iOS 7.1 / Android 4.0.0 or later
+- iOS 8.1 / Android 4.0.0 or later
 - Xcode 8.0 or later
 
-Download + Setup
----------------
+## Download + Setup
 
 ### Download
 * [Stable release](https://github.com/hansemannn/ti.bluetooth/releases)
@@ -41,29 +38,24 @@ Add the following to your plist (only neccessary for iOS):
 </plist>
 ```
 
-Features
---------------------------------
+## Features
 - [x] Create central managers, peripheral managers, descriptors, beacons, characteristics, centrals, services and requests
 - [x] Start / Stop peripheral scanning
 - [x] Send data between devices
 - [x] Receive state events
 
-#### Documentation 
+## Documentation 
+An API documentation can be found in the [Wiki](https://github.com/hansemannn/titanium-bluetooth/wiki).
 
-An API documentation can be found at [documentation/index.md](documentation/index.md).
-
-#### Example
+## Example
 > Please check [ios/example/app.js](ios/example/app.js) and [android/example/app.js](android/example/app.js) for platform-specific examples.
 
-Authors
----------------
+## Authors
 - [x] Hans Knoechel ([@hansemannnn](https://twitter.com/hansemannnn) / [Web](http://hans-knoechel.de))
 - [x] Michael Gangolf ([@MichaelGangolf](https://twitter.com/MichaelGangolf) / [Web](http://migaweb.de))
 
-License
----------------
+## License
 Apache 2.0
 
-Contributing
----------------
-Code contributions are greatly appreciated, please submit a new [pull request](https://github.com/hansemannn/ti.bluetooth/pull/new/master)!
+## Contributing
+Code contributions are greatly appreciated, please submit a new [pull request](https://github.com/hansemannn/titanium-bluetooth/pull/new/master)!
