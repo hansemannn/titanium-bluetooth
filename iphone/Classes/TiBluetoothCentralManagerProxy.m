@@ -104,15 +104,15 @@
         id dict = [args objectAtIndex:1];
         
         if ([dict objectForKey:@"notifyOnConnection"] != nil) {
-            [dict setObject:[dict objectForKey:@"notifyOnConnection"] forKey:CBConnectPeripheralOptionNotifyOnConnectionKey];
+            [options setObject:[dict objectForKey:@"notifyOnConnection"] forKey:CBConnectPeripheralOptionNotifyOnConnectionKey];
         }
         
         if ([dict objectForKey:@"notifyOnDisconnection"] != nil) {
-            [dict setObject:[dict objectForKey:@"notifyOnDisconnection"] forKey:CBConnectPeripheralOptionNotifyOnDisconnectionKey];
+            [options setObject:[dict objectForKey:@"notifyOnDisconnection"] forKey:CBConnectPeripheralOptionNotifyOnDisconnectionKey];
         }
         
         if ([dict objectForKey:@"notifyOnNotification"] != nil) {
-            [dict setObject:[dict objectForKey:@"notifyOnNotification"] forKey:CBConnectPeripheralOptionNotifyOnNotificationKey];
+            [options setObject:[dict objectForKey:@"notifyOnNotification"] forKey:CBConnectPeripheralOptionNotifyOnNotificationKey];
         }
     }
     
