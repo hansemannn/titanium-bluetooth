@@ -67,7 +67,25 @@
     args = [args objectAtIndex:0];
     
     if ([args isKindOfClass:[NSDictionary class]]) {
-        [peripheralManager startAdvertising:args];
+        NSMutableDictionary *advertisementData = [NSMutableDictionary dictionary];
+        NSString *localNameKey;
+        NSString *serviceUUIDsKey;
+        
+        ENSURE_ARG_OR_NIL_FOR_KEY(localNameKey, args, @"localNameKey", NSString);
+        ENSURE_ARG_OR_NIL_FOR_KEY(serviceUUIDsKey, args, @"serviceUUIDsKey", NSArray);
+        
+        if (localNameKey) {
+            [advertisementData setObject:localNameKey
+                        forKey:CBAdvertisementDataLocalNameKey];
+        }
+        
+        if (serviceUUIDsKey) {
+            [advertisementData setObject: [TiBluetoothUtils UUIDArrayFromStringArray:serviceUUIDsKey]
+                        forKey:CBAdvertisementDataServiceUUIDsKey];
+        }
+      
+        [peripheralManager startAdvertising:advertisementData];
+        
     } else if ([args isKindOfClass:[TiBluetoothBeaconRegionProxy class]]) {
         [peripheralManager startAdvertising:[[args beaconRegion] peripheralDataWithMeasuredPower:[args measuredPower]]];
     } else {
