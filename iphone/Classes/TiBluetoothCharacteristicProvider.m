@@ -29,17 +29,17 @@
     return (NSArray *)characteristics;
 }
 
-- (BOOL)hasPeripheral:(TiBluetoothCharacteristicProxy *)characteristic
+- (BOOL)hasCharacteristic:(TiBluetoothCharacteristicProxy *)characteristic
 {
     return [characteristics containsObject:characteristic];
 }
 
-- (void)addPeripheral:(TiBluetoothCharacteristicProxy *)peripheral
+- (void)addCharacteristic:(TiBluetoothCharacteristicProxy *)peripheral
 {
     [characteristics addObject:peripheral];
 }
 
-- (void)removePeripheral:(TiBluetoothCharacteristicProxy *)characteristic
+- (void)removeCharacteristic:(TiBluetoothCharacteristicProxy *)characteristic
 {
     if ([characteristics containsObject:characteristic]) {
         NSLog(@"[ERROR] Trying to remove a characteristic that doesn't exist in the provider.");
@@ -49,7 +49,7 @@
     [characteristics removeObject:characteristic];
 }
 
-- (TiBluetoothCharacteristicProxy *)peripheralProxyFromPeripheral:(CBCharacteristic *)characteristic
+- (TiBluetoothCharacteristicProxy *)characteristicProxyFromCharacteristic:(CBCharacteristic *)characteristic
 {
     __block TiBluetoothCharacteristicProxy *result = nil;
     
