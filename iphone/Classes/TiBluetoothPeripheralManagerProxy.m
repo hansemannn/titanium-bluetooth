@@ -68,24 +68,21 @@
     
     if ([args isKindOfClass:[NSDictionary class]]) {
         NSMutableDictionary *advertisementData = [NSMutableDictionary dictionary];
-        NSString *localNameKey;
-        NSString *serviceUUIDsKey;
+        NSString *localName;
+        NSArray *serviceUUIDs;
         
-        ENSURE_ARG_OR_NIL_FOR_KEY(localNameKey, args, @"localNameKey", NSString);
-        ENSURE_ARG_OR_NIL_FOR_KEY(serviceUUIDsKey, args, @"serviceUUIDsKey", NSArray);
+        ENSURE_ARG_OR_NIL_FOR_KEY(localName, args, @"localName", NSString);
+        ENSURE_ARG_OR_NIL_FOR_KEY(serviceUUIDs, args, @"serviceUUIDs", NSArray);
         
-        if (localNameKey) {
-            [advertisementData setObject:localNameKey
-                        forKey:CBAdvertisementDataLocalNameKey];
+        if (localName != nil) {
+            [advertisementData setObject:localName forKey:CBAdvertisementDataLocalNameKey];
         }
         
-        if (serviceUUIDsKey) {
-            [advertisementData setObject: [TiBluetoothUtils UUIDArrayFromStringArray:serviceUUIDsKey]
-                        forKey:CBAdvertisementDataServiceUUIDsKey];
+        if (serviceUUIDs != nil) {
+            [advertisementData setObject: [TiBluetoothUtils UUIDArrayFromStringArray:serviceUUIDs] forKey:CBAdvertisementDataServiceUUIDsKey];
         }
       
         [peripheralManager startAdvertising:advertisementData];
-        
     } else if ([args isKindOfClass:[TiBluetoothBeaconRegionProxy class]]) {
         [peripheralManager startAdvertising:[[args beaconRegion] peripheralDataWithMeasuredPower:[args measuredPower]]];
     } else {
