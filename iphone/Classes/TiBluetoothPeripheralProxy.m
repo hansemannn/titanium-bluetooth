@@ -213,6 +213,16 @@
     }
 }
 
+- (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
+{
+  if ([self _hasListeners:@"didWriteValueForCharacteristic"]) {
+      [self fireEvent:@"didDiscoverCharacteristicsForService" withObject:@{
+          @"peripheral": [self peripheralProxyFromPeripheral:peripheral],
+          @"error": [error localizedDescription] ?: [NSNull null]
+      }];
+  }
+}
+
 #pragma mark Utilities
 
 - (TiBluetoothPeripheralProxy *)peripheralProxyFromPeripheral:(CBPeripheral *)peripheral
