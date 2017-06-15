@@ -216,8 +216,9 @@
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
   if ([self _hasListeners:@"didWriteValueForCharacteristic"]) {
-      [self fireEvent:@"didDiscoverCharacteristicsForService" withObject:@{
+      [self fireEvent:@"didWriteValueForCharacteristic" withObject:@{
           @"peripheral": [self peripheralProxyFromPeripheral:peripheral],
+          @"characteristic": [self characteristicProxyFromCharacteristic:characteristic],
           @"error": [error localizedDescription] ?: [NSNull null]
       }];
   }
