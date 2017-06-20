@@ -71,6 +71,11 @@
     return [[TiBlob alloc] _initWithPageContext:[self pageContext] andData:characteristic.value mimetype:@"text/plain"];
 }
 
+- (id)uuid
+{
+    return characteristic.UUID.UUIDString;
+}
+
 #pragma mark Utilities
 
 - (NSArray *)arrayFromDescriptors:(NSArray<CBDescriptor *> *)descriptors

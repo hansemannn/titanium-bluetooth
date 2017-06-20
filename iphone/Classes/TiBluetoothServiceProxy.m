@@ -87,6 +87,11 @@
     return [self arrayFromCharacteristics:service.characteristics];
 }
 
+- (id)uuid
+{
+    return service.UUID.UUIDString;
+}
+
 #pragma mark Utilties
 
 - (TiBluetoothPeripheralProxy *)peripheralProxyFromPeripheral:(CBPeripheral *)peripheral
