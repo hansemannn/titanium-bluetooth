@@ -67,13 +67,13 @@
     if ([args count] == 2) {
         id dict = [args objectAtIndex:1];
         
-        if ([dict objectAtIndex:@"allowDuplicates"] != nil) {
-            [options setObject:[dict objectAtIndex:@"allowDuplicates"]
+        if ([dict objectForKey:@"allowDuplicates"] != nil) {
+            [options setObject:[dict objectForKey:@"allowDuplicates"]
                         forKey:CBCentralManagerScanOptionAllowDuplicatesKey];
         }
         
-        if ([dict objectAtIndex:@"solicitedServiceUUIDs"] != nil) {
-            [options setObject:[TiBluetoothUtils UUIDArrayFromStringArray:[dict objectAtIndex:@"solicitedServiceUUIDs"]]
+        if ([dict objectForKey:@"solicitedServiceUUIDs"] != nil) {
+            [options setObject:[TiBluetoothUtils UUIDArrayFromStringArray:[dict objectForKey:@"solicitedServiceUUIDs"]]
                         forKey:CBCentralManagerScanOptionSolicitedServiceUUIDsKey];
         }
     }
