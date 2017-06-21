@@ -53,6 +53,11 @@
     return [self arrayFromServices:_peripheral.services];
 }
 
+- (id)identifier
+{
+    return _peripheral.identifier.UUIDString;
+}
+
 - (void)readRSSI:(id)unused
 {
     [_peripheral readRSSI];
