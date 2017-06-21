@@ -79,7 +79,7 @@
         }
         
         if (serviceUUIDs != nil) {
-            [advertisementData setObject: [TiBluetoothUtils UUIDArrayFromStringArray:serviceUUIDs] forKey:CBAdvertisementDataServiceUUIDsKey];
+            [advertisementData setObject: [TiBluetoothUtils CBUUIDArrayFromStringArray:serviceUUIDs] forKey:CBAdvertisementDataServiceUUIDsKey];
         }
       
         [peripheralManager startAdvertising:advertisementData];

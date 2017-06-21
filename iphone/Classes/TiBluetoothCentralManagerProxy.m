@@ -73,7 +73,7 @@
         }
         
         if ([dict objectForKey:@"solicitedServiceUUIDs"] != nil) {
-            [options setObject:[TiBluetoothUtils UUIDArrayFromStringArray:[dict objectForKey:@"solicitedServiceUUIDs"]]
+            [options setObject:[TiBluetoothUtils CBUUIDArrayFromStringArray:[dict objectForKey:@"solicitedServiceUUIDs"]]
                         forKey:CBCentralManagerScanOptionSolicitedServiceUUIDsKey];
         }
     }
