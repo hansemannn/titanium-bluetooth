@@ -235,8 +235,7 @@
     
     NSMutableArray<TiBluetoothPeripheralProxy*> *result = [NSMutableArray array];
     
-    for (id peripheral in peripherals) {
-        ENSURE_TYPE(peripheral, CBPeripheral);
+    for (CBPeripheral *peripheral in peripherals) {
         [result addObject:[self peripheralProxyFromPeripheral:peripheral]];
     }
 

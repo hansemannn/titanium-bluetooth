@@ -26,7 +26,7 @@
     return result;
 }
 
-+ ( NSArray<NSUUID *> * _Nullable)NSUUIDArrayFromStringArray:(NSArray<id> *)array
++ ( NSArray<NSUUID *> * _Nullable)NSUUIDArrayFromStringArray:(NSArray<NSString *> *)array
 {
     if (array == nil) {
         return nil;
@@ -34,8 +34,7 @@
     
     NSMutableArray<NSUUID*> *result = [NSMutableArray array];
     
-    for (id uuid in array) {
-        ENSURE_TYPE(uuid, NSString);
+    for (NSString *uuid in array) {
         [result addObject:[[NSUUID alloc] initWithUUIDString:[TiUtils stringValue:uuid]]];
     }
 
