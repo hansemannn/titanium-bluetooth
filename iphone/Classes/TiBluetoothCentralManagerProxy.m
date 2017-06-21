@@ -73,7 +73,7 @@
         }
         
         if ([dict objectForKey:@"solicitedServiceUUIDs"] != nil) {
-            [options setObject:[TiBluetoothUtils UUIDArrayFromStringArray:[dict objectForKey:@"solicitedServiceUUIDs"]]
+            [options setObject:[TiBluetoothUtils CBUUIDArrayFromStringArray:[dict objectForKey:@"solicitedServiceUUIDs"]]
                         forKey:CBCentralManagerScanOptionSolicitedServiceUUIDsKey];
         }
     }
@@ -134,6 +134,22 @@
 - (id)state
 {
     return NUMINTEGER([centralManager state]);
+}
+
+- (id)retrievePeripheralsWithIdentifiers:(id)args
+{
+    id identifiers = [args objectAtIndex:0];
+    ENSURE_TYPE_OR_NIL(identifiers, NSArray);
+    
+    return [self peripheralProxyArrayFromPeripheralArray:[centralManager retrievePeripheralsWithIdentifiers:[TiBluetoothUtils NSUUIDArrayFromStringArray:identifiers]]];
+}
+
+- (id)retrieveConnectedPeripheralsWithServices:(id)args
+{
+  id serviceUUIDs = [args objectAtIndex:0];
+  ENSURE_TYPE_OR_NIL(serviceUUIDs, NSArray);
+  
+  return [self peripheralProxyArrayFromPeripheralArray:[centralManager retrieveConnectedPeripheralsWithServices:[TiBluetoothUtils CBUUIDArrayFromStringArray:serviceUUIDs]]];
 }
 
 #pragma mark Delegates
@@ -208,6 +224,21 @@
         [[TiBluetoothPeripheralProvider sharedInstance] addPeripheral:result];
     }
     
+    return result;
+}
+
+- (NSArray<TiBluetoothPeripheralProxy *> *)peripheralProxyArrayFromPeripheralArray:(NSArray<CBPeripheral *> *)peripherals
+{
+    if (peripherals == nil) {
+        return nil;
+    }
+    
+    NSMutableArray<TiBluetoothPeripheralProxy*> *result = [NSMutableArray array];
+    
+    for (CBPeripheral *peripheral in peripherals) {
+        [result addObject:[self peripheralProxyFromPeripheral:peripheral]];
+    }
+
     return result;
 }
 

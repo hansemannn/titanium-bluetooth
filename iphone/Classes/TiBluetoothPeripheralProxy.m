@@ -53,6 +53,11 @@
     return [self arrayFromServices:_peripheral.services];
 }
 
+- (id)identifier
+{
+    return _peripheral.identifier.UUIDString;
+}
+
 - (void)readRSSI:(id)unused
 {
     [_peripheral readRSSI];
@@ -60,7 +65,7 @@
 
 - (void)discoverServices:(id)args
 {
-    [_peripheral discoverServices:[TiBluetoothUtils UUIDArrayFromStringArray:args]];
+    [_peripheral discoverServices:[TiBluetoothUtils CBUUIDArrayFromStringArray:args]];
 }
 
 - (void)discoverIncludedServicesForService:(id)args
@@ -73,7 +78,7 @@
     ENSURE_TYPE(includedServices, NSArray);
     ENSURE_TYPE(service, TiBluetoothServiceProxy);
     
-    [_peripheral discoverIncludedServices:[TiBluetoothUtils UUIDArrayFromStringArray:includedServices]
+    [_peripheral discoverIncludedServices:[TiBluetoothUtils CBUUIDArrayFromStringArray:includedServices]
                                forService:[(TiBluetoothServiceProxy *)service service]];
 }
 
@@ -90,7 +95,7 @@
         ENSURE_TYPE_OR_NIL(characteristics, NSArray);
         ENSURE_TYPE(service, TiBluetoothServiceProxy);
 
-        [_peripheral discoverCharacteristics:[TiBluetoothUtils UUIDArrayFromStringArray:characteristics]
+        [_peripheral discoverCharacteristics:[TiBluetoothUtils CBUUIDArrayFromStringArray:characteristics]
                                   forService:[(TiBluetoothServiceProxy *)service service]];
     } else {
         ENSURE_SINGLE_ARG(args, NSDictionary);
@@ -101,7 +106,7 @@
         ENSURE_TYPE_OR_NIL(characteristics, NSArray);
         ENSURE_TYPE(service, TiBluetoothServiceProxy);
         
-        [_peripheral discoverCharacteristics:[TiBluetoothUtils UUIDArrayFromStringArray:characteristics]
+        [_peripheral discoverCharacteristics:[TiBluetoothUtils CBUUIDArrayFromStringArray:characteristics]
                                   forService:[(TiBluetoothServiceProxy *)service service]];
 
     }

@@ -10,7 +10,7 @@
 
 @implementation TiBluetoothUtils
 
-+ ( NSArray<CBUUID *> * _Nullable)UUIDArrayFromStringArray:(NSArray<id> *)array
++ ( NSArray<CBUUID *> * _Nullable)CBUUIDArrayFromStringArray:(NSArray<id> *)array
 {
     if (array == nil) {
         return nil;
@@ -21,6 +21,21 @@
     for (id uuid in array) {
         ENSURE_TYPE(uuid, NSString);
         [result addObject:[CBUUID UUIDWithString:[TiUtils stringValue:uuid]]];
+    }
+
+    return result;
+}
+
++ ( NSArray<NSUUID *> * _Nullable)NSUUIDArrayFromStringArray:(NSArray<NSString *> *)array
+{
+    if (array == nil) {
+        return nil;
+    }
+    
+    NSMutableArray<NSUUID*> *result = [NSMutableArray array];
+    
+    for (NSString *uuid in array) {
+        [result addObject:[[NSUUID alloc] initWithUUIDString:[TiUtils stringValue:uuid]]];
     }
 
     return result;
