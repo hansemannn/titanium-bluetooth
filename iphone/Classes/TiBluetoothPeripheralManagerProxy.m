@@ -140,7 +140,7 @@
                              withResult:[TiUtils intValue:result]];
 }
 
-- (void)updateValueForCharacteristicOnSubscribedCentrals:(id)args
+- (NSNumber *)updateValueForCharacteristicOnSubscribedCentrals:(id)args
 {
     ENSURE_ARG_COUNT(args, 3);
     
@@ -159,9 +159,9 @@
         [result addObject:[(TiBluetoothCentralProxy *)subscribedCentral central]];
     }
     
-    [peripheralManager updateValue:[(TiBlob *)value data]
+    return NUMBOOL([peripheralManager updateValue:[(TiBlob *)value data]
                  forCharacteristic:(CBMutableCharacteristic *)[(TiBluetoothCharacteristicProxy *)characteristic characteristic]
-              onSubscribedCentrals:result];
+              onSubscribedCentrals:result]);
 }
 
 #pragma mark Delegates

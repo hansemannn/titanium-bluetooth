@@ -212,6 +212,7 @@
 {
     if ([self _hasListeners:@"didUpdateValueForCharacteristic"]) {
         [self fireEvent:@"didUpdateValueForCharacteristic" withObject:@{
+            @"peripheral": [self peripheralProxyFromPeripheral:peripheral],
             @"characteristic": [self characteristicProxyFromCharacteristic:characteristic],
             @"error": [error localizedDescription] ?: [NSNull null]
         }];
