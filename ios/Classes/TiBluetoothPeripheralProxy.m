@@ -12,10 +12,10 @@
 #import "TiBluetoothPeripheralProvider.h"
 #import "TiBluetoothServiceProxy.h"
 #import "TiBluetoothUtils.h"
+#import "TiUtils.h"
 #if IS_XCODE_9
 #import "TiBluetoothL2CAPChannelProxy.h"
 #endif
-#import "TiUtils.h"
 
 @implementation TiBluetoothPeripheralProxy
 
@@ -218,8 +218,8 @@
   if ([self _hasListeners:@"didOpenL2CAPChannel"]) {
     [self fireEvent:@"didOpenL2CAPChannel"
          withObject:@{
-           @"channel" : [self channelProxyFromChannel:channel],
-           @"error": NULL_IF_NIL(error.localizedDescription)
+           @"channel" : [[TiBluetoothL2CAPChannelProxy alloc] _initWithPageContext:[self pageContext] andChannel:channel],
+           @"error" : NULL_IF_NIL(error.localizedDescription)
          }];
   }
 }
@@ -311,11 +311,6 @@
   }
 
   return result;
-}
-
-- (TiBluetoothL2CAPChannelProxy *)channelProxyFromChannel:(CBL2CAPChannel *)channel
-{
-  return [[TiBluetoothL2CAPChannelProxy alloc] _initWithPageContext:[self pageContext] andChannel:channel];
 }
 
 @end

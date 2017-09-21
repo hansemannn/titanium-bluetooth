@@ -16,6 +16,10 @@
 
 - (id)_initWithPageContext:(id<TiEvaluator>)context andChannel:(CBL2CAPChannel *)channel;
 
+- (NSString *)peer;
+
+- (NSNumber *)PSM;
+
 @end
 
 #endif

@@ -16,9 +16,24 @@
   if ([super _initWithPageContext:[self pageContext]]) {
     _channel = channel;
   }
-  
+
   return self;
 }
+
+- (NSString *)peer
+{
+  return _channel.peer.identifier.UUIDString;
+}
+
+- (NSNumber *)PSM
+{
+  return NUMUINT(_channel.PSM);
+}
+
+// TODO: Expose inputStream / outputStream as well?
+//
+// Need to set the NSInputStream / NSOutputStream delegate first
+// and then process the data-stream to be wrapped into a Ti.Blob
 
 @end
 

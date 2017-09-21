@@ -15,6 +15,9 @@
 #import "TiBluetoothServiceProxy.h"
 #import "TiBluetoothUtils.h"
 #import "TiUtils.h"
+#if IS_XCODE_9
+#import "TiBluetoothL2CAPChannelProxy.h"
+#endif
 
 @implementation TiBluetoothPeripheralManagerProxy
 
@@ -192,7 +195,7 @@
   if ([self _hasListeners:@"didOpenL2CAPChannel"]) {
     [self fireEvent:@"didOpenL2CAPChannel"
          withObject:@{
-           @"channel" : NUMUINT(channel.PSM) // TODO: Expose more here, use TiBluetoothL2CAPChannelProxy
+           @"channel" : [[TiBluetoothL2CAPChannelProxy alloc] _initWithPageContext:[self pageContext] andChannel:channel]
          }];
   }
 }
