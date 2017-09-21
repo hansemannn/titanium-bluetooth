@@ -12,6 +12,9 @@
 #import "TiBluetoothPeripheralProvider.h"
 #import "TiBluetoothServiceProxy.h"
 #import "TiBluetoothUtils.h"
+#if IS_XCODE_9
+#import "TiBluetoothL2CAPChannelProxy.h"
+#endif
 #import "TiUtils.h"
 
 @implementation TiBluetoothPeripheralProxy
@@ -141,6 +144,20 @@
                      type:[TiUtils intValue:type]];
 }
 
+#if IS_XCODE_9
+- (NSNumber *)canSendWriteWithoutResponse
+{
+  return NUMBOOL([_peripheral canSendWriteWithoutResponse]);
+}
+
+- (void)openL2CAPChannel:(id)args
+{
+  ENSURE_SINGLE_ARG(args, NSDictionary);
+  [_peripheral openL2CAPChannel:nil];
+}
+
+#endif
+
 - (void)setNotifyValueForCharacteristic:(id)args
 {
   ENSURE_ARG_COUNT(args, 2);
@@ -184,6 +201,29 @@
 }
 
 #pragma mark Peripheral Delegates
+
+#if IS_XCODE_9
+- (void)peripheralIsReadyToSendWriteWithoutResponse:(CBPeripheral *)peripheral
+{
+  if ([self _hasListeners:@"isReadyToSendWriteWithoutResponse"]) {
+    [self fireEvent:@"isReadyToSendWriteWithoutResponse"
+         withObject:@{
+           @"peripheral" : [self peripheralProxyFromPeripheral:peripheral],
+         }];
+  }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didOpenL2CAPChannel:(CBL2CAPChannel *)channel error:(NSError *)error
+{
+  if ([self _hasListeners:@"didOpenL2CAPChannel"]) {
+    [self fireEvent:@"didOpenL2CAPChannel"
+         withObject:@{
+           @"channel" : [self channelProxyFromChannel:channel],
+           @"error": NULL_IF_NIL(error.localizedDescription)
+         }];
+  }
+}
+#endif
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error
 {
@@ -271,6 +311,11 @@
   }
 
   return result;
+}
+
+- (TiBluetoothL2CAPChannelProxy *)channelProxyFromChannel:(CBL2CAPChannel *)channel
+{
+  return [[TiBluetoothL2CAPChannelProxy alloc] _initWithPageContext:[self pageContext] andChannel:channel];
 }
 
 @end

@@ -3,3 +3,9 @@
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
 #endif
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000
+#define IS_XCODE_9 true
+#else
+#define IS_XCODE_9 false
+#endif

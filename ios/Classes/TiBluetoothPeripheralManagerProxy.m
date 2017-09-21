@@ -166,6 +166,38 @@
 
 #pragma mark Delegates
 
+#if IS_XCODE_9
+- (void)peripheralManager:(CBPeripheralManager *)peripheral didPublishL2CAPChannel:(CBL2CAPPSM)PSM error:(NSError *)error
+{
+  if ([self _hasListeners:@"didPublishL2CAPChannel"]) {
+    [self fireEvent:@"didPublishL2CAPChannel"
+         withObject:@{
+           @"channel" : NUMUINT(PSM)
+         }];
+  }
+}
+
+- (void)peripheralManager:(CBPeripheralManager *)peripheral didUnpublishL2CAPChannel:(CBL2CAPPSM)PSM error:(NSError *)error
+{
+  if ([self _hasListeners:@"didUnpublishL2CAPChannel"]) {
+    [self fireEvent:@"didUnpublishL2CAPChannel"
+         withObject:@{
+           @"channel" : NUMUINT(PSM)
+         }];
+  }
+}
+
+- (void)peripheralManager:(CBPeripheralManager *)peripheral didOpenL2CAPChannel:(CBL2CAPChannel *)channel error:(NSError *)error
+{
+  if ([self _hasListeners:@"didOpenL2CAPChannel"]) {
+    [self fireEvent:@"didOpenL2CAPChannel"
+         withObject:@{
+           @"channel" : NUMUINT(channel.PSM) // TODO: Expose more here, use TiBluetoothL2CAPChannelProxy
+         }];
+  }
+}
+#endif
+
 - (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheral
 {
   if ([self _hasListeners:@"didUpdateState"]) {

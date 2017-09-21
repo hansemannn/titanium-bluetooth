@@ -53,6 +53,8 @@
 		DBC758881E09468D00BBB452 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBC758871E09468D00BBB452 /* CoreBluetooth.framework */; };
 		DBE6DCBA1E1500FD00D6DBCF /* TiBluetoothUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = DBE6DCB81E1500FD00D6DBCF /* TiBluetoothUtils.h */; };
 		DBE6DCBB1E1500FD00D6DBCF /* TiBluetoothUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DBE6DCB91E1500FD00D6DBCF /* TiBluetoothUtils.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		DBEDA16D1F7439CA007D04F4 /* TiBluetoothL2CAPChannelProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = DBEDA16B1F7439CA007D04F4 /* TiBluetoothL2CAPChannelProxy.h */; };
+		DBEDA16E1F7439CA007D04F4 /* TiBluetoothL2CAPChannelProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = DBEDA16C1F7439CA007D04F4 /* TiBluetoothL2CAPChannelProxy.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +101,8 @@
 		DBC758871E09468D00BBB452 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		DBE6DCB81E1500FD00D6DBCF /* TiBluetoothUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiBluetoothUtils.h; path = Classes/TiBluetoothUtils.h; sourceTree = "<group>"; };
 		DBE6DCB91E1500FD00D6DBCF /* TiBluetoothUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiBluetoothUtils.m; path = Classes/TiBluetoothUtils.m; sourceTree = "<group>"; };
+		DBEDA16B1F7439CA007D04F4 /* TiBluetoothL2CAPChannelProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TiBluetoothL2CAPChannelProxy.h; path = Classes/TiBluetoothL2CAPChannelProxy.h; sourceTree = "<group>"; };
+		DBEDA16C1F7439CA007D04F4 /* TiBluetoothL2CAPChannelProxy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TiBluetoothL2CAPChannelProxy.m; path = Classes/TiBluetoothL2CAPChannelProxy.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +154,7 @@
 				24DD6CF71134B3F500162E58 /* TiBluetoothModule.h */,
 				24DD6CF81134B3F500162E58 /* TiBluetoothModule.m */,
 				DBE6DCB71E14F57700D6DBCF /* Utils */,
+				DBEDA16A1F7439A7007D04F4 /* L2CAPChannel */,
 				DB4955C61E0896C700A1C8A6 /* Characteristic */,
 				DB4955C51E0896BF00A1C8A6 /* Peripheral */,
 				DB4F95021E8BDA63006A18DA /* Beacon */,
@@ -266,6 +271,15 @@
 			name = Utils;
 			sourceTree = "<group>";
 		};
+		DBEDA16A1F7439A7007D04F4 /* L2CAPChannel */ = {
+			isa = PBXGroup;
+			children = (
+				DBEDA16B1F7439CA007D04F4 /* TiBluetoothL2CAPChannelProxy.h */,
+				DBEDA16C1F7439CA007D04F4 /* TiBluetoothL2CAPChannelProxy.m */,
+			);
+			name = L2CAPChannel;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -277,6 +291,7 @@
 				DBB57D181E1487EE00D78BB6 /* TiBluetoothRequestProxy.h in Headers */,
 				AA747D9F0F9514B9006C5449 /* TiBluetooth_Prefix.pch in Headers */,
 				DB32140F1E088C1C00996E31 /* TiBluetoothPeripheralProxy.h in Headers */,
+				DBEDA16D1F7439CA007D04F4 /* TiBluetoothL2CAPChannelProxy.h in Headers */,
 				24DD6CF91134B3F500162E58 /* TiBluetoothModule.h in Headers */,
 				DB4F95051E8BDA88006A18DA /* TiBluetoothBeaconRegionProxy.h in Headers */,
 				DBB57D091E147EC400D78BB6 /* TiBluetoothCentralManagerProxy.h in Headers */,
@@ -362,6 +377,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB4F95061E8BDA88006A18DA /* TiBluetoothBeaconRegionProxy.m in Sources */,
+				DBEDA16E1F7439CA007D04F4 /* TiBluetoothL2CAPChannelProxy.m in Sources */,
 				DBB57D141E14841900D78BB6 /* TiBluetoothCentralProxy.m in Sources */,
 				DBB57D0A1E147EC400D78BB6 /* TiBluetoothCentralManagerProxy.m in Sources */,
 				DB3214101E088C1C00996E31 /* TiBluetoothPeripheralProxy.m in Sources */,
@@ -393,6 +409,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 24DD6D1B1134B66800162E58 /* titanium.xcconfig */;
 			buildSettings = {
+				CLANG_WARN_UNGUARDED_AVAILABILITY = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DSTROOT = /tmp/TiBluetooth.dst;
@@ -433,6 +450,7 @@
 			baseConfigurationReference = 24DD6D1B1134B66800162E58 /* titanium.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = NO;
 				DSTROOT = /tmp/TiBluetooth.dst;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_MODEL_TUNING = G5;
