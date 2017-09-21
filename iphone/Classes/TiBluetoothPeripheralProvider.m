@@ -26,6 +26,10 @@
 
 - (NSArray<TiBluetoothPeripheralProxy *> *)peripherals
 {
+    if (peripherals == nil) {
+      peripherals = [NSMutableArray array];
+    }
+  
     return (NSArray *)peripherals;
 }
 
