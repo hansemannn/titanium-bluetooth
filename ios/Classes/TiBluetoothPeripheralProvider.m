@@ -24,40 +24,40 @@
   return _sharedObject;
 }
 
-- (NSArray<TiBluetoothPeripheralProxy *> *)peripherals
+- (NSMutableArray<TiBluetoothPeripheralProxy *> *)peripherals
 {
   if (peripherals == nil) {
     peripherals = [NSMutableArray array];
   }
 
-  return (NSArray *)peripherals;
+  return peripherals;
 }
 
 - (BOOL)hasPeripheral:(TiBluetoothPeripheralProxy *)peripheral
 {
-  return [peripherals containsObject:peripheral];
+  return [[self peripherals] containsObject:peripheral];
 }
 
 - (void)addPeripheral:(TiBluetoothPeripheralProxy *)peripheral
 {
-  [peripherals addObject:peripheral];
+  [[self peripherals] addObject:peripheral];
 }
 
 - (void)removePeripheral:(TiBluetoothPeripheralProxy *)peripheral;
 {
-  if ([peripherals containsObject:peripheral]) {
+  if ([[self peripherals] containsObject:peripheral]) {
     NSLog(@"[ERROR] Trying to remove a peripheral with UUID = %@ that doesn't exist in the provider.", peripheral.peripheral.identifier);
     return;
   }
 
-  [peripherals removeObject:peripheral];
+  [[self peripherals] removeObject:peripheral];
 }
 
 - (TiBluetoothPeripheralProxy *)peripheralProxyFromPeripheral:(CBPeripheral *)peripheral
 {
   __block TiBluetoothPeripheralProxy *result = nil;
 
-  [peripherals enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
+  [[self peripherals] enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
     if ([[(TiBluetoothPeripheralProxy *)object peripheral] identifier] == [peripheral identifier]) {
       result = object;
       *stop = YES;

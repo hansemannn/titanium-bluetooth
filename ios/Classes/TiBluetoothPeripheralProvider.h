@@ -16,8 +16,6 @@
 
 + (id)sharedInstance;
 
-- (NSArray<TiBluetoothPeripheralProxy *> *)peripherals;
-
 - (BOOL)hasPeripheral:(TiBluetoothPeripheralProxy *)peripheral;
 
 - (void)addPeripheral:(TiBluetoothPeripheralProxy *)peripheral;
