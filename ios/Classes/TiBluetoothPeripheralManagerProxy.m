@@ -31,7 +31,7 @@
 
     if (!bluetoothPermissions) {
       [self throwException:@"The NSBluetoothPeripheralUsageDescription key is required to interact with Bluetooth on iOS. Please add it to your plist and try it again." subreason:nil location:CODELOCATION];
-      return;
+      return nil;
     }
 
     ENSURE_ARG_OR_NIL_FOR_KEY(showPowerAlert, args, @"showPowerAlert", NSNumber);
@@ -55,12 +55,12 @@
 
 #pragma mark Public APIs
 
-- (id)state
+- (NSNumber *)state
 {
   return NUMINTEGER([peripheralManager state]);
 }
 
-- (id)isAdvertising
+- (NSNumber *)isAdvertising
 {
   return NUMBOOL([peripheralManager isAdvertising]);
 }

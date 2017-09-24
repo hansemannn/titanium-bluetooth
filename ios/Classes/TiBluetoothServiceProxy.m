@@ -67,27 +67,27 @@
 
 #pragma mark Public API's
 
-- (id)isPrimary
+- (NSNumber *)isPrimary
 {
   return NUMBOOL(service.isPrimary);
 }
 
-- (id)peripheral
+- (TiBluetoothPeripheralProxy *)peripheral
 {
   return [self peripheralProxyFromPeripheral:service.peripheral];
 }
 
-- (id)includedServices
+- (NSArray *)includedServices
 {
   return [self arrayFromServices:service.includedServices];
 }
 
-- (id)characteristics
+- (NSArray *)characteristics
 {
   return [self arrayFromCharacteristics:service.characteristics];
 }
 
-- (id)uuid
+- (NSString *)uuid
 {
   return service.UUID.UUIDString;
 }

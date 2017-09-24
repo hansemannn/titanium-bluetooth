@@ -41,7 +41,7 @@
 
 #pragma mark Public API's
 
-- (id)characteristic
+- (TiBluetoothCharacteristicProxy *)characteristic
 {
   return [self characteristicProxyFromCharacteristic:descriptor.characteristic];
 }

@@ -87,7 +87,7 @@
   [centralManager stopScan];
 }
 
-- (id)isScanning:(id)unused
+- (NSNumber *)isScanning:(id)unused
 {
   return NUMBOOL([centralManager isScanning]);
 }
@@ -131,12 +131,12 @@
   [centralManager cancelPeripheralConnection:[(TiBluetoothPeripheralProxy *)value peripheral]];
 }
 
-- (id)state
+- (NSNumber *)state
 {
   return NUMINTEGER([centralManager state]);
 }
 
-- (id)retrievePeripheralsWithIdentifiers:(id)args
+- (NSArray *)retrievePeripheralsWithIdentifiers:(id)args
 {
   id identifiers = [args objectAtIndex:0];
   ENSURE_TYPE_OR_NIL(identifiers, NSArray);
@@ -144,7 +144,7 @@
   return [self peripheralProxyArrayFromPeripheralArray:[centralManager retrievePeripheralsWithIdentifiers:[TiBluetoothUtils NSUUIDArrayFromStringArray:identifiers]]];
 }
 
-- (id)retrieveConnectedPeripheralsWithServices:(id)args
+- (NSArray *)retrieveConnectedPeripheralsWithServices:(id)args
 {
   id serviceUUIDs = [args objectAtIndex:0];
   ENSURE_TYPE_OR_NIL(serviceUUIDs, NSArray);

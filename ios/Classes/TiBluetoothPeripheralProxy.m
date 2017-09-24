@@ -36,27 +36,27 @@
 
 #pragma mark Public API's
 
-- (id)name
+- (NSString *)name
 {
   return _peripheral.name;
 }
 
-- (id)rssi
+- (NSNumber *)rssi
 {
   return NUMINT(_peripheral.RSSI);
 }
 
-- (id)state
+- (NSNumber *)state
 {
   return NUMINT(_peripheral.state);
 }
 
-- (id)services
+- (NSArray *)services
 {
   return [self arrayFromServices:_peripheral.services];
 }
 
-- (id)identifier
+- (NSString *)identifier
 {
   return _peripheral.identifier.UUIDString;
 }
@@ -122,7 +122,7 @@
   [_peripheral readValueForCharacteristic:[(TiBluetoothCharacteristicProxy *)value characteristic]];
 }
 
-- (id)maximumWriteValueLengthForType:(id)value
+- (NSNumber *)maximumWriteValueLengthForType:(id)value
 {
   return NUMUINTEGER([_peripheral maximumWriteValueLengthForType:[TiUtils intValue:value]]);
 }
@@ -155,7 +155,6 @@
   ENSURE_SINGLE_ARG(args, NSDictionary);
   [_peripheral openL2CAPChannel:nil];
 }
-
 #endif
 
 - (void)setNotifyValueForCharacteristic:(id)args

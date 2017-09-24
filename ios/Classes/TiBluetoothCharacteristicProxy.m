@@ -46,32 +46,32 @@
 
 #pragma mark Public API's
 
-- (id)service
+- (TiBluetoothServiceProxy *)service
 {
   return [[TiBluetoothServiceProxy alloc] _initWithPageContext:[self pageContext] andService:characteristic.service];
 }
 
-- (id)properties
+- (NSNumber *)properties
 {
   return NUMUINTEGER(characteristic.properties);
 }
 
-- (id)isNotifying
+- (NSNumber *)isNotifying
 {
   return NUMBOOL(characteristic.isNotifying);
 }
 
-- (id)descriptors
+- (NSArray *)descriptors
 {
   return [self arrayFromDescriptors:characteristic.descriptors];
 }
 
-- (id)value
+- (TiBlob *)value
 {
   return [[TiBlob alloc] _initWithPageContext:[self pageContext] andData:characteristic.value mimetype:@"text/plain"];
 }
 
-- (id)uuid
+- (NSString *)uuid
 {
   return characteristic.UUID.UUIDString;
 }

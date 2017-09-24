@@ -44,7 +44,7 @@
 
 #pragma mark Public APIs
 
-- (id)hasBluetoothPermissions:(id)unused
+- (NSNumber *)hasBluetoothPermissions:(id)unused
 {
   return NUMBOOL([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSBluetoothPeripheralUsageDescription"] != nil);
 }

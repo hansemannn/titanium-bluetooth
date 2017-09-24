@@ -25,12 +25,12 @@
 
 #pragma mark Public APIs
 
-- (id)maximumUpdateValueLength
+- (NSNumber *)maximumUpdateValueLength
 {
   return NUMUINTEGER(central.maximumUpdateValueLength);
 }
 
-- (id)identifier
+- (NSString *)identifier
 {
   return central.identifier.UUIDString;
 }
