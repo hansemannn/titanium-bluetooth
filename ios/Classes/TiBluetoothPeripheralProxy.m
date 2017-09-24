@@ -235,6 +235,17 @@
   }
 }
 
+- (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
+{
+  if ([self _hasListeners:@"didUpdateNotificationStateForCharacteristic"]) {
+    [self fireEvent:@"didUpdateNotificationStateForCharacteristic"
+         withObject:@{
+           @"characteristic" : [self characteristicProxyFromCharacteristic:characteristic],
+           @"error" : [error localizedDescription] ?: [NSNull null]
+         }];
+  }
+}
+
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error
 {
   if ([self _hasListeners:@"didDiscoverCharacteristicsForService"]) {
