@@ -230,7 +230,7 @@
     [self fireEvent:@"didDiscoverServices"
          withObject:@{
            @"peripheral" : [self peripheralProxyFromPeripheral:peripheral],
-           @"error" : [error localizedDescription] ?: [NSNull null]
+           @"error" : NULL_IF_NIL([error localizedDescription])
          }];
   }
 }
@@ -241,7 +241,7 @@
     [self fireEvent:@"didUpdateNotificationStateForCharacteristic"
          withObject:@{
            @"characteristic" : [self characteristicProxyFromCharacteristic:characteristic],
-           @"error" : [error localizedDescription] ?: [NSNull null]
+           @"error" : NULL_IF_NIL([error localizedDescription])
          }];
   }
 }
@@ -253,7 +253,7 @@
          withObject:@{
            @"peripheral" : [self peripheralProxyFromPeripheral:peripheral],
            @"service" : [[TiBluetoothServiceProxy alloc] _initWithPageContext:[self pageContext] andService:service],
-           @"error" : [error localizedDescription] ?: [NSNull null]
+           @"error" : NULL_IF_NIL([error localizedDescription])
          }];
   }
 }
@@ -265,7 +265,7 @@
          withObject:@{
            @"peripheral" : [self peripheralProxyFromPeripheral:peripheral],
            @"characteristic" : [self characteristicProxyFromCharacteristic:characteristic],
-           @"error" : [error localizedDescription] ?: [NSNull null]
+           @"error" : NULL_IF_NIL([error localizedDescription])
          }];
   }
 }
@@ -277,7 +277,7 @@
          withObject:@{
            @"peripheral" : [self peripheralProxyFromPeripheral:peripheral],
            @"characteristic" : [self characteristicProxyFromCharacteristic:characteristic],
-           @"error" : [error localizedDescription] ?: [NSNull null]
+           @"error" : NULL_IF_NIL([error localizedDescription])
          }];
   }
 }

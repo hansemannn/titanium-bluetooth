@@ -227,7 +227,7 @@
     [self fireEvent:@"didStartAdvertising"
          withObject:@{
            @"success" : NUMBOOL(error == nil),
-           @"error" : [error localizedDescription] ?: [NSNull null]
+           @"error" : NULL_IF_NIL([error localizedDescription])
          }];
   }
 }
@@ -238,7 +238,7 @@
     [self fireEvent:@"didAddService"
          withObject:@{
            @"service" : [[TiBluetoothServiceProxy alloc] _initWithPageContext:[self pageContext] andService:service],
-           @"error" : [error localizedDescription] ?: [NSNull null]
+           @"error" : NULL_IF_NIL([error localizedDescription])
          }];
   }
 }

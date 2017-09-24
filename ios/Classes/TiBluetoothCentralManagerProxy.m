@@ -202,7 +202,7 @@
     [self fireEvent:@"didFailToConnectPeripheral"
          withObject:@{
            @"peripheral" : [self peripheralProxyFromPeripheral:peripheral],
-           @"error" : [error localizedDescription] ?: [NSNull null]
+           @"error" : NULL_IF_NIL([error localizedDescription])
          }];
   }
 }
