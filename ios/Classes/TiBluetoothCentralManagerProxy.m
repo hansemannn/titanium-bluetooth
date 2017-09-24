@@ -198,8 +198,8 @@
 
 - (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error
 {
-  if ([self _hasListeners:@"didDisconnectPeripheral"]) {
-    [self fireEvent:@"didDisconnectPeripheral"
+  if ([self _hasListeners:@"didFailToConnectPeripheral"]) {
+    [self fireEvent:@"didFailToConnectPeripheral"
          withObject:@{
            @"peripheral" : [self peripheralProxyFromPeripheral:peripheral],
            @"error" : [error localizedDescription] ?: [NSNull null]

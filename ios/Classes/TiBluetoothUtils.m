@@ -12,7 +12,7 @@
 
 + (NSArray<CBUUID *> *_Nullable)CBUUIDArrayFromStringArray:(NSArray<id> *)array
 {
-  if (array == nil) {
+  if (array == nil || array.count == 0) {
     return nil;
   }
 
@@ -28,7 +28,7 @@
 
 + (NSArray<NSUUID *> *_Nullable)NSUUIDArrayFromStringArray:(NSArray<NSString *> *)array
 {
-  if (array == nil) {
+  if (array == nil || array.count == 0) {
     return nil;
   }
 
@@ -43,7 +43,7 @@
 
 + (NSArray<id> *_Nullable)stringArrayFromUUIDArray:(NSArray<CBUUID *> *)array
 {
-  if (array == nil) {
+  if (array == nil || array.count == 0) {
     return nil;
   }
 
