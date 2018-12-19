@@ -44,7 +44,7 @@ public class TiBluetoothModule extends KrollModule {
     public static final int CHARACTERISTIC_PROPERTY_WRITE_WITH_RESPONSE = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
 
     @Kroll.constant
-    public static final int CHARACTERISTIC_PROPERTY_WRITE_WITH_NO_RESPONSE = BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE;
+    public static final int CHARACTERISTIC_PROPERTY_WRITE_WITHOUT_RESPONSE = BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE;
 
     public TiBluetoothModule() {
         super();
