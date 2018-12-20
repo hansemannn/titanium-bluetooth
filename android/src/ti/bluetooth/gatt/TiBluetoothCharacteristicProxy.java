@@ -10,25 +10,28 @@ import ti.bluetooth.TiBluetoothModule;
 
 @Kroll.proxy(parentModule = TiBluetoothModule.class)
 public class TiBluetoothCharacteristicProxy extends KrollProxy {
-    private BluetoothGattCharacteristic characteristic;
+  private BluetoothGattCharacteristic characteristic;
 
-    public TiBluetoothCharacteristicProxy(BluetoothGattCharacteristic characteristic) {
-        this.characteristic = characteristic;
-    }
+  public TiBluetoothCharacteristicProxy(
+      BluetoothGattCharacteristic characteristic) {
+    this.characteristic = characteristic;
+  }
 
-    @Kroll.getProperty
-    @Kroll.method
-    public String getUuid() {
-        return characteristic.getUuid().toString().toUpperCase();
-    }
+  @Kroll
+      .getProperty
+      @Kroll.method
+      public String getUuid() {
+    return characteristic.getUuid().toString().toUpperCase();
+  }
 
-    @Kroll.getProperty
-    @Kroll.method
-    public TiBlob getValue() {
-        return TiBlob.blobFromData(characteristic.getValue());
-    }
+  @Kroll
+      .getProperty
+      @Kroll.method
+      public TiBlob getValue() {
+    return TiBlob.blobFromData(characteristic.getValue());
+  }
 
-    public BluetoothGattCharacteristic getCharacteristic() {
-        return characteristic;
-    }
+  public BluetoothGattCharacteristic getCharacteristic() {
+    return characteristic;
+  }
 }

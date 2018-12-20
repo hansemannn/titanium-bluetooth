@@ -15,4 +15,4 @@ name: ti.bluetooth
 moduleid: ti.bluetooth
 guid: 1d5352ed-3084-4f88-9f02-8e7be75f4ca9
 platform: android
-minsdk: 7.5.0
+minsdk: 7.0.0

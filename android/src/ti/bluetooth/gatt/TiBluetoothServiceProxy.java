@@ -13,37 +13,42 @@ import ti.bluetooth.TiBluetoothModule;
 
 @Kroll.proxy(parentModule = TiBluetoothModule.class)
 public class TiBluetoothServiceProxy extends KrollProxy {
-    private BluetoothGattService bluetoothGattService;
-    private List<TiBluetoothCharacteristicProxy> characteristics;
+  private BluetoothGattService bluetoothGattService;
+  private List<TiBluetoothCharacteristicProxy> characteristics;
 
-    public TiBluetoothServiceProxy(BluetoothGattService bluetoothGattService) {
-        this.bluetoothGattService = bluetoothGattService;
-        this.characteristics = mapCharacteristics(bluetoothGattService.getCharacteristics());
+  public TiBluetoothServiceProxy(BluetoothGattService bluetoothGattService) {
+    this.bluetoothGattService = bluetoothGattService;
+    this.characteristics =
+        mapCharacteristics(bluetoothGattService.getCharacteristics());
+  }
+
+  private List<TiBluetoothCharacteristicProxy>
+  mapCharacteristics(List<BluetoothGattCharacteristic> characteristics) {
+    List<TiBluetoothCharacteristicProxy> characteristicList = new ArrayList<>();
+
+    for (BluetoothGattCharacteristic characteristic : characteristics) {
+      characteristicList.add(
+          new TiBluetoothCharacteristicProxy(characteristic));
     }
 
-    private List<TiBluetoothCharacteristicProxy> mapCharacteristics(List<BluetoothGattCharacteristic> characteristics) {
-        List<TiBluetoothCharacteristicProxy> characteristicList = new ArrayList<>();
+    return characteristicList;
+  }
 
-        for (BluetoothGattCharacteristic characteristic: characteristics) {
-            characteristicList.add(new TiBluetoothCharacteristicProxy(characteristic));
-        }
+  public List<TiBluetoothCharacteristicProxy> getCharacteristicsList() {
+    return characteristics;
+  }
 
-        return characteristicList;
-    }
+  @Kroll
+      .getProperty
+      @Kroll.method
+      public Object[] getCharacteristics() {
+    return characteristics.toArray();
+  }
 
-    public List<TiBluetoothCharacteristicProxy> getCharacteristicsList() {
-        return characteristics;
-    }
-
-    @Kroll.getProperty
-    @Kroll.method
-    public Object[] getCharacteristics() {
-        return characteristics.toArray();
-    }
-
-    @Kroll.getProperty
-    @Kroll.method
-    public String getUuid() {
-        return bluetoothGattService.getUuid().toString().toUpperCase();
-    }
+  @Kroll
+      .getProperty
+      @Kroll.method
+      public String getUuid() {
+    return bluetoothGattService.getUuid().toString().toUpperCase();
+  }
 }

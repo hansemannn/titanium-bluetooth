@@ -8,22 +8,23 @@ import android.content.Intent;
 import ti.bluetooth.listener.OnBluetoothStateChangedListener;
 
 public final class TiBluetoohBroadcastReceiver extends BroadcastReceiver {
-	private OnBluetoothStateChangedListener bluetoothStateChangedListener;
+  private OnBluetoothStateChangedListener bluetoothStateChangedListener;
 
-	public TiBluetoohBroadcastReceiver(OnBluetoothStateChangedListener bluetoothStateChangedListener) {
-		super();
+  public TiBluetoohBroadcastReceiver(
+      OnBluetoothStateChangedListener bluetoothStateChangedListener) {
+    super();
 
-		this.bluetoothStateChangedListener = bluetoothStateChangedListener;
-	}
+    this.bluetoothStateChangedListener = bluetoothStateChangedListener;
+  }
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        String action = intent.getAction();
+  @Override
+  public void onReceive(Context context, Intent intent) {
+    String action = intent.getAction();
 
-        if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
-            if (bluetoothStateChangedListener != null) {
-                bluetoothStateChangedListener.onBluetoothStateChanged();
-            }
-        }
+    if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+      if (bluetoothStateChangedListener != null) {
+        bluetoothStateChangedListener.onBluetoothStateChanged();
+      }
     }
+  }
 };

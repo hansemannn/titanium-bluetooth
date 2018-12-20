@@ -22,39 +22,38 @@ import ti.bluetooth.central.TiBluetoothCentralManagerProxy;
 @Kroll.module(name = "TiBluetooth", id = "ti.bluetooth")
 public class TiBluetoothModule extends KrollModule {
 
-    @Kroll.constant 
-    public static final int MANAGER_STATE_POWERED_OFF = 10;
+  @Kroll.constant public static final int MANAGER_STATE_POWERED_OFF = 10;
 
-    @Kroll.constant 
-    public static final int MANAGER_STATE_POWERED_ON = 12;
+  @Kroll.constant public static final int MANAGER_STATE_POWERED_ON = 12;
 
-    @Kroll.constant 
-    public static final int SCAN_MODE_BALANCED = 1;
+  @Kroll.constant public static final int SCAN_MODE_BALANCED = 1;
 
-    @Kroll.constant 
-    public static final int SCAN_MODE_LOW_LATENCY = 2;
+  @Kroll.constant public static final int SCAN_MODE_LOW_LATENCY = 2;
 
-    @Kroll.constant 
-    public static final int SCAN_MODE_LOW_POWER = 0;
+  @Kroll.constant public static final int SCAN_MODE_LOW_POWER = 0;
 
-    @Kroll.constant 
-    public static final int SCAN_MODE_OPPORTUNISTIC = -1;
+  @Kroll.constant public static final int SCAN_MODE_OPPORTUNISTIC = -1;
 
-    @Kroll.constant
-    public static final int CHARACTERISTIC_PROPERTY_WRITE_WITH_RESPONSE = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
+  @Kroll.constant
+  public static final int CHARACTERISTIC_PROPERTY_WRITE_WITH_RESPONSE =
+      BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT;
 
-    @Kroll.constant
-    public static final int CHARACTERISTIC_PROPERTY_WRITE_WITHOUT_RESPONSE = BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE;
+  @Kroll.constant
+  public static final int CHARACTERISTIC_PROPERTY_WRITE_WITHOUT_RESPONSE =
+      BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE;
 
-    public TiBluetoothModule() {
-        super();
-    }
+  public TiBluetoothModule() { super(); }
 
-    @Kroll.method
-    public TiBluetoothCentralManagerProxy createCentralManager() {
-        BluetoothManager bluetoothManager = (BluetoothManager) TiApplication.getInstance().getSystemService(Context.BLUETOOTH_SERVICE);
-        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
+  @Kroll.method
+  public TiBluetoothCentralManagerProxy createCentralManager() {
+    BluetoothManager bluetoothManager =
+        (BluetoothManager)TiApplication.getInstance().getSystemService(
+            Context.BLUETOOTH_SERVICE);
+    BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
 
-        return bluetoothAdapter != null ? new TiBluetoothCentralManagerProxy(TiApplication.getInstance(), bluetoothAdapter) : null;
-    }
+    return bluetoothAdapter != null
+        ? new TiBluetoothCentralManagerProxy(TiApplication.getInstance(),
+                                             bluetoothAdapter)
+        : null;
+  }
 }
