@@ -5,7 +5,7 @@
 Ti.Bluetooth is an open source project to support Bluetooth / BLE in Appcelerator Titanium.
 
 ## Requirements
-- Titanium Mobile SDK 7.5.0.GA or later for Android. (_You can always download the source and build the project for lower SDK-targets_)
+- Titanium Mobile SDK 7.0.0.GA or later for Android.
 - Titanium Mobile SDK 6.0.0.GA or later for iOS.
 - iOS 8.1 / Android 4.0.0 or later
 - Xcode 10.1 or later
