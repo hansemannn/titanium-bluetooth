@@ -37,7 +37,10 @@ var btn1 = Ti.UI.createButton({
 });
 
 var centralManager = BLE.createCentralManager();
-var peripheralManager = BLE.createPeripheralManager();
+
+if (OS_IOS) {
+    var peripheralManager = BLE.createPeripheralManager();
+}
 
 btn1.addEventListener('click', function() {
     if (centralManager.isScanning()) {
@@ -74,6 +77,14 @@ btn2.addEventListener('click', function() {
 centralManager.addEventListener('didDiscoverPeripheral', function(e) {
     Ti.API.info('didDiscoverPeripheral');
     Ti.API.info(e);
+
+    Ti.API.info('Connect to ' + e.peripheral);
+    centralManager.connectPeripheral(e.peripheral, {
+        notifyOnConnection: true,
+        notifyOnDisconnection: true
+    });
+
+    centralManager.stopScan();
 });
 
 centralManager.addEventListener('didUpdateState', function(e) {
@@ -148,54 +159,57 @@ centralManager.addEventListener('didFailToConnectPeripheral', function(e) {
     Ti.API.info(e);
 });
 
+
 /** 
  * Peripheral Manager Events
  */
- 
-peripheralManager.addEventListener('didUpdateState', function(e) {
-    Ti.API.info('didUpdateState');
-    Ti.API.info(e);
-});
 
-peripheralManager.addEventListener('willRestoreState', function(e) {
-   Ti.API.info('willRestoreState');
-   Ti.API.info(e);
-});
+ if (OS_IOS) {
+    peripheralManager.addEventListener('didUpdateState', function(e) {
+        Ti.API.info('didUpdateState');
+        Ti.API.info(e);
+    });
 
-peripheralManager.addEventListener('didStartAdvertising', function(e) {
-   Ti.API.info('didStartAdvertising');
-   Ti.API.info(e);
-});
+    peripheralManager.addEventListener('willRestoreState', function(e) {
+       Ti.API.info('willRestoreState');
+       Ti.API.info(e);
+    });
 
-peripheralManager.addEventListener('didAddService', function(e) {
-   Ti.API.info('didAddService');
-   Ti.API.info(e);
-});
+    peripheralManager.addEventListener('didStartAdvertising', function(e) {
+       Ti.API.info('didStartAdvertising');
+       Ti.API.info(e);
+    });
 
-peripheralManager.addEventListener('didSubscribeToCharacteristic', function(e) {
-   Ti.API.info('didSubscribeToCharacteristic');
-   Ti.API.info(e);
-});
+    peripheralManager.addEventListener('didAddService', function(e) {
+       Ti.API.info('didAddService');
+       Ti.API.info(e);
+    });
 
-peripheralManager.addEventListener('didUnsubscribeFromCharacteristic', function(e) {
-   Ti.API.info('didUnsubscribeFromCharacteristic');
-   Ti.API.info(e);
-});
+    peripheralManager.addEventListener('didSubscribeToCharacteristic', function(e) {
+       Ti.API.info('didSubscribeToCharacteristic');
+       Ti.API.info(e);
+    });
 
-peripheralManager.addEventListener('didReceiveReadRequest', function(e) {
-   Ti.API.info('didReceiveReadRequest');
-   Ti.API.info(e);
-});
+    peripheralManager.addEventListener('didUnsubscribeFromCharacteristic', function(e) {
+       Ti.API.info('didUnsubscribeFromCharacteristic');
+       Ti.API.info(e);
+    });
 
-peripheralManager.addEventListener('didReceiveWriteRequests', function(e) {
-   Ti.API.info('didReceiveWriteRequests');
-   Ti.API.info(e);
-});
+    peripheralManager.addEventListener('didReceiveReadRequest', function(e) {
+       Ti.API.info('didReceiveReadRequest');
+       Ti.API.info(e);
+    });
 
-peripheralManager.addEventListener('readyToUpdateSubscribers', function(e) {
-   Ti.API.info('readyToUpdateSubscribers');
-   Ti.API.info(e);
-});
+    peripheralManager.addEventListener('didReceiveWriteRequests', function(e) {
+       Ti.API.info('didReceiveWriteRequests');
+       Ti.API.info(e);
+    });
+
+    peripheralManager.addEventListener('readyToUpdateSubscribers', function(e) {
+       Ti.API.info('readyToUpdateSubscribers');
+       Ti.API.info(e);
+    });
+}
 
 win.add(btn1);
 win.add(btn2);

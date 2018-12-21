@@ -97,7 +97,7 @@ public class TiBluetoothCentralManagerProxy
 
   @Kroll.method
   public void connectPeripheral(TiBluetoothPeripheralProxy peripheral,
-                                KrollDict properties) {
+                                @Kroll.argument(optional=true) KrollDict properties) {
     boolean notifyOnConnection =
         properties.getBoolean(NOTIFY_ON_CONNECTION_KEY);
     boolean notifyOnDisconnection =
