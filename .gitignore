@@ -6,7 +6,6 @@ build
 .settings/
 bin/**
 libs
-dist
 
 # General
 .DS_Store
