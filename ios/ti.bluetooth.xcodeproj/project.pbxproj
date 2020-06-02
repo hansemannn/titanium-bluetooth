@@ -26,6 +26,8 @@
 		24DD6CFA1134B3F500162E58 /* TiBluetoothModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DD6CF81134B3F500162E58 /* TiBluetoothModule.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		24DE9E1111C5FE74003F90F6 /* TiBluetoothModuleAssets.h in Headers */ = {isa = PBXBuildFile; fileRef = 24DE9E0F11C5FE74003F90F6 /* TiBluetoothModuleAssets.h */; };
 		24DE9E1211C5FE74003F90F6 /* TiBluetoothModuleAssets.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DE9E1011C5FE74003F90F6 /* TiBluetoothModuleAssets.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		3A99445F248686E40011F223 /* TiBluetoothBeaconManagerProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A99445D248686E40011F223 /* TiBluetoothBeaconManagerProxy.h */; };
+		3A994460248686E40011F223 /* TiBluetoothBeaconManagerProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A99445E248686E40011F223 /* TiBluetoothBeaconManagerProxy.m */; };
 		AA747D9F0F9514B9006C5449 /* TiBluetooth_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* TiBluetooth_Prefix.pch */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 		DB32140B1E088B8700996E31 /* TiBluetoothCharacteristicProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = DB3214091E088B8700996E31 /* TiBluetoothCharacteristicProxy.h */; };
@@ -73,6 +75,8 @@
 		24DD6D1B1134B66800162E58 /* titanium.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = titanium.xcconfig; sourceTree = "<group>"; };
 		24DE9E0F11C5FE74003F90F6 /* TiBluetoothModuleAssets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiBluetoothModuleAssets.h; path = Classes/TiBluetoothModuleAssets.h; sourceTree = "<group>"; };
 		24DE9E1011C5FE74003F90F6 /* TiBluetoothModuleAssets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TiBluetoothModuleAssets.m; path = Classes/TiBluetoothModuleAssets.m; sourceTree = "<group>"; };
+		3A99445D248686E40011F223 /* TiBluetoothBeaconManagerProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TiBluetoothBeaconManagerProxy.h; path = Classes/TiBluetoothBeaconManagerProxy.h; sourceTree = "<group>"; };
+		3A99445E248686E40011F223 /* TiBluetoothBeaconManagerProxy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TiBluetoothBeaconManagerProxy.m; path = Classes/TiBluetoothBeaconManagerProxy.m; sourceTree = "<group>"; };
 		AA747D9E0F9514B9006C5449 /* TiBluetooth_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TiBluetooth_Prefix.pch; sourceTree = SOURCE_ROOT; };
 		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libti.bluetooth.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libti.bluetooth.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -218,6 +222,8 @@
 			children = (
 				DB4F95031E8BDA88006A18DA /* TiBluetoothBeaconRegionProxy.h */,
 				DB4F95041E8BDA88006A18DA /* TiBluetoothBeaconRegionProxy.m */,
+				3A99445D248686E40011F223 /* TiBluetoothBeaconManagerProxy.h */,
+				3A99445E248686E40011F223 /* TiBluetoothBeaconManagerProxy.m */,
 			);
 			name = Beacon;
 			sourceTree = "<group>";
@@ -289,6 +295,7 @@
 			files = (
 				DB32140B1E088B8700996E31 /* TiBluetoothCharacteristicProxy.h in Headers */,
 				DBB57D181E1487EE00D78BB6 /* TiBluetoothRequestProxy.h in Headers */,
+				3A99445F248686E40011F223 /* TiBluetoothBeaconManagerProxy.h in Headers */,
 				AA747D9F0F9514B9006C5449 /* TiBluetooth_Prefix.pch in Headers */,
 				DB32140F1E088C1C00996E31 /* TiBluetoothPeripheralProxy.h in Headers */,
 				DBEDA16D1F7439CA007D04F4 /* TiBluetoothL2CAPChannelProxy.h in Headers */,
@@ -379,6 +386,7 @@
 			files = (
 				DB4F95061E8BDA88006A18DA /* TiBluetoothBeaconRegionProxy.m in Sources */,
 				DBEDA16E1F7439CA007D04F4 /* TiBluetoothL2CAPChannelProxy.m in Sources */,
+				3A994460248686E40011F223 /* TiBluetoothBeaconManagerProxy.m in Sources */,
 				DBB57D141E14841900D78BB6 /* TiBluetoothCentralProxy.m in Sources */,
 				DBB57D0A1E147EC400D78BB6 /* TiBluetoothCentralManagerProxy.m in Sources */,
 				DB3214101E088C1C00996E31 /* TiBluetoothPeripheralProxy.m in Sources */,
