@@ -13,9 +13,8 @@
 #import "TiBluetoothServiceProxy.h"
 #import "TiBluetoothUtils.h"
 #import "TiUtils.h"
-#if IS_XCODE_9
+#import "TiBlob.h"
 #import "TiBluetoothL2CAPChannelProxy.h"
-#endif
 
 @implementation TiBluetoothPeripheralProxy
 
@@ -43,12 +42,13 @@
 
 - (NSNumber *)rssi
 {
-  return NUMINT(_peripheral.RSSI);
+  DEPRECATED_REMOVED(@"Bluetooth.Peripheral.rssi (use \"didReadRSSI\" event instead)", @"2.0.0", @"2.0.0");
+  return @(-1);
 }
 
 - (NSNumber *)state
 {
-  return NUMINT(_peripheral.state);
+  return @(_peripheral.state);
 }
 
 - (NSArray *)services
@@ -144,7 +144,6 @@
                      type:[TiUtils intValue:type]];
 }
 
-#if IS_XCODE_9
 - (NSNumber *)canSendWriteWithoutResponse
 {
   return NUMBOOL([_peripheral canSendWriteWithoutResponse]);
@@ -153,9 +152,8 @@
 - (void)openL2CAPChannel:(id)args
 {
   ENSURE_SINGLE_ARG(args, NSDictionary);
-  [_peripheral openL2CAPChannel:nil];
+  [_peripheral openL2CAPChannel:0];
 }
-#endif
 
 - (void)setNotifyValueForCharacteristic:(id)args
 {
@@ -201,7 +199,6 @@
 
 #pragma mark Peripheral Delegates
 
-#if IS_XCODE_9
 - (void)peripheralIsReadyToSendWriteWithoutResponse:(CBPeripheral *)peripheral
 {
   if ([self _hasListeners:@"isReadyToSendWriteWithoutResponse"]) {
@@ -222,7 +219,6 @@
          }];
   }
 }
-#endif
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error
 {
@@ -230,6 +226,17 @@
     [self fireEvent:@"didDiscoverServices"
          withObject:@{
            @"peripheral" : [self peripheralProxyFromPeripheral:peripheral],
+           @"error" : NULL_IF_NIL([error localizedDescription])
+         }];
+  }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didReadRSSI:(NSNumber *)RSSI error:(NSError *)error
+{
+  if ([self _hasListeners:@"didReadRSSI"]) {
+    [self fireEvent:@"didReadRSSI"
+         withObject:@{
+           @"rssi" : RSSI,
            @"error" : NULL_IF_NIL([error localizedDescription])
          }];
   }

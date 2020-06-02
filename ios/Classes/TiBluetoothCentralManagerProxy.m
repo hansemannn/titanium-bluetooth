@@ -9,6 +9,7 @@
 #import "TiBluetoothPeripheralProvider.h"
 #import "TiBluetoothUtils.h"
 #import "TiUtils.h"
+#import "TiBlob.h"
 
 #import "TiBluetoothCharacteristicProxy.h"
 #import "TiBluetoothPeripheralProxy.h"
@@ -181,7 +182,7 @@
          withObject:@{
            @"peripheral" : [self peripheralProxyFromPeripheral:peripheral],
            @"advertisementData" : [self dictionaryFromAdvertisementData:advertisementData],
-           @"rssi" : NUMINT(RSSI)
+           @"rssi" : RSSI
          }];
   }
 }
@@ -191,7 +192,7 @@
   if ([self _hasListeners:@"willRestoreState"]) {
     [self fireEvent:@"willRestoreState"
          withObject:@{
-           @"state" : NUMINT(central.state)
+           @"state" : @(central.state)
          }];
   }
 }
@@ -212,7 +213,7 @@
   if ([self _hasListeners:@"didUpdateState"]) {
     [self fireEvent:@"didUpdateState"
          withObject:@{
-           @"state" : NUMINT(central.state)
+           @"state" : @(central.state)
          }];
   }
 }
@@ -255,7 +256,7 @@
   // Write own handler
   for (id key in advertisementData) {
     if ([[advertisementData objectForKey:key] isKindOfClass:[NSData class]]) {
-      [dict setObject:[[TiBlob alloc] _initWithPageContext:[self pageContext] andData:[advertisementData objectForKey:key] mimetype:@"text/plain"] forKey:key];
+      [dict setObject:[[TiBlob alloc] initWithData:[advertisementData objectForKey:key] mimetype:@"text/plain"] forKey:key];
     } else if ([[advertisementData objectForKey:key] isKindOfClass:[NSNumber class]]) {
       [dict setObject:NUMBOOL([advertisementData objectForKey:key]) forKey:key];
     } else if ([[advertisementData objectForKey:key] isKindOfClass:[NSString class]]) {

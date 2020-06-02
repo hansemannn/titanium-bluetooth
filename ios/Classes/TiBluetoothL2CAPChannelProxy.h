@@ -5,8 +5,6 @@
  * Please see the LICENSE included with this distribution for details.
  */
 
-#if IS_XCODE_9
-
 #import "TiProxy.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 
@@ -21,5 +19,3 @@
 - (NSNumber *)PSM;
 
 @end
-
-#endif

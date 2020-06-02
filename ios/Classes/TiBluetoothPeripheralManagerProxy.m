@@ -15,9 +15,8 @@
 #import "TiBluetoothServiceProxy.h"
 #import "TiBluetoothUtils.h"
 #import "TiUtils.h"
-#if IS_XCODE_9
+#import "TiBlob.h"
 #import "TiBluetoothL2CAPChannelProxy.h"
-#endif
 
 @implementation TiBluetoothPeripheralManagerProxy
 
@@ -169,7 +168,6 @@
 
 #pragma mark Delegates
 
-#if IS_XCODE_9
 - (void)peripheralManager:(CBPeripheralManager *)peripheral didPublishL2CAPChannel:(CBL2CAPPSM)PSM error:(NSError *)error
 {
   if ([self _hasListeners:@"didPublishL2CAPChannel"]) {
@@ -199,14 +197,13 @@
          }];
   }
 }
-#endif
 
 - (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheral
 {
   if ([self _hasListeners:@"didUpdateState"]) {
     [self fireEvent:@"didUpdateState"
          withObject:@{
-           @"state" : NUMINT(peripheral.state)
+           @"state" : @(peripheral.state)
          }];
   }
 }
@@ -216,7 +213,7 @@
   if ([self _hasListeners:@"willRestoreState"]) {
     [self fireEvent:@"willRestoreState"
          withObject:@{
-           @"state" : NUMINT(peripheral.state)
+           @"state" : @(peripheral.state)
          }];
   }
 }

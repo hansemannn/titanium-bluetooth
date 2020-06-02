@@ -46,7 +46,7 @@
 
 - (TiBlob *)value
 {
-  return [[TiBlob alloc] _initWithPageContext:[self pageContext] andData:request.value mimetype:@"text/plain"];
+  return [[TiBlob alloc] initWithData:request.value mimetype:@"text/plain"];
 }
 
 - (TiBluetoothCharacteristicProxy *)characteristicProxyFromCharacteristic:(CBCharacteristic *)characteristic

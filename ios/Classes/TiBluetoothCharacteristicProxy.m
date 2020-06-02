@@ -68,7 +68,7 @@
 
 - (TiBlob *)value
 {
-  return [[TiBlob alloc] _initWithPageContext:[self pageContext] andData:characteristic.value mimetype:@"text/plain"];
+  return [[TiBlob alloc] initWithData:characteristic.value mimetype:@"text/plain"];
 }
 
 - (NSString *)uuid

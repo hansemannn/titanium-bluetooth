@@ -5,8 +5,6 @@
  * Please see the LICENSE included with this distribution for details.
  */
 
-#if IS_XCODE_9
-
 #import "TiBluetoothL2CAPChannelProxy.h"
 
 @implementation TiBluetoothL2CAPChannelProxy
@@ -36,5 +34,3 @@
 // and then process the data-stream to be wrapped into a Ti.Blob
 
 @end
-
-#endif
