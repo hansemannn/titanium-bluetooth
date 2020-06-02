@@ -1,14 +1,14 @@
 # Bluetooth in Appcelerator Titanium 
-[![Build Status](https://travis-ci.org/hansemannn/titanium-bluetooth.svg?branch=master)](https://travis-ci.org/hansemannn/titanium-bluetooth) [![License](http://hans-knoechel.de/shields/shield-license.svg?v=1)](./LICENSE) [![Support](http://hans-knoechel.de/shields/shield-slack.svg?v=1)](http://tislack.org)
+[![License](http://hans-knoechel.de/shields/shield-license.svg?v=1)](./LICENSE) [![Support](http://hans-knoechel.de/shields/shield-slack.svg?v=1)](http://tislack.org)
 
 ## Summary
 Ti.Bluetooth is an open source project to support Bluetooth / BLE in Appcelerator Titanium.
 
 ## Requirements
-- Titanium Mobile SDK 7.0.0.GA or later for Android.
-- Titanium Mobile SDK 6.0.0.GA or later for iOS.
-- iOS 8.1 / Android 4.0.0 or later
-- Xcode 10.1 or later
+- Titanium SDK 7+ for Android
+- Titanium SDK 8+ for iOS
+- iOS 10.0+ / Android 4.0.0+
+- Xcode 11+
 
 ## Download + Setup
 

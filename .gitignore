@@ -44,3 +44,4 @@ android/.settings
 android/launch-*
 nbproject
 /android/java-sources.txt
+ios/dist/ti.bluetooth-iphone-*.zip
