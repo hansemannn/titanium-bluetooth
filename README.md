@@ -35,6 +35,9 @@ Add the following to your plist (only neccessary for iOS):
         </array>
         <key>NSBluetoothPeripheralUsageDescription</key>
         <string>Can we connect to Bluetooth devices?</string>
+        <!-- since iOS 13 -->
+        <key>NSBluetoothAlwaysUsageDescription</key>
+        <string>Bluetooth device communication.</string>
     </dict>
 </plist>
 ```
