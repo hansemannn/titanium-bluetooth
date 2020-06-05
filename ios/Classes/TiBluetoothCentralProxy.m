@@ -27,7 +27,7 @@
 
 - (NSNumber *)maximumUpdateValueLength
 {
-  return NUMUINTEGER(central.maximumUpdateValueLength);
+  return @(central.maximumUpdateValueLength);
 }
 
 - (NSString *)identifier

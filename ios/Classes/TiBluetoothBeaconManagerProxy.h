@@ -8,9 +8,11 @@
 #import "TiProxy.h"
 #import <CoreLocation/CoreLocation.h>
 
-@interface TiBluetoothBeaconManagerProxy : TiProxy<CLLocationManagerDelegate> {
+@interface TiBluetoothBeaconManagerProxy : TiProxy<CLLocationManagerDelegate, UIApplicationDelegate> {
   CLLocationManager *_locationManager;
 }
+
+@property(nonatomic, strong) KrollCallback *authorizationCallback;
 
 - (void)requestAlwaysAuthorization:(id)unused;
 

@@ -25,7 +25,7 @@
 
 - (NSNumber *)PSM
 {
-  return NUMUINT(_channel.PSM);
+  return @(_channel.PSM);
 }
 
 // TODO: Expose inputStream / outputStream as well?

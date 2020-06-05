@@ -41,7 +41,7 @@
 
 - (NSNumber *)offset
 {
-  return NUMUINTEGER(request.offset);
+  return @(request.offset);
 }
 
 - (TiBlob *)value

@@ -6,6 +6,7 @@
  */
 
 #import "TiBluetoothBeaconManagerProxy.h"
+#import "TiApp.h"
 
 @implementation TiBluetoothBeaconManagerProxy
 
@@ -21,10 +22,18 @@
   return _locationManager;;
 }
 
+- (void)_configure
+{
+  [super _configure];
+  [[TiApp app] registerApplicationDelegate:self];
+}
+
 - (void)_destroy
 {
   [super _destroy];
 
+  [[TiApp app] unregisterApplicationDelegate:self];
+  
   if (_locationManager != nil) {
     _locationManager.delegate = nil;
   }
@@ -32,48 +41,56 @@
 
 #pragma mark Public APIs
 
-- (void)requestAlwaysAuthorization:(id)unused
+- (void)requestAlwaysAuthorization:(id)callback
 {
-  [_locationManager requestAlwaysAuthorization];
+  ENSURE_SINGLE_ARG(callback, KrollCallback);
+  _authorizationCallback = callback;
+
+  if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
+    [_authorizationCallback call:@[@{ @"success": @(YES) }] thisObject:self];
+    _authorizationCallback = nil;
+  } else {
+    [[self locationManager] requestAlwaysAuthorization];
+  }
 }
 
 - (void)startRangingBeaconsInRegion:(id)region
 {
   ENSURE_SINGLE_ARG(region, NSDictionary);
-  
-    NSString *uuid = region[@"uuid"];
-    NSNumber *minor = region[@"minor"];
-    NSNumber *major = region[@"major"];
-    NSString *identifier = region[@"identifier"];
 
-    CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc] initWithUUID:[[NSUUID alloc] initWithUUIDString:uuid]
-                                                                  major:major.intValue
-                                                                  minor:minor.intValue
-                                                             identifier:identifier];
+  NSString *uuid = region[@"uuid"];
+  NSNumber *minor = region[@"minor"];
+  NSNumber *major = region[@"major"];
+  NSString *identifier = region[@"identifier"];
 
-    beaconRegion.notifyOnEntry = YES;
-    beaconRegion.notifyOnExit = NO;
+  CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc] initWithUUID:[[NSUUID alloc] initWithUUIDString:uuid]
+                                                                major:major.intValue
+                                                                minor:minor.intValue
+                                                           identifier:identifier];
 
-    [[self locationManager] startMonitoringForRegion:beaconRegion];
-    [[self locationManager] startRangingBeaconsInRegion:beaconRegion];
+  beaconRegion.notifyOnEntry = YES;
+  beaconRegion.notifyOnExit = NO;
+
+  [[self locationManager] startMonitoringForRegion:beaconRegion];
+  [[self locationManager] startRangingBeaconsInRegion:beaconRegion];
 }
 
 - (void)stopRangingBeaconsInRegion:(id)region
 {
   ENSURE_SINGLE_ARG(region, NSDictionary);
-  
-    NSString *uuid = region[@"uuid"];
-    NSNumber *minor = region[@"minor"];
-    NSNumber *major = region[@"major"];
-    NSString *identifier = region[@"identifier"];
 
-    CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc] initWithUUID:[[NSUUID alloc] initWithUUIDString:uuid]
-                                                                  major:major.intValue
-                                                                  minor:minor.intValue
-                                                             identifier:identifier];
-    
-    [[self locationManager] stopMonitoringForRegion:beaconRegion];
-    [[self locationManager] stopRangingBeaconsInRegion:beaconRegion];
+  NSString *uuid = region[@"uuid"];
+  NSNumber *minor = region[@"minor"];
+  NSNumber *major = region[@"major"];
+  NSString *identifier = region[@"identifier"];
+
+  CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc] initWithUUID:[[NSUUID alloc] initWithUUIDString:uuid]
+                                                                major:major.intValue
+                                                                minor:minor.intValue
+                                                           identifier:identifier];
+  
+  [[self locationManager] stopMonitoringForRegion:beaconRegion];
+  [[self locationManager] stopRangingBeaconsInRegion:beaconRegion];
 }
 
 - (NSNumber *)isBeaconRangingAvailable
@@ -85,7 +102,10 @@
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
-  [self fireEvent:@"authorization" withObject:@{ @"success": @(status == kCLAuthorizationStatusAuthorizedAlways) }];
+  if (_authorizationCallback != nil) {
+    [_authorizationCallback call:@[@{ @"success": @(status == kCLAuthorizationStatusAuthorizedAlways) }] thisObject:self];
+    _authorizationCallback = nil;
+  }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray<CLBeacon *> *)beacons inRegion:(CLBeaconRegion *)region
@@ -94,7 +114,7 @@
 
   for (CLBeacon *beacon in beacons) {
     [mappedBeacons addObject:@{
-      @"uuid": beacon.UUID,
+      @"uuid": beacon.UUID.UUIDString,
       @"proximity": @(beacon.proximity),
       @"timestamp": beacon.timestamp,
       @"major": beacon.major,
@@ -102,7 +122,30 @@
     }];
   }
 
-  [self fireEvent:@"didRangeBeacons" withObject:@{ @"beacons": beacons }];
+  if (mappedBeacons.count > 0) {
+    [self fireEvent:@"didRangeBeacons" withObject:@{ @"beacons": mappedBeacons }];
+  }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
+{
+  [self fireEvent:@"didEnterRegion" withObject:@{ @"region": @{ @"uuid": region.identifier } }];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
+{
+  [self fireEvent:@"didExitRegion" withObject:@{ @"region": @{ @"uuid": region.identifier } }];
+}
+
+#pragma mark UIApplicationDelegate
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey,id> *)launchOptions
+{
+  if ([launchOptions objectForKey:@"UIApplicationLaunchOptionsLocationKey"]) {
+    [self fireEvent:@"applicationOpenedFromLocation"];
+  }
+
+  return YES;
 }
 
 @end

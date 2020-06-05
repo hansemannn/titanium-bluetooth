@@ -12,6 +12,7 @@ The iOS API is provided with extra functionality to let your iOS-device act as a
 * Descriptor **(iOS only)**
 * Peripheral
 * Service
+* Beacons
 * Constants
 
 ## `CentralManager`
@@ -159,6 +160,10 @@ restoreIdentifier(String)
 * `includedServices` ([String]) **(iOS only)**
 * `characteristics` ([Characteristic])
 * `uuid` (String)
+
+## Beacons (iOS only)
+
+See the `example/beacons.js` for an advanced beacon example
 
 ## `Constants`
 
