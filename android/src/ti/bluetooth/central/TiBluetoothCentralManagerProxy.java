@@ -3,19 +3,18 @@ package ti.bluetooth.central;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanRecord;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.os.ParcelUuid;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import org.appcelerator.kroll.common.Log;
 import ti.bluetooth.TiBluetoothModule;
 import ti.bluetooth.broadcastReceiver.TiBluetoohBroadcastReceiver;
 import ti.bluetooth.listener.OnBluetoothStateChangedListener;
@@ -96,8 +95,9 @@ public class TiBluetoothCentralManagerProxy
   }
 
   @Kroll.method
-  public void connectPeripheral(TiBluetoothPeripheralProxy peripheral,
-                                @Kroll.argument(optional=true) KrollDict properties) {
+  public void
+  connectPeripheral(TiBluetoothPeripheralProxy peripheral,
+                    @Kroll.argument(optional = true) KrollDict properties) {
     boolean notifyOnConnection =
         properties.getBoolean(NOTIFY_ON_CONNECTION_KEY);
     boolean notifyOnDisconnection =
@@ -131,17 +131,15 @@ public class TiBluetoothCentralManagerProxy
     peripheral.disconnectPeripheral();
   }
 
-  @Kroll
-      .getProperty
-      @Kroll.method
-      public int getScanMode() {
+  @Kroll.getProperty
+  @Kroll.method
+  public int getScanMode() {
     return scanMode;
   }
 
-  @Kroll
-      .setProperty
-      @Kroll.method
-      public void setScanMode(int scanMode) {
+  @Kroll.setProperty
+  @Kroll.method
+  public void setScanMode(int scanMode) {
     if (scanMode == SCAN_MODE_BALANCED || scanMode == SCAN_MODE_LOW_LATENCY ||
         scanMode == SCAN_MODE_LOW_POWER ||
         scanMode == SCAN_MODE_OPPORTUNISTIC) {
@@ -149,10 +147,9 @@ public class TiBluetoothCentralManagerProxy
     }
   }
 
-  @Kroll
-      .getProperty
-      @Kroll.method
-      public int getState() {
+  @Kroll.getProperty
+  @Kroll.method
+  public int getState() {
     return bluetoothState;
   }
 
@@ -197,7 +194,8 @@ public class TiBluetoothCentralManagerProxy
 
   private void processResult(ScanResult result) {
     TiBluetoothPeripheralProxy bluetoothPeripheral =
-        new TiBluetoothPeripheralProxy(result.getDevice());
+        new TiBluetoothPeripheralProxy(result.getDevice(),
+                                       result.getScanRecord());
     fireCentralManagerEvent(DID_DISCOVER_PERIPHERAL, bluetoothPeripheral);
   }
 

@@ -101,6 +101,8 @@ restoreIdentifier(String)
 * `uuid` (String)
 * `service` (Service)  **(iOS only)**
 * `properties` (CHARACTERISTIC_PROPERTY_*)  **(iOS only)**
+* `characteristicProperties` (int) **(Android only)**
+* `permissions` (int) **(Android only)**
 * `isNotifying` (Boolean)  **(iOS only)**
 * `descriptors` ([Descriptor])  **(iOS only)**
 
@@ -128,7 +130,7 @@ restoreIdentifier(String)
 * `writeValueForCharacteristicWithType(value, characteristic, type)`
     * `value` (Ti.Blob)
     * `characteristic` (Characteristic)
-    * `type` (CHARACTERISTIC_WRITE_*) 
+    * `type` (CHARACTERISTIC_WRITE_*)
 * `setNotifyValueForCharacteristic(enabled, characteristic)`
     * `enabled` (Boolean)
     * `characteristic` (Characteristic)
@@ -146,6 +148,7 @@ restoreIdentifier(String)
 * `address` **(Android only)**
 * `state` **(iOS only)**
 * `services`
+* `uuids` **(Android only)**
 
 ### Events
 * `didDiscoverServices`

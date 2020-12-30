@@ -4,7 +4,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
 import ti.bluetooth.listener.OnBluetoothStateChangedListener;
 
 public class TiBluetoohBroadcastReceiver extends BroadcastReceiver {

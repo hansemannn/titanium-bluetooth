@@ -2,13 +2,10 @@ package ti.bluetooth.gatt;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
-
-import org.appcelerator.kroll.KrollProxy;
-import org.appcelerator.kroll.annotations.Kroll;
-
 import java.util.ArrayList;
 import java.util.List;
-
+import org.appcelerator.kroll.KrollProxy;
+import org.appcelerator.kroll.annotations.Kroll;
 import ti.bluetooth.TiBluetoothModule;
 
 @Kroll.proxy(parentModule = TiBluetoothModule.class)
@@ -38,17 +35,15 @@ public class TiBluetoothServiceProxy extends KrollProxy {
     return characteristics;
   }
 
-  @Kroll
-      .getProperty
-      @Kroll.method
-      public Object[] getCharacteristics() {
+  @Kroll.getProperty
+  @Kroll.method
+  public Object[] getCharacteristics() {
     return characteristics.toArray();
   }
 
-  @Kroll
-      .getProperty
-      @Kroll.method
-      public String getUuid() {
+  @Kroll.getProperty
+  @Kroll.method
+  public String getUuid() {
     return bluetoothGattService.getUuid().toString().toUpperCase();
   }
 }
