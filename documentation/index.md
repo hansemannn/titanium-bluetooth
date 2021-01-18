@@ -123,7 +123,7 @@ restoreIdentifier(String)
 * `discoverCharacteristicsForService(args)`
     * `characteristics` ([Characteristic]) **(iOS only)**
     * `service` (Service)
-* `readValueForCharacteristic(characteristic)` **(iOS only)**
+* `readValueForCharacteristic(characteristic)`
     * `characteristic` (Characteristic)
 * `maximumWriteValueLengthForType(type)` **(iOS only)**
     * `type` (CHARACTERISTIC_WRITE_*)
@@ -155,6 +155,7 @@ restoreIdentifier(String)
 * `didDiscoverCharacteristicsForService`
 * `didUpdateValueForCharacteristic`
 * `didWriteValueForCharacteristic`
+* `didReadValueForCharacteristic` **(Android only)**
 
 ## `Service`
 ### Properties
