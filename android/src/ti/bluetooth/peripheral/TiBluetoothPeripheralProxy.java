@@ -31,6 +31,8 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
       "didUpdateValueForCharacteristic";
   private static final String DID_WRITE_VALUE_FOR_CHARACTERISTIC =
       "didWriteValueForCharacteristic";
+  private static final String DID_READ_VALUE_FOR_CHARACTERISTIC =
+      "didReadValueForCharacteristic";
   private static final String SERVICE_KEY = "service";
 
   private BluetoothDevice bluetoothDevice;
@@ -95,6 +97,17 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
         super.onCharacteristicWrite(gatt, characteristic, status);
 
         firePeripheralEvent(DID_WRITE_VALUE_FOR_CHARACTERISTIC,
+                            TiBluetoothPeripheralProxy.this, null,
+                            new TiBluetoothCharacteristicProxy(characteristic));
+      }
+
+      @Override
+      public void onCharacteristicRead(
+          BluetoothGatt gatt, BluetoothGattCharacteristic characteristic,
+          int status) {
+        super.onCharacteristicRead(gatt, characteristic, status);
+
+        firePeripheralEvent(DID_READ_VALUE_FOR_CHARACTERISTIC,
                             TiBluetoothPeripheralProxy.this, null,
                             new TiBluetoothCharacteristicProxy(characteristic));
       }
@@ -198,6 +211,12 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
       boolean enabled, TiBluetoothCharacteristicProxy characteristic) {
     bluetoothGatt.setCharacteristicNotification(
         characteristic.getCharacteristic(), enabled);
+  }
+
+
+  @Kroll.method
+  public void readValueForCharacteristic(TiBluetoothCharacteristicProxy characteristic) {
+    bluetoothGatt.readCharacteristic(characteristic.getCharacteristic());
   }
 
   @Kroll.method
