@@ -7,11 +7,11 @@
 	<array>
         	<!-- Use when acting as a central -->
 		<string>bluetooth-central</string>
-        
+
         	<!-- Use when acting as a peripheral -->
 		<string>bluetooth-peripheral</string>
 	</array>
-    
+
     	<!-- Use when acting as a peripheral -->
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Can we connect to Bluetooth devices?</string>
@@ -70,13 +70,19 @@ btn2.addEventListener('click', function() {
     centralManager.stopScan();
 });
 
-/** 
+/**
  * Central Manager Events
  */
 
 centralManager.addEventListener('didDiscoverPeripheral', function(e) {
     Ti.API.info('didDiscoverPeripheral');
     Ti.API.info(e);
+
+    if (OS_ANDROID){
+        _.each(e.peripheral.uuids, function(item) {
+            console.log(e.peripheral.name, ":", e.peripheral.address, '-', item, (item.indexOf("fd6f") > -1) ? " (Exposure Notifications)" : "");
+        })
+    }
 
     Ti.API.info('Connect to ' + e.peripheral);
     centralManager.connectPeripheral(e.peripheral, {
@@ -89,30 +95,30 @@ centralManager.addEventListener('didDiscoverPeripheral', function(e) {
 
 centralManager.addEventListener('didUpdateState', function(e) {
     Ti.API.info('didUpdateState');
-    
+
     switch (e.state) {
-        case BLE.MANAGER_STATE_RESETTING: 
+        case BLE.MANAGER_STATE_RESETTING:
             Ti.API.info('Resetting');
         break;
 
-        case BLE.MANAGER_STATE_UNSUPPORTED: 
+        case BLE.MANAGER_STATE_UNSUPPORTED:
             Ti.API.info('Unsupported');
         break;
 
-        case BLE.MANAGER_STATE_UNAUTHORIZED: 
+        case BLE.MANAGER_STATE_UNAUTHORIZED:
             Ti.API.info('Unauthorized');
         break;
-        
-        case BLE.MANAGER_STATE_POWERED_OFF: 
+
+        case BLE.MANAGER_STATE_POWERED_OFF:
             Ti.API.info('Powered Off');
         break;
-        
-        case BLE.MANAGER_STATE_POWERED_ON: 
+
+        case BLE.MANAGER_STATE_POWERED_ON:
             Ti.API.info('Powered On');
         break;
-        
-        case BLE.MANAGER_STATE_UNKNOWN: 
-        default: 
+
+        case BLE.MANAGER_STATE_UNKNOWN:
+        default:
             Ti.API.info('Unknown');
         break;
     }
@@ -121,13 +127,13 @@ centralManager.addEventListener('didUpdateState', function(e) {
 centralManager.addEventListener('didConnectPeripheral', function(e) {
     Ti.API.info('didConnectPeripheral');
     Ti.API.info(e);
-    
+
     // Now you can add event listener to the found peripheral.
     // Make sure to handle event listeners properly and remove them
     // when you don't need them anymore
-    
+
     myPeripheral = e.peripheral;
-        
+
     myPeripheral.addEventListener('didDiscoverServices', function(e) {
         Ti.API.info('didDiscoverServices');
         Ti.API.info(e);
@@ -160,7 +166,7 @@ centralManager.addEventListener('didFailToConnectPeripheral', function(e) {
 });
 
 
-/** 
+/**
  * Peripheral Manager Events
  */
 

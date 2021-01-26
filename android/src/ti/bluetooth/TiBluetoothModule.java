@@ -12,11 +12,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
-
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiApplication;
-
 import ti.bluetooth.central.TiBluetoothCentralManagerProxy;
 
 @Kroll.module(name = "TiBluetooth", id = "ti.bluetooth")

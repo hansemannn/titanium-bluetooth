@@ -6,16 +6,17 @@ import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
+import android.bluetooth.le.ScanRecord;
 import android.content.Context;
-
+import android.os.ParcelUuid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
+import org.appcelerator.kroll.common.Log;
 import org.appcelerator.titanium.TiBlob;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import ti.bluetooth.TiBluetoothModule;
 import ti.bluetooth.gatt.TiBluetoothCharacteristicProxy;
 import ti.bluetooth.gatt.TiBluetoothServiceProxy;
@@ -30,14 +31,19 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
       "didUpdateValueForCharacteristic";
   private static final String DID_WRITE_VALUE_FOR_CHARACTERISTIC =
       "didWriteValueForCharacteristic";
+  private static final String DID_READ_VALUE_FOR_CHARACTERISTIC =
+      "didReadValueForCharacteristic";
   private static final String SERVICE_KEY = "service";
 
   private BluetoothDevice bluetoothDevice;
   private BluetoothGatt bluetoothGatt;
   private List<TiBluetoothServiceProxy> services;
+  private ScanRecord scanRecord;
 
-  public TiBluetoothPeripheralProxy(BluetoothDevice bluetoothDevice) {
+  public TiBluetoothPeripheralProxy(BluetoothDevice bluetoothDevice,
+                                    ScanRecord scanRecord) {
     this.bluetoothDevice = bluetoothDevice;
+    this.scanRecord = scanRecord;
   }
 
   public void
@@ -91,6 +97,17 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
         super.onCharacteristicWrite(gatt, characteristic, status);
 
         firePeripheralEvent(DID_WRITE_VALUE_FOR_CHARACTERISTIC,
+                            TiBluetoothPeripheralProxy.this, null,
+                            new TiBluetoothCharacteristicProxy(characteristic));
+      }
+
+      @Override
+      public void onCharacteristicRead(
+          BluetoothGatt gatt, BluetoothGattCharacteristic characteristic,
+          int status) {
+        super.onCharacteristicRead(gatt, characteristic, status);
+
+        firePeripheralEvent(DID_READ_VALUE_FOR_CHARACTERISTIC,
                             TiBluetoothPeripheralProxy.this, null,
                             new TiBluetoothCharacteristicProxy(characteristic));
       }
@@ -153,24 +170,39 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
     }
   }
 
-  @Kroll
-      .getProperty
-      @Kroll.method
-      public String getName() {
+  @Kroll.getProperty
+  @Kroll.method
+  public String getName() {
     return bluetoothDevice.getName();
   }
 
-  @Kroll
-      .getProperty
-      @Kroll.method
-      public String getAddress() {
+  @Kroll.getProperty
+  @Kroll.method
+  public String getAddress() {
     return bluetoothDevice.getAddress();
   }
 
-  @Kroll
-      .getProperty
-      @Kroll.method
-      public Object[] getServices() {
+  @Kroll.getProperty
+  @Kroll.method
+  public KrollDict getUuids() {
+    ParcelUuid[] uuids = bluetoothDevice.getUuids();
+    KrollDict out = new KrollDict();
+    if (uuids != null) {
+      for (int i = 0; i < uuids.length; i++) {
+        out.put("uuid", uuids[i].toString());
+      }
+    } else {
+      Map<ParcelUuid, byte[]> data = scanRecord.getServiceData();
+      for (ParcelUuid key : data.keySet()) {
+        out.put("uuid", key.toString());
+      }
+    }
+    return out;
+  }
+
+  @Kroll.getProperty
+  @Kroll.method
+  public Object[] getServices() {
     return services.toArray();
   }
 
@@ -179,6 +211,12 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
       boolean enabled, TiBluetoothCharacteristicProxy characteristic) {
     bluetoothGatt.setCharacteristicNotification(
         characteristic.getCharacteristic(), enabled);
+  }
+
+
+  @Kroll.method
+  public void readValueForCharacteristic(TiBluetoothCharacteristicProxy characteristic) {
+    bluetoothGatt.readCharacteristic(characteristic.getCharacteristic());
   }
 
   @Kroll.method
