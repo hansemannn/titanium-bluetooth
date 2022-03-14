@@ -262,7 +262,10 @@
     } else if ([[advertisementData objectForKey:key] isKindOfClass:[NSString class]]) {
       [dict setObject:[TiUtils stringValue:[advertisementData objectForKey:key]] forKey:key];
     } else if ([key isEqualToString:@"kCBAdvDataServiceUUIDs"]) {
-      [dict setObject:[TiBluetoothUtils stringArrayFromUUIDArray:[advertisementData objectForKey:key]] forKey:key];
+      NSArray<id> *uuidArray = [advertisementData objectForKey:key];
+      if (uuidArray != nil) {
+        [dict setObject:[TiBluetoothUtils stringArrayFromUUIDArray:[advertisementData objectForKey:key]] forKey:key];
+      }
     } else {
       NSLog(@"[DEBUG] Unhandled type for key: %@ - Skipping, please do a PR to handle!", key);
     }
