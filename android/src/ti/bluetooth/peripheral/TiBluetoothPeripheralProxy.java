@@ -203,7 +203,11 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
   @Kroll.getProperty
   @Kroll.method
   public Object[] getServices() {
-    return services.toArray();
+    if (services == null){
+      return new Object[0];
+    } else {
+      return services.toArray();
+    }
   }
 
   @Kroll.method
