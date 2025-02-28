@@ -2,12 +2,13 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 2.0.1
+version: 3.0.0
 apiversion: 2
 architectures: arm64 x86_64
 description: ti.bluetooth
 author: Hans Knoechel
 license: Apache 2.0
+mac: false
 copyright: Copyright (c) 2016-present by Hans Knoechel
 
 # these should not be edited
@@ -15,4 +16,4 @@ name: ti.bluetooth
 moduleid: ti.bluetooth
 guid: 3c1bc730-d661-401e-8184-84695ad92360
 platform: iphone
-minsdk: 9.2.0
+minsdk: 12.0.0
