@@ -37,7 +37,7 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
 
   private BluetoothDevice bluetoothDevice;
   private BluetoothGatt bluetoothGatt;
-  private List<TiBluetoothServiceProxy> services;
+  private List<TiBluetoothServiceProxy> services = new ArrayList<>();
   private ScanRecord scanRecord;
 
   public TiBluetoothPeripheralProxy(BluetoothDevice bluetoothDevice,
